@@ -28,7 +28,7 @@ public class User {
     @Column(name = "picture_url")
     private String pictureUrl;
 
-    @Column(name = "enabled")
+    @Column(name = "blocked")
     private boolean blocked;
 
     @ManyToOne
@@ -107,4 +107,7 @@ public class User {
         this.blocked = blocked;
     }
 
+    public boolean isAdmin(){
+        return role.getRoleName().equals("Admin");
+    }
 }
