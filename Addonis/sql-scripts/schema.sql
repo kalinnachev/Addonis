@@ -21,9 +21,9 @@ create table users
     first_name  varchar(30)          not null,
     last_name   varchar(30)          not null,
     email       varchar(30)          not null,
-    picture_url varchar(100)         not null,
-    enabled     tinyint(1) default 1 not null,
-    role_id     int                  not null,
+    picture_url varchar(100)         ,
+    blocked     tinyint(1) default 0 not null,
+    role_id     int    default 2 not null,
     constraint users_username_uindex
         unique (username),
     constraint users_roles_id_fk
