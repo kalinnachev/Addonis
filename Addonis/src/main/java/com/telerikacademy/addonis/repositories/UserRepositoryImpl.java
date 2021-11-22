@@ -29,4 +29,16 @@ public class UserRepositoryImpl extends CRUDSQLRepository<User> implements UserR
                     .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
         }
     }
+
+    @Override
+    public User findByEmail(String email) {
+        String query = format("from %s where %s = :value", getClazz().getSimpleName(), "email");
+        try (Session session = getSessionFactory().openSession()) {
+            return session
+                    .createQuery(query, getClazz())
+                    .setParameter("value", email)
+                    .uniqueResultOptional()
+                    .orElseThrow(() -> new EntityNotFoundException("User", "email", email));
+        }
+    }
 }
