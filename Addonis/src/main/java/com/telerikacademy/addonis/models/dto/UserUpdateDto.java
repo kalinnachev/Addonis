@@ -1,6 +1,6 @@
 package com.telerikacademy.addonis.models.dto;
 
-import com.telerikacademy.addonis.models.ValidPassword;
+import com.telerikacademy.addonis.models.validators.ValidPassword;
 
 import javax.validation.constraints.NotNull;
 
