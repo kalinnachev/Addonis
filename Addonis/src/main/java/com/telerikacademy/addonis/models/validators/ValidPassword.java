@@ -1,4 +1,4 @@
-package com.telerikacademy.addonis.models;
+package com.telerikacademy.addonis.models.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
