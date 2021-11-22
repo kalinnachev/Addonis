@@ -1,7 +1,5 @@
 package com.telerikacademy.addonis.models.validators;
 
-import com.telerikacademy.addonis.models.PasswordConstraintValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
