@@ -25,6 +25,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "picture_url")
     private String pictureUrl;
 
@@ -34,6 +37,14 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getPictureUrl() {
         return pictureUrl;
