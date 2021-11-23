@@ -35,6 +35,7 @@ public class ModelMapperUser {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
         Role role = roleRepository.getUserRole();
         user.setRole(role);
     }
@@ -43,6 +44,7 @@ public class ModelMapperUser {
         user.setPassword(userUpdateDto.getPassword());
         user.setFirstName(userUpdateDto.getFirstName());
         user.setLastName(userUpdateDto.getLastName());
+        user.setPhoneNumber(userUpdateDto.getPhoneNumber());
         user.setEmail(userUpdateDto.getEmail());
     }
 }
