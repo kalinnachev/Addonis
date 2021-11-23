@@ -39,6 +39,8 @@ public class Addon {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
+    //TODO boolean approved field
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "addons_tags",
