@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/users")
@@ -26,8 +27,10 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
+    public List<User> getAll(@RequestParam(required = false) Optional<String> username,
+                             @RequestParam(required = false) Optional<String> email,
+                             @RequestParam(required = false) Optional<String> phoneNumber) {
+        return userService.search(username,email,phoneNumber);
     }
 
 
@@ -61,6 +64,28 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }catch (DuplicateEntityException ex){
             throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/block")
+    public User BlockUser(@PathVariable int id) {
+        try {
+           return userService.block(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping("/{id}/unblock")
+    public User UnblockUser(@PathVariable int id) {
+        try {
+           return userService.unblock(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
     }
 

@@ -3,8 +3,10 @@ package com.telerikacademy.addonis.models.dto;
 import com.telerikacademy.addonis.models.validators.ValidPassword;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserUpdateDto {
+    public static final int SIZE_TELEPHONE_NUMBER = 10;
     @ValidPassword
     private String password;
 
@@ -17,7 +19,19 @@ public class UserUpdateDto {
     @NotNull(message = "Email can't be empty")
     private String email;
 
+    @NotNull(message = "Telephone number can't be empty")
+    @Size(min = SIZE_TELEPHONE_NUMBER, max = SIZE_TELEPHONE_NUMBER, message = "Telephone number should have ten digit")
+    private String phoneNumber;
+
     public UserUpdateDto() {
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {

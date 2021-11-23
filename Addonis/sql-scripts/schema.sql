@@ -14,22 +14,26 @@ create table roles
 
 create table users
 (
-    id          int auto_increment
+    id           int auto_increment
         primary key,
-    username    varchar(20)          not null,
-    password    varchar(68)          not null,
-    first_name  varchar(30)          not null,
-    last_name   varchar(30)          not null,
-    email       varchar(30)          not null,
-    picture_url varchar(100)         ,
-    blocked     tinyint(1) default 0 not null,
-    role_id     int    default 2 not null,
+    username     varchar(20)   not null,
+    password     varchar(68)   not null,
+    first_name   varchar(30)   not null,
+    last_name    varchar(30)   not null,
+    email        varchar(30)   not null,
+    picture_url  varchar(100) null,
+    blocked      tinyint(1) default 0 not null,
+    role_id      int default 2 not null,
+    phone_number varchar(10)   not null,
+    constraint users_email_uindex
+        unique (email),
+    constraint users_phone_number_uindex
+        unique (phone_number),
     constraint users_username_uindex
         unique (username),
     constraint users_roles_id_fk
         foreign key (role_id) references roles (id)
 );
-
 create table tags
 (
     id   int auto_increment

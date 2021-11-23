@@ -8,6 +8,7 @@ import com.telerikacademy.addonis.services.contracts.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,6 +39,33 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         checkForDuplicateEmail(user);
         userRepository.update(user);
+    }
+
+    @Override
+    public User block(int id) {
+        User user = userRepository.getById(id);
+        if(user.isAdmin()){
+            throw new IllegalArgumentException("Admin can not block");
+        }
+        user.setBlocked(true);
+        userRepository.update(user);
+        return user;
+    }
+
+    @Override
+    public User unblock(int id) {
+        User user = userRepository.getById(id);
+        user.setBlocked(false);
+        userRepository.update(user);
+        return user;
+    }
+
+    @Override
+    public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber) {
+        if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()){
+            return userRepository.getAll();
+        }
+        return userRepository.search(username,email,phoneNumber);
     }
 
     @Override
