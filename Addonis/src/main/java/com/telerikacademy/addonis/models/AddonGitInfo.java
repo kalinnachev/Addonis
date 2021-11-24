@@ -1,6 +1,7 @@
 package com.telerikacademy.addonis.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AddonGitInfo {
 
@@ -11,6 +12,8 @@ public class AddonGitInfo {
     private int pullRequestsCount;
 
     private int openIssuesCount;
+
+    private LocalDateTime lastUpdateDateTime;
 
     public LocalDate getLastCommitDate() {
         return lastCommitDate;
@@ -43,4 +46,14 @@ public class AddonGitInfo {
     public void setOpenIssuesCount(int openIssuesCount) {
         this.openIssuesCount = openIssuesCount;
     }
+
+    public LocalDateTime getLastUpdateDateTime() {
+        return lastUpdateDateTime;
+    }
+
+    public void setLastUpdateDateTime(LocalDateTime lastUpdateDateTime) {
+        this.lastUpdateDateTime = lastUpdateDateTime;
+    }
+
+
 }
