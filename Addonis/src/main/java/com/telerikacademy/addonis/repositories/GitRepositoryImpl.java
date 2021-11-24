@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,8 @@ public class GitRepositoryImpl implements GitRepository {
     private final DateTimeFormatter dateTimeFormatter;
 
     private final static int MAX_ITEMS_PER_PAGE =100;
+    private final static int START_PAGE =1;
+
 
     @Autowired
     public GitRepositoryImpl(RestTemplate restTemplate) {
@@ -47,7 +50,7 @@ public class GitRepositoryImpl implements GitRepository {
         String lastCommitUrl = GitUrlHelpers.getLastCommitURL(repo_url);
         String allIssuesURL = GitUrlHelpers.getAllIssuesURL(repo_url);
         try {
-            List<IssueDto> issues = readAllIssues(allIssuesURL, 1);
+            List<IssueDto> issues = readAllIssues(allIssuesURL, START_PAGE);
             int num_pull_request = (int)issues.stream().filter(IssueDto::isPullRequest).count();
             addonGitInfo = populateLastCommitDateAndTitle(addonGitInfo, lastCommitUrl);
             addonGitInfo.setOpenIssuesCount(issues.size()-num_pull_request);
@@ -55,7 +58,7 @@ public class GitRepositoryImpl implements GitRepository {
         } catch (Exception e) {
            throw new RuntimeException(e.getMessage());
         }
-
+        addonGitInfo.setLastUpdateDateTime(LocalDateTime.now());
         return addonGitInfo;
     }
 
@@ -93,7 +96,6 @@ public class GitRepositoryImpl implements GitRepository {
         private Object pull_request;
 
         private Long id;
-
 
         public Long getId() {
             return id;
