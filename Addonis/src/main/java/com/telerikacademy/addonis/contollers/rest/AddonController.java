@@ -46,9 +46,17 @@ public class AddonController {
     }
 
     //TODO when Dto is done
-    @PostMapping("/{id}")
-    public Addon createAddon(){
-        throw new UnsupportedOperationException();
+    @PostMapping()
+    public Addon createAddon(@Valid @RequestBody AddonDto addonDto){
+        try{
+            //TODO swap user with header when authentication is ready
+            User user = userService.getById(1);
+            Addon addon = modelMapperAddon.fromDto(addonDto,user);
+            addonService.create(addon);
+            return addon;
+        } catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     //TODO when Dto is done
