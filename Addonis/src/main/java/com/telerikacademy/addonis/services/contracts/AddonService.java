@@ -14,4 +14,6 @@ public interface AddonService {
     void update(Addon addon);
 
     void delete(int id);
+
+    void approve(Addon addon);
 }

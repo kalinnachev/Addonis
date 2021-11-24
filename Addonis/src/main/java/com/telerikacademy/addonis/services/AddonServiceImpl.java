@@ -47,6 +47,11 @@ public class AddonServiceImpl implements AddonService {
         addonRepository.delete(id);
     }
 
+    @Override
+    public void approve(Addon addon) {
+        addon.setApproved(true);
+    }
+
     private void checkForDuplicateOriginUrl(Addon addon) {
         boolean duplicateExist = true;
         try{
