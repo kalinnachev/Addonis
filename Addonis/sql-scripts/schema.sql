@@ -16,15 +16,16 @@ create table users
 (
     id           int auto_increment
         primary key,
-    username     varchar(20)   not null,
-    password     varchar(68)   not null,
-    first_name   varchar(30)   not null,
-    last_name    varchar(30)   not null,
-    email        varchar(30)   not null,
-    picture_url  varchar(100) null,
+    username     varchar(20)          not null,
+    password     varchar(68)          not null,
+    first_name   varchar(30)          not null,
+    last_name    varchar(30)          not null,
+    email        varchar(30)          not null,
+    picture_url  varchar(100)         null,
     blocked      tinyint(1) default 0 not null,
-    role_id      int default 2 not null,
-    phone_number varchar(10)   not null,
+    role_id      int        default 2 not null,
+    phone_number varchar(10)          not null,
+    enabled      tinyint(1)           null,
     constraint users_email_uindex
         unique (email),
     constraint users_phone_number_uindex
@@ -34,6 +35,17 @@ create table users
     constraint users_roles_id_fk
         foreign key (role_id) references roles (id)
 );
+
+create table verifications_token
+(
+    id      int auto_increment
+        primary key,
+    user_id int          null,
+    name    varchar(100) null,
+    constraint verifications_token_users_id_fk
+        foreign key (user_id) references users (id)
+);
+
 create table tags
 (
     id   int auto_increment
