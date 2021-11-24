@@ -74,6 +74,14 @@ public class AddonController {
         }
     }
 
+    @PutMapping("/{id}/approve")
+    public Addon approveAddon(@PathVariable int id){
+        //TODO authentication and exception handling
+        Addon addon = addonService.getById(id);
+        addonService.approve(addon);
+        return addon;
+    }
+
     @DeleteMapping("/{id}")
     public void deleteAddon(@PathVariable int id){
         try{
