@@ -1,5 +1,7 @@
 package com.telerikacademy.addonis.services;
 
+import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import com.telerikacademy.addonis.services.contracts.AddonService;
@@ -27,10 +29,9 @@ public class AddonServiceImpl implements AddonService {
         return addonRepository.getAll();
     }
 
-    //TODO should get creator from session
     @Override
     public void create(Addon addon) {
-        //TODO checks
+        checkForDuplicateAddon(addon);
         addonRepository.create(addon);
     }
 
@@ -44,5 +45,17 @@ public class AddonServiceImpl implements AddonService {
     public void delete(int id) {
         //TODO checks
         addonRepository.delete(id);
+    }
+
+    private void checkForDuplicateAddon(Addon addon) {
+        boolean duplicateExist = true;
+        try{
+            addonRepository.findByOriginUrl(addon.getOriginUrl());
+        } catch (EntityNotFoundException e) {
+            duplicateExist = false;
+        }
+        if(duplicateExist) {
+            throw new DuplicateEntityException("Addon", "originUrl", addon.getOriginUrl());
+        }
     }
 }
