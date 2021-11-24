@@ -2,15 +2,19 @@ package com.telerikacademy.addonis.contollers.rest;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.models.OnRegistrationCompleteEvent;
+import com.telerikacademy.addonis.models.RegistrationListener;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.UserDto;
 import com.telerikacademy.addonis.models.dto.UserUpdateDto;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +24,16 @@ import java.util.Optional;
 public class UserController {
     private UserService userService;
     private ModelMapperUser modelMapperUser;
+//   private final ApplicationEventPublisher eventPublisher;
+   private RegistrationListener registrationListener;
 
-    public UserController(UserService userService, ModelMapperUser modelMapperUser) {
+   @Autowired
+    public UserController(UserService userService, ModelMapperUser modelMapperUser, RegistrationListener registrationListener) {
         this.userService = userService;
         this.modelMapperUser = modelMapperUser;
-    }
+//        this.eventPublisher = eventPublisher;
+       this.registrationListener = registrationListener;
+   }
 
     @GetMapping
     public List<User> getAll(@RequestParam(required = false) Optional<String> username,
@@ -44,10 +53,15 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody UserDto userDto) {
+    public User createUser(@Valid @RequestBody UserDto userDto,
+                           HttpServletRequest request) {
         try {
             User user = modelMapperUser.fromDto(userDto);
             userService.crete(user);
+            String appUrl = request.getContextPath();
+            OnRegistrationCompleteEvent onRegistrationCompleteEvent = new OnRegistrationCompleteEvent(user,
+                    request.getLocale(), appUrl);
+            registrationListener.confirmRegistration(onRegistrationCompleteEvent);
             return user;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
