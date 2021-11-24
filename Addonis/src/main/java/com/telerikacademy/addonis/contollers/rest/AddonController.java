@@ -76,7 +76,11 @@ public class AddonController {
 
     @DeleteMapping("/{id}")
     public void deleteAddon(@PathVariable int id){
-        addonService.delete(id);
+        try{
+            addonService.delete(id);
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     //TODO the rest of the functionality
