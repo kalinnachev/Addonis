@@ -1,9 +1,19 @@
 package com.telerikacademy.addonis.contollers.rest;
 
+import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.dto.AddonDto;
+import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
 import com.telerikacademy.addonis.services.contracts.AddonService;
+import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.untilities.ModelMapperAddon;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
