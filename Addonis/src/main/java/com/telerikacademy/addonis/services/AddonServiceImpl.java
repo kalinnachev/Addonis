@@ -31,7 +31,7 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void create(Addon addon) {
-        checkForDuplicateAddon(addon);
+        checkForDuplicateOriginUrl(addon);
         addonRepository.create(addon);
     }
 
@@ -47,7 +47,7 @@ public class AddonServiceImpl implements AddonService {
         addonRepository.delete(id);
     }
 
-    private void checkForDuplicateAddon(Addon addon) {
+    private void checkForDuplicateOriginUrl(Addon addon) {
         boolean duplicateExist = true;
         try{
             addonRepository.findByOriginUrl(addon.getOriginUrl());
