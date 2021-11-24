@@ -9,11 +9,14 @@ import java.util.List;
 @RestController
 @RequestMapping("api/addons")
 public class AddonController {
-    //TODO add modelMapper and create Dto
+    private final ModelMapperAddon modelMapperAddon;
     private final AddonService addonService;
+    private final UserService userService;
 
-    public AddonController(AddonService addonService) {
+    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, UserService userService) {
+        this.modelMapperAddon = modelMapperAddon;
         this.addonService = addonService;
+        this.userService = userService;
     }
 
     //TODO authentication and exception handling
