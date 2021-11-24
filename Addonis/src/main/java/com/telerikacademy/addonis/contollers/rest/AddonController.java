@@ -61,8 +61,17 @@ public class AddonController {
 
     //TODO when Dto is done
     @PutMapping("/{id}")
-    public Addon updateAddon(){
-        throw new UnsupportedOperationException();
+    public Addon updateAddon(@PathVariable int id,
+                             @Valid @RequestBody AddonUpdateDto addonUpdateDto){
+        try{
+            //TODO swap user with header when authentication is ready
+            User user = userService.getById(1);
+            Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
+            addonService.update(addon);
+            return addon;
+        } catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
