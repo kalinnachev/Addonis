@@ -33,6 +33,12 @@ public class ModelMapperAddon {
         return addon;
     }
 
+    public Addon fromDto(AddonUpdateDto addonUpdateDto, int id) {
+        Addon addon = addonService.getById(id);
+        dtoUpdateObject(addonUpdateDto,addon);
+        return addon;
+    }
+
     private void dtoToObject(Addon addon, AddonDto addonDto, User user) {
         addon.setName(addonDto.getName());
         addon.setDescription(addon.getDescription());
