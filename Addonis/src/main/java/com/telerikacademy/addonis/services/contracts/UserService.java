@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> getAll();
 
+    User getByUsername(String username);
+
     void crete(User user);
 
     void delete(int id);
@@ -21,5 +23,4 @@ public interface UserService {
     User unblock(int id);
 
     List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber);
-
 }

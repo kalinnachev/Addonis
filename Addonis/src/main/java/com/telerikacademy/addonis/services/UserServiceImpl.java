@@ -3,10 +3,18 @@ package com.telerikacademy.addonis.services;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.VerificationToken;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
 import com.telerikacademy.addonis.services.contracts.UserService;
+import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userRepository.getAll();
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -67,7 +80,7 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.search(username,email,phoneNumber);
     }
-
+    
     @Override
     public void delete(int id) {
         userRepository.delete(id);
