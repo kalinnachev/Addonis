@@ -39,7 +39,7 @@ public class Addon {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
-    //TODO boolean approved field
+    private boolean approved;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -127,5 +127,13 @@ public class Addon {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 }
