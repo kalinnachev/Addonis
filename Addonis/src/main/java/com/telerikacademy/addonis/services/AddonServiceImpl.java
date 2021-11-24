@@ -37,7 +37,7 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void update(Addon addon) {
-        //TODO checks
+        //TODO checks 1.for user same as creator
         addonRepository.update(addon);
     }
 
