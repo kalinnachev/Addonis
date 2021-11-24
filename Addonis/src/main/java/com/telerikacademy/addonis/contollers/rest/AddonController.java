@@ -25,7 +25,11 @@ public class AddonController {
 
     @GetMapping("/{id}")
     public Addon getById(@PathVariable int id) {
-        return addonService.getById(id);
+        try {
+            return addonService.getById(id);
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     //TODO when Dto is done
