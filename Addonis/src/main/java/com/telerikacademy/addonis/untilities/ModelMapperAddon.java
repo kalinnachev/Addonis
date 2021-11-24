@@ -35,9 +35,6 @@ public class ModelMapperAddon {
 
     private void dtoToObject(Addon addon, AddonDto addonDto, User user) {
         addon.setName(addonDto.getName());
-        addon.setTargetIde(targetIdeService.getById(addonDto.getTargetIde()));
-        //TODO check on origin_url
-        addon.setOriginUrl(addonDto.getOriginUrl());
         addon.setDescription(addon.getDescription());
         addon.setCreator(user);
         addon.setTargetIde(targetIdeService.getById(addonDto.getTargetIde()));
@@ -55,4 +52,14 @@ public class ModelMapperAddon {
     }
 
     //TODO method for update from admin after approving with additional info
+    private void dtoUpdateObject(AddonUpdateDto addonUpdateDto, Addon addon) {
+        addon.setDescription(addonUpdateDto.getDescription());
+        addon.setBinaryContentUrl(addonUpdateDto.getBinaryContentUrl());
+        Set<Tag> tags = new HashSet<>();
+        for (Integer tag : addonUpdateDto.getTags()) {
+            Tag tagToAdd = tagRepository.getById(tag);
+            tags.add(tagToAdd);
+        }
+        addon.setTags(tags);
+    }
 }
