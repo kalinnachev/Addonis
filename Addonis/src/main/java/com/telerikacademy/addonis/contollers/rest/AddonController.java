@@ -46,6 +46,11 @@ public class AddonController {
         return addonService.getNewest();
     }
 
+    @GetMapping("/popular")
+    public List<Addon> getPopular(){
+        return addonService.getPopular();
+    }
+
     @GetMapping("/{id}")
     public Addon getById(@PathVariable int id) {
         try {

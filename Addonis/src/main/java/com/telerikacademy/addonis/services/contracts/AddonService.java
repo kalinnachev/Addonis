@@ -20,4 +20,6 @@ public interface AddonService {
     List<Addon> getFeatured();
 
     List<Addon> getNewest();
+
+    List<Addon> getPopular();
 }

@@ -53,4 +53,14 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                     .list();
         }
     }
+
+    @Override
+    public List<Addon> getPopular() {
+        String query = format("from %s order by %s desc limit 5",getClazz().getSimpleName(),"numberOfDownloads");
+        try(Session session = getSessionFactory().openSession()){
+            return session
+                    .createQuery(query, getClazz())
+                    .list();
+        }
+    }
 }
