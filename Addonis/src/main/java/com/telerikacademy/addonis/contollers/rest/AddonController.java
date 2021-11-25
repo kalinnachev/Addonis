@@ -36,6 +36,21 @@ public class AddonController {
         return addonService.getAll();
     }
 
+    @GetMapping("/featured")
+    public List<Addon> getFeatured(){
+        return addonService.getFeatured();
+    }
+
+    @GetMapping("/new")
+    public List<Addon> getNewest(){
+        return addonService.getNewest();
+    }
+
+    @GetMapping("/popular")
+    public List<Addon> getPopular(){
+        return addonService.getPopular();
+    }
+
     @GetMapping("/{id}")
     public Addon getById(@PathVariable int id) {
         try {
@@ -90,6 +105,4 @@ public class AddonController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
-
-    //TODO the rest of the functionality
 }

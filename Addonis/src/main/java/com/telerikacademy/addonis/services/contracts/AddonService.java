@@ -16,4 +16,10 @@ public interface AddonService {
     void delete(int id);
 
     void approve(Addon addon);
+
+    List<Addon> getFeatured();
+
+    List<Addon> getNewest();
+
+    List<Addon> getPopular();
 }
