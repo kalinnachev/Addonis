@@ -39,7 +39,12 @@ public class Addon {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
+    @Column(name = "approved")
     private boolean approved;
+
+    @OneToOne
+    @JoinColumn(name = "repo_info_id")
+    private RepoInfo repoInfo;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -135,5 +140,13 @@ public class Addon {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public RepoInfo getRepoInfo() {
+        return repoInfo;
+    }
+
+    public void setRepoInfo(RepoInfo repoInfo) {
+        this.repoInfo = repoInfo;
     }
 }
