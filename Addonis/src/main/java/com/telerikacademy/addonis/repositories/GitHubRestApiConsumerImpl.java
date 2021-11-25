@@ -5,16 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.telerikacademy.addonis.models.AddonGitInfo;
-import com.telerikacademy.addonis.repositories.contracts.GitRepository;
+import com.telerikacademy.addonis.models.RepoInfo;
+import com.telerikacademy.addonis.repositories.contracts.GitHubRestApiConsumer;
 import com.telerikacademy.addonis.utils.GitUrlHelpers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ import java.util.List;
     https://www.section.io/engineering-education/spring-boot-rest-template/
  */
 @Repository
-public class GitRepositoryImpl implements GitRepository {
+public class GitHubRestApiConsumerImpl implements GitHubRestApiConsumer {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -37,29 +37,25 @@ public class GitRepositoryImpl implements GitRepository {
 
 
     @Autowired
-    public GitRepositoryImpl(RestTemplate restTemplate) {
+    public GitHubRestApiConsumerImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper();
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
     }
 
     @Override
-    public AddonGitInfo getInfo(String repo_url) {
-        //checkLimits();
-        AddonGitInfo addonGitInfo = new AddonGitInfo();
+    public void populateRepoInfoFromApi(String repo_url, RepoInfo info) {
         String lastCommitUrl = GitUrlHelpers.getLastCommitURL(repo_url);
         String allIssuesURL = GitUrlHelpers.getAllIssuesURL(repo_url);
         try {
             List<IssueDto> issues = readAllIssues(allIssuesURL, START_PAGE);
             int num_pull_request = (int)issues.stream().filter(IssueDto::isPullRequest).count();
-            addonGitInfo = populateLastCommitDateAndTitle(addonGitInfo, lastCommitUrl);
-            addonGitInfo.setOpenIssuesCount(issues.size()-num_pull_request);
-            addonGitInfo.setPullRequestsCount(num_pull_request);
+            populateLastCommitDateAndTitle(info, lastCommitUrl);
+            info.setOpenIssues(issues.size()-num_pull_request);
+            info.setOpenPullRequests(num_pull_request);
         } catch (Exception e) {
            throw new RuntimeException(e.getMessage());
         }
-        addonGitInfo.setLastUpdateDateTime(LocalDateTime.now());
-        return addonGitInfo;
     }
 
     private List<IssueDto> readAllIssues(String apiUrl, int page) throws JsonProcessingException {
@@ -70,16 +66,15 @@ public class GitRepositoryImpl implements GitRepository {
         return issues;
     }
 
-    private AddonGitInfo populateLastCommitDateAndTitle(AddonGitInfo addonGitInfo, String apiUrl) throws JsonProcessingException {
+    private void populateLastCommitDateAndTitle(RepoInfo repoInfo, String apiUrl) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
         JsonNode root = objectMapper.readTree(response.getBody());
         JsonNode commitNode = root.get(0).get("commit");
         String commitTitle = commitNode.get("message").asText();
         String commitDate =  commitNode.get("author").get("date").asText().substring(0,10);
         LocalDate date = LocalDate.parse( commitDate, dateTimeFormatter);
-        addonGitInfo.setLastCommitDate(date);
-        addonGitInfo.setLastCommitTitle(commitTitle);
-        return addonGitInfo;
+        repoInfo.setLastCommitDate(date);
+        repoInfo.setLastCommitTitle(commitTitle);
     }
 
     private void checkLimits(){
@@ -87,7 +82,6 @@ public class GitRepositoryImpl implements GitRepository {
         System.out.println("response = " + response);
 
     }
-
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class IssueDto {
