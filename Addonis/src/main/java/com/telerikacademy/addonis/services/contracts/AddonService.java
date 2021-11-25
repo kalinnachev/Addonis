@@ -18,4 +18,6 @@ public interface AddonService {
     void approve(Addon addon);
 
     List<Addon> getFeatured();
+
+    List<Addon> getNewest();
 }

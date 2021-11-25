@@ -41,6 +41,11 @@ public class AddonController {
         return addonService.getFeatured();
     }
 
+    @GetMapping("/new")
+    public List<Addon> getNewest(){
+        return addonService.getNewest();
+    }
+
     @GetMapping("/{id}")
     public Addon getById(@PathVariable int id) {
         try {

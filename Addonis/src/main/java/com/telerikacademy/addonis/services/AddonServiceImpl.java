@@ -57,6 +57,11 @@ public class AddonServiceImpl implements AddonService {
         return addonRepository.getFeatured();
     }
 
+    @Override
+    public List<Addon> getNewest() {
+        return addonRepository.getNewest();
+    }
+
     private void checkForDuplicateOriginUrl(Addon addon) {
         boolean duplicateExist = true;
         try{

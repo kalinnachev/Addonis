@@ -43,4 +43,14 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                     .list();
         }
     }
+
+    @Override
+    public List<Addon> getNewest() {
+        String query = format("from %s order by %s desc limit 5",getClazz().getSimpleName(),"creationDate");
+        try(Session session = getSessionFactory().openSession()){
+            return session
+                    .createQuery(query, getClazz())
+                    .list();
+        }
+    }
 }

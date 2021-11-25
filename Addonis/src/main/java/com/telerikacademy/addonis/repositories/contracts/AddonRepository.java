@@ -8,4 +8,6 @@ public interface AddonRepository extends CRUDRepository<Addon> {
     Addon findByOriginUrl(String originUrl);
 
     List<Addon> getFeatured();
+
+    List<Addon> getNewest();
 }
