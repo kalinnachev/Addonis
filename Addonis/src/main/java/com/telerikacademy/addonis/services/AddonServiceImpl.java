@@ -52,6 +52,11 @@ public class AddonServiceImpl implements AddonService {
         addon.setApproved(true);
     }
 
+    @Override
+    public List<Addon> getFeatured() {
+        return addonRepository.getFeatured();
+    }
+
     private void checkForDuplicateOriginUrl(Addon addon) {
         boolean duplicateExist = true;
         try{
