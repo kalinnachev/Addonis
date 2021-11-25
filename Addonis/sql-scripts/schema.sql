@@ -65,28 +65,44 @@ create table target_ide
         unique (name)
 );
 
--- auto-generated definition
+create table repo_info
+(
+    id                 int auto_increment
+        primary key,
+    last_commit_title  text     not null,
+    open_pull_requests int      not null,
+    open_issues        int      not null,
+    last_commit_date   date     not null,
+    last_refresh       datetime not null
+);
+
+
 create table addons
 (
-    id                  int auto_increment primary key,
-    name                varchar(30)   not null,
-    target_ide_id       int           not null,
-    creator_id          int           not null,
-    description         varchar(256)  not null,
-    origin_url          varchar(256)  not null,
-    binary_content_url  varchar(256)  not null,
-    number_of_downloads int default 0 null,
-    creation_date       date          not null,
-    featured            tinyint(1)    not null,
+    id                  int auto_increment,
+    name                varchar(30)          not null,
+    target_ide_id       int                  not null,
+    creator_id          int                  not null,
+    description         varchar(256)         not null,
+    origin_url          varchar(256)         not null,
+    binary_content_url  varchar(256)         not null,
+    number_of_downloads int        default 0 null,
+    creation_date       date                 not null,
+    featured            tinyint(1) default 0 not null,
+    approved            tinyint(1) default 1 not null,
+    repo_info_id        int                  not null,
     constraint addons_id_uindex
         unique (id),
     constraint addons_name_uindex
         unique (name),
+    constraint addons_repo_info_id_fk
+        foreign key (repo_info_id) references repo_info (id),
     constraint addons_target_ide_id_fk
         foreign key (target_ide_id) references target_ide (id),
     constraint addons_users_id_fk
         foreign key (creator_id) references users (id)
 );
+
 
 create table addons_tags
 (
