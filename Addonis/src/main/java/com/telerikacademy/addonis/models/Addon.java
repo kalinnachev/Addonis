@@ -39,6 +39,10 @@ public class Addon {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
+    //TODO how to make it tinyint
+    @Column(name = "featured")
+    private boolean featured;
+
     private boolean approved;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -135,5 +139,13 @@ public class Addon {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 }
