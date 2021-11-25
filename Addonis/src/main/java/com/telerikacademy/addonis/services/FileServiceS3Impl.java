@@ -12,16 +12,19 @@ import com.telerikacademy.addonis.services.contracts.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 
 @Service
 public class FileServiceS3Impl implements FileService {
 
     private static final String BUCKET = "addonis-app";
+
     private final AmazonS3 amazonS3;
 
     private Logger logger = LoggerFactory.getLogger(FileServiceS3Impl.class);
@@ -32,28 +35,32 @@ public class FileServiceS3Impl implements FileService {
     }
 
     @Override
-    public String storeBinaryContent(MultipartFile file, Addon addon) {
-
-        return null;
+    public String storeBinaryContent(File file, Addon addon) {
+        String key = addon.getId() + "_binary_content_" + file.getName();
+        amazonS3.putObject(BUCKET, key, file);
+        return file.getName();
     }
 
     @Override
-    public String storeUserPicture(MultipartFile multipartFile, User user) {
-        String key = user.getUsername() + "_profile_picture_" + multipartFile.getOriginalFilename();
-        user.setPictureUrl(multipartFile.getOriginalFilename());
-        try {
-            saveFile(multipartFile, key);
-        } catch (IOException e) {
-            // TODO
-            e.printStackTrace();
-        }
-        return multipartFile.getOriginalFilename();
+    public String storeUserPicture(File file, User user) {
+        String key = user.getUsername() + "_profile_picture_" + file.getName();
+        amazonS3.putObject(BUCKET, key, file);
+        return file.getName();
     }
 
     @Override
     public byte[] getUserPicture(User user) {
-        logger.info("Requesting user picture from Amazon S3");
         String key = user.getUsername() + "_profile_picture_" + user.getPictureUrl();
+        return getContent(key);
+    }
+    @Override
+    public byte[] getBinaryContent(Addon addon) {
+        String key = addon.getId() + "_binary_content_" + addon.getBinaryContentUrl();
+        return getContent(key);
+    }
+
+    private byte[] getContent(String key) {
+        logger.info("Requesting data from Amazon S3");
         byte[] content = null;
         try(S3Object s3Object = amazonS3.getObject(BUCKET, key)){
             S3ObjectInputStream stream = s3Object.getObjectContent();
@@ -62,25 +69,12 @@ public class FileServiceS3Impl implements FileService {
             // TODO
             e.printStackTrace();
         }
-        logger.info("Requesting user picture from Amazon S3 - DONE");
-
+        logger.info("Requesting data from Amazon S3 - DONE");
         return content;
     }
 
-    @Override
-    public byte[] getBinaryContent(Addon addon) {
-        return new byte[0];
-    }
 
-    public Resource downloadFile(String fileName) {
-        return null;
-    }
 
-    public PutObjectResult saveFile(MultipartFile multipartFile, String key) throws IOException {
-        ObjectMetadata data = new ObjectMetadata();
-        data.setContentType(multipartFile.getContentType());
-        data.setContentLength(multipartFile.getSize());
-        PutObjectResult objectResult = amazonS3.putObject(BUCKET, key, multipartFile.getInputStream(), data);
-        return objectResult;
-    }
+
+
 }
