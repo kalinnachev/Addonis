@@ -12,15 +12,15 @@ public interface UserService {
 
     User getByUsername(String username);
 
-    void crete(User user);
+    void create(User user);
 
-    void delete(int id);
+    void delete(int id, User user);
 
     void update(User user);
 
-    User block(int id);
+    User block(int id, User user);
 
-    User unblock(int id);
+    User unblock(int id, User user);
 
-    List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber);
+    List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber, User user);
 }

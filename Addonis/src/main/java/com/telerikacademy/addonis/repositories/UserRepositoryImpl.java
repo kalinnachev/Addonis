@@ -49,6 +49,17 @@ public class UserRepositoryImpl extends CRUDSQLRepository<User> implements UserR
     }
 
     @Override
+    public User findByTelephone(String phoneNumber) {
+        String query = format("from %s where %s = :value", getClazz().getSimpleName(), "phoneNumber");
+        try (Session session = getSessionFactory().openSession()) {
+            return session
+                    .createQuery(query, getClazz())
+                    .setParameter("value", phoneNumber)
+                    .uniqueResultOptional()
+                    .orElseThrow(() -> new EntityNotFoundException("User", "phoneNumber", phoneNumber));
+        }
+    }
+    @Override
     public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber) {
         try (Session session = getSessionFactory().openSession()) {
             var queryString = new StringBuilder(" from User ");

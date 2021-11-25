@@ -3,18 +3,10 @@ package com.telerikacademy.addonis.services;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
-import com.telerikacademy.addonis.models.VerificationToken;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
 import com.telerikacademy.addonis.services.contracts.UserService;
-import net.bytebuddy.utility.RandomString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,52 +34,63 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void crete(User user) {
+    public void create(User user) {
         checkForDuplicateUsername(user);
         checkForDuplicateEmail(user);
+        checkForDuplicateTelephone(user);
         userRepository.create(user);
     }
 
     @Override
     public void update(User user) {
         checkForDuplicateEmail(user);
+        checkForDuplicateTelephone(user);
         userRepository.update(user);
     }
 
     @Override
-    public User block(int id) {
-        User user = userRepository.getById(id);
-        if(user.isAdmin()){
-            throw new IllegalArgumentException("Admin can not block");
+    public User block(int id, User user) {
+        if (!user.isAdmin()) {
+            throw new IllegalArgumentException("Only admin can block");
         }
-        user.setBlocked(true);
-        userRepository.update(user);
-        return user;
+        User userBlock = userRepository.getById(id);
+        userBlock.setBlocked(true);
+        userRepository.update(userBlock);
+        return userBlock;
     }
 
     @Override
-    public User unblock(int id) {
-        User user = userRepository.getById(id);
-        user.setBlocked(false);
-        userRepository.update(user);
-        return user;
+    public User unblock(int id, User user) {
+        if (!user.isAdmin()) {
+            throw new IllegalArgumentException("Only admin can unblock");
+        }
+        User userUnblock = userRepository.getById(id);
+        userUnblock.setBlocked(false);
+        userRepository.update(userUnblock);
+        return userUnblock;
+
     }
 
     @Override
-    public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber) {
-        if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()){
+    public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber, User user) {
+        if (!user.isAdmin()) {
+            throw new IllegalArgumentException("Only admin can search");
+        } else if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()) {
             return userRepository.getAll();
         }
-        return userRepository.search(username,email,phoneNumber);
+        return userRepository.search(username, email, phoneNumber);
     }
-    
+
     @Override
-    public void delete(int id) {
+    public void delete(int id, User user) {
+        if (!user.isAdmin()) {
+            throw new IllegalArgumentException("Only admin can delete");
+        }
         userRepository.delete(id);
     }
 
 
-    public void checkForDuplicateUsername(User user){
+    public void checkForDuplicateUsername(User user) {
         boolean duplicateExist = true;
         try {
             userRepository.findByUsername(user.getUsername());
@@ -99,16 +102,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void checkForDuplicateEmail(User user){
-        boolean duplicateExist = true;
+    public void checkForDuplicateEmail(User user) {
         try {
-            userRepository.findByEmail(user.getEmail());
+            User u = userRepository.findByEmail(user.getEmail());
+            if (u.getId() == user.getId())
+                return;
         } catch (EntityNotFoundException e) {
-            duplicateExist = false;
+            return;
         }
-        if (duplicateExist) {
-            throw new DuplicateEntityException("User", "email", user.getEmail());
+        throw new DuplicateEntityException("User", "e-mail", user.getEmail());
+    }
+
+    public void checkForDuplicateTelephone(User user) {
+        try {
+            User u = userRepository.findByTelephone(user.getPhoneNumber());
+            if (u.getId() == user.getId())
+                return;
+        } catch (EntityNotFoundException e) {
+            return;
         }
+        throw new DuplicateEntityException("User", "phoneNumber", user.getPhoneNumber());
     }
 }
 

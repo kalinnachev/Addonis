@@ -4,4 +4,6 @@ import com.telerikacademy.addonis.models.User;
 
 public interface VerificationTokenService {
     void createVerificationToken(User user, String token);
+
+    void deleteVerificationToken(User user);
 }

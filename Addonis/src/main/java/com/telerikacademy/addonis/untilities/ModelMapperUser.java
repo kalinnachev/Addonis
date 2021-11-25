@@ -23,8 +23,7 @@ public class ModelMapperUser {
         dtoObject(userDto, user);
         return user;
     }
-    public User fromDto(UserUpdateDto userUpdateDto, int id) {
-        User user = userRepository.getById(id);
+    public User fromDto(UserUpdateDto userUpdateDto, User user) {
         dtoUpdateObject(userUpdateDto,user);
         return user;
     }

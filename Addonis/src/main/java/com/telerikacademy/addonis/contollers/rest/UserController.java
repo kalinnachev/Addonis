@@ -2,14 +2,16 @@ package com.telerikacademy.addonis.contollers.rest;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
-import com.telerikacademy.addonis.models.OnRegistrationCompleteEvent;
 import com.telerikacademy.addonis.models.RegistrationListener;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.UserDto;
 import com.telerikacademy.addonis.models.dto.UserUpdateDto;
 import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
+import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,22 +26,31 @@ import java.util.Optional;
 public class UserController {
     private UserService userService;
     private ModelMapperUser modelMapperUser;
-//   private final ApplicationEventPublisher eventPublisher;
    private RegistrationListener registrationListener;
+   private AuthenticationHelper authenticationHelper;
+   private VerificationTokenService verificationTokenService;
 
    @Autowired
-    public UserController(UserService userService, ModelMapperUser modelMapperUser, RegistrationListener registrationListener) {
+    public UserController(UserService userService, ModelMapperUser modelMapperUser, RegistrationListener registrationListener, AuthenticationHelper authenticationHelper, VerificationTokenService verificationTokenService) {
         this.userService = userService;
         this.modelMapperUser = modelMapperUser;
-//        this.eventPublisher = eventPublisher;
        this.registrationListener = registrationListener;
+       this.authenticationHelper = authenticationHelper;
+       this.verificationTokenService = verificationTokenService;
    }
 
     @GetMapping
+    public List<User> getAll() {
+        return userService.getAll();
+    }
+
+    @GetMapping("/search")
     public List<User> getAll(@RequestParam(required = false) Optional<String> username,
                              @RequestParam(required = false) Optional<String> email,
-                             @RequestParam(required = false) Optional<String> phoneNumber) {
-        return userService.search(username,email,phoneNumber);
+                             @RequestParam(required = false) Optional<String> phoneNumber
+            ,@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return userService.search(username,email,phoneNumber,user);
     }
 
 
@@ -57,21 +68,23 @@ public class UserController {
                            HttpServletRequest request) {
         try {
             User user = modelMapperUser.fromDto(userDto);
-            userService.crete(user);
-            String appUrl = request.getContextPath();
-            OnRegistrationCompleteEvent onRegistrationCompleteEvent = new OnRegistrationCompleteEvent(user,
-                    request.getLocale(), appUrl);
-            registrationListener.confirmRegistration(onRegistrationCompleteEvent);
+            userService.create(user);
+//            String appUrl = request.getContextPath();
+//            OnRegistrationCompleteEvent onRegistrationCompleteEvent = new OnRegistrationCompleteEvent(user,
+//                    request.getLocale(), appUrl);
+//            registrationListener.confirmRegistration(onRegistrationCompleteEvent);
             return user;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @Valid @RequestBody UserUpdateDto userUpdateDto) {
+    @PutMapping()
+    public User updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto
+    , @RequestHeader HttpHeaders headers) {
         try {
-            User user = modelMapperUser.fromDto(userUpdateDto, id);
+            User user = authenticationHelper.tryGetUser(headers);
+            modelMapperUser.fromDto(userUpdateDto,user);
             userService.update(user);
             return user;
         } catch (EntityNotFoundException e) {
@@ -81,10 +94,12 @@ public class UserController {
         }
     }
 
+
     @PutMapping("/{id}/block")
-    public User BlockUser(@PathVariable int id) {
+    public User BlockUser(@PathVariable int id,@RequestHeader HttpHeaders headers) {
         try {
-           return userService.block(id);
+            User user = authenticationHelper.tryGetUser(headers);
+           return userService.block(id,user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }catch (IllegalArgumentException e){
@@ -93,9 +108,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}/unblock")
-    public User UnblockUser(@PathVariable int id) {
+    public User UnblockUser(@PathVariable int id,@RequestHeader HttpHeaders headers) {
         try {
-           return userService.unblock(id);
+            User user = authenticationHelper.tryGetUser(headers);
+           return userService.unblock(id,user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }catch (IllegalArgumentException e){
@@ -104,9 +120,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable int id,@RequestHeader HttpHeaders headers){
         try{
-            userService.delete(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            verificationTokenService.deleteVerificationToken(user);
+            userService.delete(id,user);
         }catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
