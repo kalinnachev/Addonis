@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 
 @Repository
-@Primary
 public class MockRestApiConsumer implements GitHubRestApiConsumer {
     @Override
     public void populateRepoInfoFromApi(String repo_url, RepoInfo repoInfo) {

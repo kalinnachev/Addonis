@@ -5,8 +5,8 @@ import com.telerikacademy.addonis.models.RepoInfo;
 
 public interface RepoInfoService {
 
-    RepoInfo create(Addon addon);
+    void createInfoForAddon(Addon addon);
 
-    RepoInfo update(Addon addon);
+    void updateInfoForAddon(Addon addon);
 
 }

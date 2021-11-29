@@ -3,8 +3,11 @@ package com.telerikacademy.addonis.services;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.RepoInfo;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import com.telerikacademy.addonis.services.contracts.AddonService;
+import com.telerikacademy.addonis.services.contracts.RepoInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +16,12 @@ import java.util.List;
 public class AddonServiceImpl implements AddonService {
 
     private final AddonRepository addonRepository;
+    private final RepoInfoService repoInfoService;
 
-    public AddonServiceImpl(AddonRepository addonRepository) {
+    @Autowired
+    public AddonServiceImpl(AddonRepository addonRepository, RepoInfoService repoInfoService) {
         this.addonRepository = addonRepository;
+        this.repoInfoService = repoInfoService;
     }
 
     @Override
@@ -32,6 +38,7 @@ public class AddonServiceImpl implements AddonService {
     @Override
     public void create(Addon addon) {
         checkForDuplicateOriginUrl(addon);
+        repoInfoService.createInfoForAddon(addon);
         addonRepository.create(addon);
     }
 

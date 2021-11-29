@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class RepoInfoServiceImpl implements RepoInfoService {
@@ -30,31 +31,36 @@ public class RepoInfoServiceImpl implements RepoInfoService {
     }
 
     @Override
-    public RepoInfo create(Addon addon) {
+    public void createInfoForAddon(Addon addon) {
         RepoInfo repoInfo = new RepoInfo();
-        apiConsumer.populateRepoInfoFromApi(addon.getOriginUrl(), repoInfo);
-        repoInfo.setLastUpdateDateTime(LocalDateTime.now());
+        extractedDataFromExternalSource(addon.getOriginUrl(), repoInfo);
+        addon.setRepoInfo(repoInfo);
         repoInfoRepository.create(repoInfo);
-        return repoInfo;
     }
 
     @Override
-    public RepoInfo update(Addon addon) {
+    public void updateInfoForAddon(Addon addon) {
         RepoInfo repoInfo = addon.getRepoInfo();
-        apiConsumer.populateRepoInfoFromApi(addon.getOriginUrl(), repoInfo);
+        extractedDataFromExternalSource(addon.getOriginUrl(), repoInfo);
+    }
+
+    private void extractedDataFromExternalSource(String url, RepoInfo repoInfo) {
+        apiConsumer.populateRepoInfoFromApi(url , repoInfo);
         repoInfo.setLastUpdateDateTime(LocalDateTime.now());
-        repoInfoRepository.update(repoInfo);
-        return repoInfo;
     }
 
     /*
      https://riptutorial.com/spring/example/21209/cron-expression
      */
-    @Scheduled(cron = "0/30 * * * * *")
-    private void updateAll(){
-        logger.info("Scheduled refresh of all addon. Extracting data from GitHub");
-        addonRepository.getAll().stream().forEach(this::update);
-        logger.info("Scheduled refresh - DONE");
+    @Scheduled(cron = "0 0/5 * * * *")
+    private void scheduledUpdate(){
+        List<Addon> addonList =  addonRepository.getAll();
+        logger.info("Scheduled update of all repos. Extracting data from GitHub...");
+        for(Addon addon: addonList){
+            extractedDataFromExternalSource(addon.getOriginUrl(), addon.getRepoInfo());
+            repoInfoRepository.update(addon.getRepoInfo());
+        }
+        logger.info("Scheduled update of all repos - DONE");
 
     }
 }
