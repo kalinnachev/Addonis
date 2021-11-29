@@ -25,7 +25,7 @@ import java.util.List;
     https://www.baeldung.com/rest-template
     https://www.section.io/engineering-education/spring-boot-rest-template/
  */
-@Repository
+
 public class GitHubRestApiConsumerImpl implements GitHubRestApiConsumer {
 
     private final RestTemplate restTemplate;
