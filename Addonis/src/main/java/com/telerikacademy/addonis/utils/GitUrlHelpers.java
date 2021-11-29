@@ -42,7 +42,7 @@ public class GitUrlHelpers {
      input:  https://github.com/spring-projects/spring-boot
      output: spring-projects/spring-boot
   */
-    private static String extractPath(String originURL) {
+    public static String extractPath(String originURL) {
         try {
             return (new URI(originURL)).getPath().substring(1);
         } catch (URISyntaxException e) {
