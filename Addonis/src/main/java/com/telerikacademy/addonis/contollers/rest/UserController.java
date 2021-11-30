@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,75 +60,44 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getById(@PathVariable int id) {
-        try {
             return userService.getById(id);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody UserDto userDto, HttpServletRequest request) {
-        //try {
         User user = modelMapperUser.fromDto(userDto);
         userService.create(user);
         String appUrl = request.getContextPath();
         applicationEventPublisher.publishEvent(new UserRegistrationCompleteEvent(user));
-
         return user;
-//        } catch (DuplicateEntityException e) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-//        }
     }
 
     @PutMapping()
     public User updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto
             , @RequestHeader HttpHeaders headers) {
-        try {
             User user = authenticationHelper.tryGetUser(headers);
             modelMapperUser.fromDto(userUpdateDto, user);
             userService.update(user);
             return user;
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (DuplicateEntityException ex) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage());
-        }
     }
 
 
     @PutMapping("/{id}/block")
-    public User BlockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-        try {
+    public User blockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
             User user = authenticationHelper.tryGetUser(headers);
             return userService.block(id, user);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        }
     }
 
     @PutMapping("/{id}/unblock")
-    public User UnblockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-        try {
+    public User unblockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
             User user = authenticationHelper.tryGetUser(headers);
             return userService.unblock(id, user);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        }
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-        try {
             User user = authenticationHelper.tryGetUser(headers);
-            verificationTokenService.deleteVerificationToken(user);
+            verificationTokenService.deleteVerificationToken(userService.getById(id));
             userService.delete(id, user);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
     }
 }
