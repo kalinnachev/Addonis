@@ -28,7 +28,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Override
     public void deleteVerificationToken(User user) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.
-                getAll().stream().filter(u-> u.getId() == user.getId()).findFirst();
+                getAll().stream().filter(u-> u.getUser().getPhoneNumber().equals(user.getPhoneNumber())).findFirst();
         verificationTokenRepository.delete(verificationToken.get().getId());
     }
 }
