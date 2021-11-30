@@ -5,6 +5,8 @@ import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.untilities.AuthenticationHelper;
+import com.telerikacademy.addonis.untilities.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 /*
@@ -30,30 +34,31 @@ public class FileController {
 
     private final AddonService addonService;
 
+    private final AuthenticationHelper authenticationHelper;
+
+
     @Autowired
-    public FileController(FileService fileService, UserService userService, AddonService addonService) {
+    public FileController(FileService fileService, UserService userService, AddonService addonService, AuthenticationHelper authenticationHelper) {
         this.fileService = fileService;
         this.userService = userService;
         this.addonService = addonService;
+        this.authenticationHelper = authenticationHelper;
     }
 
-    @PostMapping("/profile/picture/{id}")
-    public String uploadFile(@PathVariable int id, @RequestParam("picture") MultipartFile picture) {
-        User user = userService.getById(id);
-       // String fn = fileService.storeUserPicture(picture, user);
-      //  user.setPictureUrl(fn);
-        userService.update(user);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-               .path("api/storage/profile/picture/"+id)
-                .toUriString();
-
-        return fileDownloadUri;
+    @PutMapping ("/profile/picture")
+    public User uploadFile( @RequestParam("picture") MultipartFile picture,
+                           @RequestHeader HttpHeaders headers) throws IOException {
+        User userToUpdate = authenticationHelper.tryGetUser(headers);
+        File file = IOUtils.convert(picture);
+        String fn = fileService.storeUserPicture(file, userToUpdate);
+        userToUpdate.setPictureUrl(fn);
+        userService.update(userToUpdate);
+        return userToUpdate;
     }
 
-    @GetMapping(value= "/profile/picture/{id}")
-    public ResponseEntity<ByteArrayResource> getProfilePicture(@PathVariable int id) {
-        User user = userService.getById(id);
+    @GetMapping(value= "/profile/picture")
+    public ResponseEntity<ByteArrayResource> getProfilePicture(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
         byte[] data = fileService.getUserPicture(user);
         return generateResponse(user.getPictureUrl(), data);
     }
