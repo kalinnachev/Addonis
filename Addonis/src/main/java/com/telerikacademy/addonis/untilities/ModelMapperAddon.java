@@ -41,7 +41,7 @@ public class ModelMapperAddon {
 
     private void dtoToObject(Addon addon, AddonDto addonDto, User user) {
         addon.setName(addonDto.getName());
-        addon.setDescription(addon.getDescription());
+        addon.setDescription(addonDto.getDescription());
         addon.setCreator(user);
         addon.setTargetIde(targetIdeService.getById(addonDto.getTargetIde()));
         addon.setOriginUrl(addonDto.getOriginUrl());
@@ -52,7 +52,7 @@ public class ModelMapperAddon {
             tags.add(tagToAdd);
         }
         addon.setTags(tags);
-        addon.setBinaryContentUrl(addonDto.getBinaryContentUrl());
+        //addon.setBinaryContentUrl(addonDto.getBinaryContentUrl());
         addon.setApproved(false);
         addon.setCreationDate(LocalDate.now());
     }
