@@ -3,11 +3,13 @@ package com.telerikacademy.addonis.contollers.aspects;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
+import com.telerikacademy.addonis.untilities.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -17,6 +19,7 @@ https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-jav
 
 @ControllerAdvice("com.telerikacademy.addonis.contollers.rest")
 public class RestControllerAdvice {
+
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException e) {
@@ -33,9 +36,10 @@ public class RestControllerAdvice {
         return generateResponse(HttpStatus.UNAUTHORIZED, e);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        return generateResponseWithStackTrace(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    // TODO internal server error?
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponse> handleException(IOException e) {
+        return generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 
     private String getStackTrace(Exception e){
