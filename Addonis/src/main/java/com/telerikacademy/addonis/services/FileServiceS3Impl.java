@@ -1,8 +1,6 @@
 package com.telerikacademy.addonis.services;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
@@ -12,13 +10,12 @@ import com.telerikacademy.addonis.services.contracts.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+
+// TODO add link
 
 @Service
 public class FileServiceS3Impl implements FileService {
@@ -27,7 +24,7 @@ public class FileServiceS3Impl implements FileService {
 
     private final AmazonS3 amazonS3;
 
-    private Logger logger = LoggerFactory.getLogger(FileServiceS3Impl.class);
+    private final Logger logger = LoggerFactory.getLogger(FileServiceS3Impl.class);
 
     @Autowired
     public FileServiceS3Impl(AmazonS3 amazonS3) {
@@ -53,6 +50,7 @@ public class FileServiceS3Impl implements FileService {
         String key = user.getUsername() + "_profile_picture_" + user.getPictureUrl();
         return getContent(key);
     }
+
     @Override
     public byte[] getBinaryContent(Addon addon) {
         String key = addon.getId() + "_binary_content_" + addon.getBinaryContentUrl();
@@ -62,19 +60,16 @@ public class FileServiceS3Impl implements FileService {
     private byte[] getContent(String key) {
         logger.info("Requesting data from Amazon S3");
         byte[] content = null;
-        try(S3Object s3Object = amazonS3.getObject(BUCKET, key)){
+        try (S3Object s3Object = amazonS3.getObject(BUCKET, key)) {
             S3ObjectInputStream stream = s3Object.getObjectContent();
             content = IOUtils.toByteArray(stream);
-        } catch(IOException e) {
+        } catch (IOException e) {
             // TODO
             e.printStackTrace();
         }
         logger.info("Requesting data from Amazon S3 - DONE");
         return content;
     }
-
-
-
 
 
 }
