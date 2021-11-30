@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.contollers.aspects;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,11 @@ public class RestControllerAdvice {
     @ExceptionHandler(DuplicateEntityException.class)
     public ResponseEntity<ErrorResponse> handleException(DuplicateEntityException e) {
         return generateResponse(HttpStatus.CONFLICT, e);
+    }
+
+    @ExceptionHandler(UnauthorizedFailureException.class)
+    public ResponseEntity<ErrorResponse> handleException(UnauthorizedFailureException e) {
+        return generateResponse(HttpStatus.UNAUTHORIZED, e);
     }
 
     @ExceptionHandler(Exception.class)
