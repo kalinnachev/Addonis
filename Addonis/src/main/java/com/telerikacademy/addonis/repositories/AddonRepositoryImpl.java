@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.repositories;
 
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,4 +64,17 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                     .list();
         }
     }
+
+    @Override
+    public Addon getByName(String name) {
+        String query = format("from %s where %s = :value", getClazz().getSimpleName(), "name");
+        try (Session session = getSessionFactory().openSession()) {
+            return session
+                    .createQuery(query, getClazz())
+                    .setParameter("value", name)
+                    .uniqueResultOptional()
+                    .orElseThrow(() -> new EntityNotFoundException("Addon", "name", name));
+        }
+    }
+
 }

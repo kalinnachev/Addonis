@@ -12,4 +12,6 @@ public interface AddonRepository extends CRUDRepository<Addon> {
     List<Addon> getNewest();
 
     List<Addon> getPopular();
+
+    Addon getByName(String name);
 }
