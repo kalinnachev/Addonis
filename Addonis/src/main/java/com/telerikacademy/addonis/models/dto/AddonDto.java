@@ -1,6 +1,7 @@
 package com.telerikacademy.addonis.models.dto;
 
 import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.validators.ValidGitRepo;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -21,11 +22,13 @@ public class AddonDto {
     @Positive
     private int targetIde;
 
+    @NotNull(message = "Description can't be empty")
     private String description;
 
+    @ValidGitRepo
     private String originUrl;
 
-    private String binaryContentUrl;
+   // private String binaryContentUrl;
 
     private Set<Integer> tags = new HashSet<>();
 
@@ -64,13 +67,13 @@ public class AddonDto {
         this.originUrl = originUrl;
     }
 
-    public String getBinaryContentUrl() {
-        return binaryContentUrl;
-    }
-
-    public void setBinaryContentUrl(String binaryContentUrl) {
-        this.binaryContentUrl = binaryContentUrl;
-    }
+//    public String getBinaryContentUrl() {
+//        return binaryContentUrl;
+//    }
+//
+//    public void setBinaryContentUrl(String binaryContentUrl) {
+//        this.binaryContentUrl = binaryContentUrl;
+//    }
 
     public Set<Integer> getTags() {
         return tags;
