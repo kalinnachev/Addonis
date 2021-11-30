@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.services;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
 import com.telerikacademy.addonis.services.contracts.UserService;
@@ -12,6 +13,10 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+    public static final String ONLY_ADMIN_CAN_UNBLOCK = "Only admin can unblock";
+    public static final String ONLY_ADMIN_CAN_SEARCH = "Only admin can search";
+    public static final String ONLY_ADMIN_CAN_DELETE = "Only admin can delete";
+    public static final String ONLY_ADMIN_CAN_BLOCK = "Only admin can block";
     private UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -51,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User block(int id, User user) {
         if (!user.isAdmin()) {
-            throw new IllegalArgumentException("Only admin can block");
+            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_BLOCK);
         }
         User userBlock = userRepository.getById(id);
         userBlock.setBlocked(true);
@@ -62,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User unblock(int id, User user) {
         if (!user.isAdmin()) {
-            throw new IllegalArgumentException("Only admin can unblock");
+            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_UNBLOCK);
         }
         User userUnblock = userRepository.getById(id);
         userUnblock.setBlocked(false);
@@ -74,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber, User user) {
         if (!user.isAdmin()) {
-            throw new IllegalArgumentException("Only admin can search");
+            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_SEARCH);
         } else if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()) {
             return userRepository.getAll();
         }
@@ -84,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(int id, User user) {
         if (!user.isAdmin()) {
-            throw new IllegalArgumentException("Only admin can delete");
+            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_DELETE);
         }
         userRepository.delete(id);
     }
