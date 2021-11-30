@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.services;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.RepoInfo;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
@@ -26,7 +27,6 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public Addon getById(int id) {
-        //TODO checks
         return addonRepository.getById(id);
     }
 
@@ -37,9 +37,28 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void create(Addon addon) {
+        throwIfCreatorIsBlocked(addon);
+        throwIfNameIsNotUnique(addon);
         checkForDuplicateOriginUrl(addon);
         repoInfoService.createInfoForAddon(addon);
         addonRepository.create(addon);
+    }
+
+    private void throwIfNameIsNotUnique(Addon addon) {
+        try {
+            Addon a = addonRepository.getByName(addon.getName());
+            if (a.getId() == addon.getId())
+                return;
+        } catch (EntityNotFoundException e) {
+            return;
+        }
+        throw new DuplicateEntityException("Addon", "name", addon.getName());
+    }
+
+    private void throwIfCreatorIsBlocked(Addon addon) {
+        if(addon.getCreator().isBlocked())
+            throw new UnauthorizedFailureException(
+                    String.format("User %d is blocked", addon.getCreator().getId()));
     }
 
     @Override
