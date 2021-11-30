@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class IOUtils {
 
-    public static File convert(MultipartFile file) throws IOException, IOException {
+    public static File convert(MultipartFile file) throws IOException {
         String tmpDirsLocation = System.getProperty("java.io.tmpdir");
         File convFile = new File(tmpDirsLocation + file.getOriginalFilename());
         convFile.createNewFile();
