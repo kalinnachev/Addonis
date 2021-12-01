@@ -9,7 +9,9 @@ import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,15 +19,15 @@ import java.util.List;
 @RestController
 @RequestMapping("api/addons")
 public class AddonController {
+    public static final String ERROR_MSG_BLOCKED = "Action is blocked";
+    public static final String ERROR_MSG_ADMIN = "User must be admin";
     private final ModelMapperAddon modelMapperAddon;
     private final AddonService addonService;
-    private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
 
-    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, UserService userService, AuthenticationHelper authenticationHelper) {
+    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, AuthenticationHelper authenticationHelper) {
         this.modelMapperAddon = modelMapperAddon;
         this.addonService = addonService;
-        this.userService = userService;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -60,6 +62,7 @@ public class AddonController {
     @PostMapping()
     public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
+        checkIfBlocked(user);
         Addon addon = modelMapperAddon.fromDto(addonDto, user);
         // TODO
         addon.setBinaryContentUrl("test");
@@ -67,30 +70,43 @@ public class AddonController {
         return addon;
     }
 
-    //TODO when Dto is done
     @PutMapping("/{id}")
     public Addon updateAddon(@PathVariable int id,
-                             @Valid @RequestBody AddonUpdateDto addonUpdateDto) {
-
-        //TODO swap user with header when authentication is ready
-        User user = userService.getById(1);
-        Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-        addonService.update(addon);
-        return addon;
-
+                             @Valid @RequestBody AddonUpdateDto addonUpdateDto,
+                             @RequestHeader HttpHeaders headers) {
+            User user = authenticationHelper.tryGetUser(headers);
+            checkIfBlocked(user);
+            Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
+            addonService.update(addon);
+            return addon;
     }
 
     @PutMapping("/{id}/approve")
-    public Addon approveAddon(@PathVariable int id) {
-        //TODO authentication and exception handling
+    public Addon approveAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        checkIfAdmin(user);
         Addon addon = addonService.getById(id);
         addonService.approve(addon);
         return addon;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAddon(@PathVariable int id) {
+    public void deleteAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        checkIfBlocked(user);
         addonService.delete(id);
 
+    }
+
+    private void checkIfAdmin(User user) {
+        if(!user.isAdmin()){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MSG_ADMIN);
+        }
+    }
+
+    private void checkIfBlocked(User user) {
+        if(!user.isBlocked()){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MSG_BLOCKED);
+        }
     }
 }

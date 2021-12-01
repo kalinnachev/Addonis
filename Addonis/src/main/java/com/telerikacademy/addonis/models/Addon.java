@@ -48,9 +48,9 @@ public class Addon {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "addons_tags",
+            name = "addons_tags", //ratings
             joinColumns = @JoinColumn(name = "addon_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            inverseJoinColumns = @JoinColumn(name = "tag_id") //rating
     )
     private Set<Tag> tags = new HashSet<>();
 
@@ -134,6 +134,7 @@ public class Addon {
         this.tags = tags;
     }
 
+
     public boolean isApproved() {
         return approved;
     }
@@ -149,4 +150,12 @@ public class Addon {
     public void setRepoInfo(RepoInfo repoInfo) {
         this.repoInfo = repoInfo;
     }
+
+//    public double getAverageRating(){
+//        double totalRating = 0;
+//        for (Rating rating : ratings) {
+//            totalRating+= rating.getRating();
+//        }
+//        return totalRating/ratings.size();
+//    }
 }
