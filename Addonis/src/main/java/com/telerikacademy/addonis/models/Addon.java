@@ -48,9 +48,9 @@ public class Addon {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "addons_tags",
+            name = "addons_tags", //ratings
             joinColumns = @JoinColumn(name = "addon_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            inverseJoinColumns = @JoinColumn(name = "tag_id") //rating
     )
     private Set<Tag> tags = new HashSet<>();
 
@@ -129,10 +129,12 @@ public class Addon {
     public Set<Tag> getTags() {
         return tags;
     }
+    //fori(Sum(ratings)/ratings.size) = getRating
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
+
 
     public boolean isApproved() {
         return approved;
