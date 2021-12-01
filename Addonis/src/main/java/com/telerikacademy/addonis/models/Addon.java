@@ -54,14 +54,6 @@ public class Addon {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "ratings",
-            joinColumns = @JoinColumn(name = "addon_id"),
-            inverseJoinColumns = @JoinColumn(name = "rating")
-    )
-    private Set<Rating> ratings = new HashSet<>();
-
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -138,15 +130,6 @@ public class Addon {
         return tags;
     }
 
-    public Set<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
-    }
-//fori(Sum(ratings)/ratings.size) = getRating
-
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
@@ -168,11 +151,11 @@ public class Addon {
         this.repoInfo = repoInfo;
     }
 
-    public double getAverageRating(){
-        double totalRating = 0;
-        for (Rating rating : ratings) {
-            totalRating+= rating.getRating();
-        }
-        return totalRating/ratings.size();
-    }
+//    public double getAverageRating(){
+//        double totalRating = 0;
+//        for (Rating rating : ratings) {
+//            totalRating+= rating.getRating();
+//        }
+//        return totalRating/ratings.size();
+//    }
 }
