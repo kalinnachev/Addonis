@@ -47,20 +47,22 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
 
     @Override
     public List<Addon> getNewest() {
-        String query = format("from %s order by %s desc limit 5",getClazz().getSimpleName(),"creationDate");
+        String query = format("from %s order by %s desc",getClazz().getSimpleName(),"creationDate");
         try(Session session = getSessionFactory().openSession()){
             return session
                     .createQuery(query, getClazz())
+                    .setMaxResults(5)
                     .list();
         }
     }
 
     @Override
     public List<Addon> getPopular() {
-        String query = format("from %s order by %s desc limit 5",getClazz().getSimpleName(),"numberOfDownloads");
+        String query = format("from %s order by %s desc",getClazz().getSimpleName(),"numberOfDownloads");
         try(Session session = getSessionFactory().openSession()){
             return session
                     .createQuery(query, getClazz())
+                    .setMaxResults(5)
                     .list();
         }
     }
