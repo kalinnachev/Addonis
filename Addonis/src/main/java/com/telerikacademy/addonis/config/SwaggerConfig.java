@@ -15,7 +15,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 //.apis(RequestHandlerSelectors.any())
-                .apis(RequestHandlerSelectors.basePackage(("com.telerikacademy.delivery.controllers.rest")))
+                .apis(RequestHandlerSelectors.basePackage(("com.telerikacademy.addonis.contollers.rest")))
                 .paths(PathSelectors.any())
                 .build();
     }
