@@ -1,5 +1,6 @@
 package com.telerikacademy.addonis.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
 
@@ -16,10 +17,12 @@ public class Rating {
     //from Rating where addon = :id return list - ratingList
     // AVG(ratingLIst) = getRating
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "addon_id")
     private Addon addon;
