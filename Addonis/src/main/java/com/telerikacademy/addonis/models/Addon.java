@@ -3,6 +3,7 @@ package com.telerikacademy.addonis.models;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Table(name = "addons")
@@ -151,7 +152,15 @@ public class Addon {
         this.repoInfo = repoInfo;
     }
 
-//    public double getAverageRating(){
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Addon addon = (Addon) o;
+        return Objects.equals(id, addon.id) && Objects.equals(name, addon.name);
+    }
+
+    //    public double getAverageRating(){
 //        double totalRating = 0;
 //        for (Rating rating : ratings) {
 //            totalRating+= rating.getRating();

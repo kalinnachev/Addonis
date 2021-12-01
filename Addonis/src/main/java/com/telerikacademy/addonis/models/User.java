@@ -3,6 +3,7 @@ package com.telerikacademy.addonis.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Table(name = "users")
 @Entity
@@ -135,5 +136,13 @@ public class User {
 
     public boolean isAdmin(){
         return role.getRoleName().equals("Admin");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 }
