@@ -19,8 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/addons")
 public class AddonController {
-    public static final String ERROR_MSG_BLOCKED = "Action is blocked";
-    public static final String ERROR_MSG_ADMIN = "User must be admin";
+
     private final ModelMapperAddon modelMapperAddon;
     private final AddonService addonService;
     private final AuthenticationHelper authenticationHelper;
@@ -62,11 +61,10 @@ public class AddonController {
     @PostMapping()
     public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-        checkIfBlocked(user);
         Addon addon = modelMapperAddon.fromDto(addonDto, user);
         // TODO
         addon.setBinaryContentUrl("test");
-        addonService.create(addon);
+        addonService.create(addon,user);
         return addon;
     }
 
@@ -75,38 +73,24 @@ public class AddonController {
                              @Valid @RequestBody AddonUpdateDto addonUpdateDto,
                              @RequestHeader HttpHeaders headers) {
             User user = authenticationHelper.tryGetUser(headers);
-            checkIfBlocked(user);
             Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-            addonService.update(addon);
+            addonService.update(addon,user);
             return addon;
     }
 
     @PutMapping("/{id}/approve")
     public Addon approveAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-        checkIfAdmin(user);
         Addon addon = addonService.getById(id);
-        addonService.approve(addon);
+        addonService.approve(addon,user);
         return addon;
     }
 
     @DeleteMapping("/{id}")
     public void deleteAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-        checkIfBlocked(user);
-        addonService.delete(id);
+        addonService.delete(id,user);
 
     }
 
-    private void checkIfAdmin(User user) {
-        if(!user.isAdmin()){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MSG_ADMIN);
-        }
-    }
-
-    private void checkIfBlocked(User user) {
-        if(!user.isBlocked()){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MSG_BLOCKED);
-        }
-    }
 }

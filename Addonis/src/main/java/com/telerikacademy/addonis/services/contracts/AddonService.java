@@ -1,6 +1,7 @@
 package com.telerikacademy.addonis.services.contracts;
 
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.User;
 
 import java.util.List;
 
@@ -9,13 +10,13 @@ public interface AddonService {
 
     List<Addon> getAll();
 
-    void create(Addon addon);
+    void create(Addon addon, User user);
 
-    void update(Addon addon);
+    void update(Addon addon, User user);
 
-    void delete(int id);
+    void delete(int id, User user);
 
-    void approve(Addon addon);
+    void approve(Addon addon, User user);
 
     List<Addon> getFeatured();
 
