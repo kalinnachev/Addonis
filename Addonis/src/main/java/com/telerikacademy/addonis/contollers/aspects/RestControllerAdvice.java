@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MultipartException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,6 +35,11 @@ public class RestControllerAdvice {
     @ExceptionHandler(UnauthorizedFailureException.class)
     public ResponseEntity<ErrorResponse> handleException(UnauthorizedFailureException e) {
         return generateResponse(HttpStatus.UNAUTHORIZED, e);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ErrorResponse> handleException(MultipartException e) {
+        return generateResponse(HttpStatus.BAD_REQUEST, e);
     }
 
     // TODO internal server error?
