@@ -8,5 +8,5 @@ public interface VerificationTokenService {
 
     void deleteVerificationToken(User user);
 
-    void verificationToken(String token);
+    void verifyToken(String token);
 }
