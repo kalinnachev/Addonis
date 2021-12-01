@@ -55,6 +55,9 @@ public class Addon {
     )
     private Set<Tag> tags = new HashSet<>();
 
+    @OneToMany(mappedBy = "addon", fetch = FetchType.EAGER)
+    private Set<Rating> ratings = new HashSet<>();
+
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -152,6 +155,14 @@ public class Addon {
         this.repoInfo = repoInfo;
     }
 
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,11 +171,11 @@ public class Addon {
         return Objects.equals(id, addon.id) && Objects.equals(name, addon.name);
     }
 
-    //    public double getAverageRating(){
-//        double totalRating = 0;
-//        for (Rating rating : ratings) {
-//            totalRating+= rating.getRating();
-//        }
-//        return totalRating/ratings.size();
-//    }
+    public double getAverageRating() {
+        double totalRating = 0;
+        for (Rating rating : ratings) {
+            totalRating += rating.getRating();
+        }
+        return totalRating / ratings.size();
+    }
 }
