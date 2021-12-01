@@ -1,5 +1,6 @@
 package com.telerikacademy.addonis.services;
 
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.VerificationToken;
 import com.telerikacademy.addonis.repositories.contracts.VerificationTokenRepository;
@@ -33,9 +34,12 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public void verificationToken(String token) {
+    public void verifyToken(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.
                 getAll().stream().filter(t-> t.getToken().equals(token)).findFirst();
+        if(verificationToken.isEmpty()){
+            throw new EntityNotFoundException("Token","value",token);
+        }
         verificationToken.get().getUser().setEnabled(true);
     }
 }

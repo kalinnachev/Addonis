@@ -51,6 +51,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.kohsuke/github-api
     implementation 'org.kohsuke:github-api:1.301'
 
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
 
 
 }
