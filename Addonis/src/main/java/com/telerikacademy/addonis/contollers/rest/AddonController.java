@@ -63,6 +63,7 @@ public class AddonController {
     @PostMapping()
     public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
+        checkIfBlocked(user);
         Addon addon = modelMapperAddon.fromDto(addonDto, user);
         // TODO
         addon.setBinaryContentUrl("test");
@@ -72,26 +73,28 @@ public class AddonController {
 
     @PutMapping("/{id}")
     public Addon updateAddon(@PathVariable int id,
-                             @Valid @RequestBody AddonUpdateDto addonUpdateDto) {
-
-        //TODO swap user with header when authentication is ready
-        User user = userService.getById(1);
-        Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-        addonService.update(addon);
-        return addon;
-
+                             @Valid @RequestBody AddonUpdateDto addonUpdateDto,
+                             @RequestHeader HttpHeaders headers) {
+            User user = authenticationHelper.tryGetUser(headers);
+            checkIfBlocked(user);
+            Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
+            addonService.update(addon);
+            return addon;
     }
 
     @PutMapping("/{id}/approve")
-    public Addon approveAddon(@PathVariable int id) {
-        //TODO authentication and exception handling
+    public Addon approveAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        checkIfAdmin(user);
         Addon addon = addonService.getById(id);
         addonService.approve(addon);
         return addon;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAddon(@PathVariable int id) {
+    public void deleteAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        checkIfBlocked(user);
         addonService.delete(id);
 
     }
