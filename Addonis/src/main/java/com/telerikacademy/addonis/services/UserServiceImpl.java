@@ -5,9 +5,11 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
+import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +19,14 @@ public class UserServiceImpl implements UserService {
     public static final String ONLY_ADMIN_CAN_SEARCH = "Only admin can search";
     public static final String ONLY_ADMIN_CAN_DELETE = "Only admin can delete";
     public static final String ONLY_ADMIN_CAN_BLOCK = "Only admin can block";
-    private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    private final FileService fileService;
+
+
+    public UserServiceImpl(UserRepository userRepository, FileService fileService) {
         this.userRepository = userRepository;
+        this.fileService = fileService;
     }
 
     @Override
@@ -39,17 +45,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) {
+    public void create(User user, File profilePicture) {
         checkForDuplicateUsername(user);
         checkForDuplicateEmail(user);
         checkForDuplicateTelephone(user);
+
+        setProfilePicture(user, profilePicture);
         userRepository.create(user);
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user, Optional<File> profilePicture) {
         checkForDuplicateEmail(user);
         checkForDuplicateTelephone(user);
+
+        profilePicture.ifPresent(file->setProfilePicture(user,file));
         userRepository.update(user);
     }
 
@@ -127,6 +137,12 @@ public class UserServiceImpl implements UserService {
             return;
         }
         throw new DuplicateEntityException("User", "phoneNumber", user.getPhoneNumber());
+    }
+
+
+    private void setProfilePicture(User user, File profilePicture) {
+        String picture = fileService.storeUserPicture(profilePicture, user);
+        user.setPictureUrl(picture);
     }
 }
 
