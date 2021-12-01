@@ -17,10 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
+
 /*
 https://blogs.perficient.com/2020/07/27/requestbody-and-multipart-on-spring-boot/
  */
@@ -29,11 +32,8 @@ https://blogs.perficient.com/2020/07/27/requestbody-and-multipart-on-spring-boot
 public class FileController {
 
     private final FileService fileService;
-
     private final UserService userService;
-
     private final AddonService addonService;
-
     private final AuthenticationHelper authenticationHelper;
 
 
@@ -45,31 +45,27 @@ public class FileController {
         this.authenticationHelper = authenticationHelper;
     }
 
-    @PutMapping ("/profile/picture")
-    public User uploadFile( @RequestParam("picture") MultipartFile picture,
-                           @RequestHeader HttpHeaders headers) throws IOException {
-        User userToUpdate = authenticationHelper.tryGetUser(headers);
-        File file = IOUtils.convert(picture);
-        String fn = fileService.storeUserPicture(file, userToUpdate);
-        userToUpdate.setPictureUrl(fn);
-        userService.update(userToUpdate);
-        return userToUpdate;
-    }
-
-    @GetMapping(value= "/profile/picture")
-    public ResponseEntity<ByteArrayResource> getProfilePicture(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
+    @GetMapping(value= "/users/{id}/picture")
+    public ResponseEntity<ByteArrayResource> getProfilePicture(@PathVariable int id,@RequestHeader HttpHeaders headers) {
+        User user = userService.getById(id);
         byte[] data = fileService.getUserPicture(user);
         return generateResponse(user.getPictureUrl(), data);
     }
 
-    @GetMapping(value= "/addon/content/{id}")
+    @PutMapping ("/users/picture")
+    public User uploadFile( @RequestParam("picture") MultipartFile picture,
+                           @RequestHeader HttpHeaders headers) throws IOException {
+        User userToUpdate = authenticationHelper.tryGetUser(headers);
+        userService.update(userToUpdate, Optional.of(IOUtils.convert(picture)));
+        return userToUpdate;
+    }
+
+    @GetMapping(value= "/addon/{id}/content")
     public ResponseEntity<ByteArrayResource> getAddonBinary(@PathVariable int id) {
         Addon addon = addonService.getById(id);
         byte[] data = fileService.getBinaryContent(addon);
         return generateResponse(addon.getBinaryContentUrl(), data);
     }
-
 
     public ResponseEntity<ByteArrayResource> generateResponse(String fileName, byte[] data) {
         ByteArrayResource resource = new ByteArrayResource(data);

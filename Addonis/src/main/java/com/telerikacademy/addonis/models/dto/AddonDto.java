@@ -1,6 +1,5 @@
 package com.telerikacademy.addonis.models.dto;
 
-import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.validators.ValidGitRepo;
 
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,6 @@ public class AddonDto {
 
     public static final int MAX_ADDON_NAME_LENGTH = 30;
     public static final int MIN_ADDON_NAME_LENGTH = 3;
-
 
     @NotNull(message = "Name can't be empty")
     @Size(min = MIN_ADDON_NAME_LENGTH, max = MAX_ADDON_NAME_LENGTH)
@@ -28,8 +26,7 @@ public class AddonDto {
     @ValidGitRepo
     private String originUrl;
 
-   // private String binaryContentUrl;
-
+    @Size(min = 1, message = "Must have at least one tag")
     private Set<Integer> tags = new HashSet<>();
 
     public AddonDto() {
@@ -66,14 +63,6 @@ public class AddonDto {
     public void setOriginUrl(String originUrl) {
         this.originUrl = originUrl;
     }
-
-//    public String getBinaryContentUrl() {
-//        return binaryContentUrl;
-//    }
-//
-//    public void setBinaryContentUrl(String binaryContentUrl) {
-//        this.binaryContentUrl = binaryContentUrl;
-//    }
 
     public Set<Integer> getTags() {
         return tags;

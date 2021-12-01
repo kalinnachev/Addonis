@@ -1,26 +1,22 @@
 package com.telerikacademy.addonis.contollers.rest;
 
 import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
-import com.telerikacademy.addonis.events.UserRegistrationListener;
-import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
-import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.UserDto;
 import com.telerikacademy.addonis.models.dto.UserUpdateDto;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
+import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +29,8 @@ public class UserController {
     private final AuthenticationHelper authenticationHelper;
     private final VerificationTokenService verificationTokenService;
 
-
     @Autowired
-    public UserController(UserService userService, ModelMapperUser modelMapperUser,  AuthenticationHelper authenticationHelper, VerificationTokenService verificationTokenService, ApplicationEventPublisher applicationEventPublisher) {
+    public UserController(UserService userService, ModelMapperUser modelMapperUser, AuthenticationHelper authenticationHelper, VerificationTokenService verificationTokenService, ApplicationEventPublisher applicationEventPublisher) {
         this.userService = userService;
         this.modelMapperUser = modelMapperUser;
         this.authenticationHelper = authenticationHelper;
@@ -57,17 +52,16 @@ public class UserController {
         return userService.search(username, email, phoneNumber, user);
     }
 
-
     @GetMapping("/{id}")
     public User getById(@PathVariable int id) {
-            return userService.getById(id);
+        return userService.getById(id);
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody UserDto userDto, HttpServletRequest request) {
+    public User createUser(@Valid @RequestPart("user") UserDto userDto,
+                           @RequestPart("picture") MultipartFile picture) throws IOException {
         User user = modelMapperUser.fromDto(userDto);
-        userService.create(user);
-        String appUrl = request.getContextPath();
+        userService.create(user, IOUtils.convert(picture));
         applicationEventPublisher.publishEvent(new UserRegistrationCompleteEvent(user));
         return user;
     }
@@ -75,29 +69,29 @@ public class UserController {
     @PutMapping()
     public User updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto
             , @RequestHeader HttpHeaders headers) {
-            User user = authenticationHelper.tryGetUser(headers);
-            modelMapperUser.fromDto(userUpdateDto, user);
-            userService.update(user);
-            return user;
+        User user = authenticationHelper.tryGetUser(headers);
+        modelMapperUser.fromDto(userUpdateDto, user);
+        userService.update(user, Optional.empty());
+        return user;
     }
 
 
     @PutMapping("/{id}/block")
     public User blockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-            User user = authenticationHelper.tryGetUser(headers);
-            return userService.block(id, user);
+        User user = authenticationHelper.tryGetUser(headers);
+        return userService.block(id, user);
     }
 
     @PutMapping("/{id}/unblock")
     public User unblockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-            User user = authenticationHelper.tryGetUser(headers);
-            return userService.unblock(id, user);
+        User user = authenticationHelper.tryGetUser(headers);
+        return userService.unblock(id, user);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-            User user = authenticationHelper.tryGetUser(headers);
-            verificationTokenService.deleteVerificationToken(userService.getById(id));
-            userService.delete(id, user);
+        User user = authenticationHelper.tryGetUser(headers);
+        verificationTokenService.deleteVerificationToken(userService.getById(id));
+        userService.delete(id, user);
     }
 }
