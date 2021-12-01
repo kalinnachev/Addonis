@@ -25,10 +25,9 @@ public class AddonController {
     private final AddonService addonService;
     private final AuthenticationHelper authenticationHelper;
 
-    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, UserService userService, AuthenticationHelper authenticationHelper) {
+    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, AuthenticationHelper authenticationHelper) {
         this.modelMapperAddon = modelMapperAddon;
         this.addonService = addonService;
-        this.userService = userService;
         this.authenticationHelper = authenticationHelper;
     }
 
