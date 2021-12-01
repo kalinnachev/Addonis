@@ -13,6 +13,9 @@ public class Rating {
     @Column(name = "id")
     private Integer id;
 
+    //from Rating where addon = :id return list - ratingList
+    // AVG(ratingLIst) = getRating
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
