@@ -72,7 +72,7 @@ create table repo_info
     last_commit_title  text     not null,
     open_pull_requests int      not null,
     open_issues        int      not null,
-    last_commit_date   date     not null,
+    last_commit_date   datetime not null,
     last_refresh       datetime not null
 );
 

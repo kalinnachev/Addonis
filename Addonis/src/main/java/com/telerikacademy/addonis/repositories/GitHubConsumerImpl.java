@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -46,15 +46,15 @@ public class GitHubConsumerImpl implements GitHubRestApiConsumer {
             repoInfo.setOpenIssues(ghRepository.getOpenIssueCount() - numberOfPullRequests);
             repoInfo.setLastCommitTitle(ghCommit.getCommitShortInfo().getMessage());
             repoInfo.setLastCommitDate(convertToLocalDate(ghCommit.getCommitDate()));
-
+            //ghCommit.getCommitShortInfo().getCommitDate()
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private LocalDate convertToLocalDate(Date date) {
+    private LocalDateTime convertToLocalDate(Date date) {
         return Instant.ofEpochMilli(date.getTime())
                 .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+                .toLocalDateTime();
     }
 }
