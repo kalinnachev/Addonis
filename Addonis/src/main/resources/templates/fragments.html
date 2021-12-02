@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+</head>
+<body>
+
+<div th:fragment="addoncard(addon)" class="product">
+    <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
+    <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
+
+    <div class="product-img">
+        <img class="test" th:src="${vf.getLogoSource(addon.getTargetIde())}"
+             src="./img/eclipse.png" alt="" style="max-width:30%">
+        <div class="product-label">
+            <span class="" th:text="${addon.getTargetIde().getName()}"></span>
+        </div>
+    </div>
+    <div class="product-body">
+        <h3 class="product-name" >
+            <a href="#" th:text="${addon.getName()}">
+                product name goes here
+        </a>
+            <p class="product-category" th:text="${addon.getCreator().getUsername()}">
+                Category
+            </p>
+        </h3>
+<!--        <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>-->
+
+        <i><div th:text="${addon.getDescription()}"> ALA BALA</div></i>
+        <div class="product-rating">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+        </div>
+        <h6>Average rating: 4.5 out of 5</h6>
+        <h6>16 downloads</h6>
+        <h6 th:text="${vf.getLastCommit(addon)}"></h6>
+        <div class="product-btns">
+            <button class="add-to-wishlist">
+                <i class="fa fa-user"></i>
+                <span class="tooltipp"
+                      th:text="${addon.getCreator().getUsername()}">Author</span>
+            </button>
+
+            <button class="add-to-compare" >
+                <a th:href="${addon.getOriginUrl()}" target="_blank">
+                    <i class="fa fa-git"></i>             </a>
+
+                <span class="tooltipp" >
+                GIT Repo</span>
+            </button>
+
+            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Details</span>
+            </button>
+
+            <button class="add-to-compare">
+                <i class="fa fa-download"></i>
+                <span class="tooltipp" >
+                Download</span>
+            </button>
+        </div>
+    </div>
+<!--    <div class="add-to-cart">-->
+<!--        <button class="add-to-cart-btn">-->
+<!--            <i class="fa fa-download"></i> Download</button>-->
+<!--    </div>-->
+</div>
+
+</body>
+</html>
