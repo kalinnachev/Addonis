@@ -84,7 +84,6 @@ public class UserRepositoryImpl extends CRUDSQLRepository<User> implements UserR
             if(!search.isEmpty()) {
                 queryString.append(" where ").append(String.join(" or ", search));
             }
-            System.out.println(queryString);
             Query<User> query = session.createQuery(queryString.toString(), User.class);
             query.setProperties(params);
             return query.list();
