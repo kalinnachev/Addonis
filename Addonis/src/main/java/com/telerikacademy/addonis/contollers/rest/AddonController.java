@@ -5,18 +5,18 @@ import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.AddonDto;
 import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
 import com.telerikacademy.addonis.services.contracts.AddonService;
-import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
+import io.swagger.annotations.ApiOperation;
+import org.joda.time.LocalDate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +34,21 @@ public class AddonController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    //TODO authentication and exception handling
+    @ApiOperation(value = "Get all addons")
     @GetMapping
     public List<Addon> getAll() {
         return addonService.getAll();
+    }
+
+    @GetMapping("/filter")
+    public List<Addon> filterAddon(@RequestParam(required = false) Optional<String> name,
+                                   @RequestParam(required = false) Optional<Integer> targetIdeId,
+                                   @RequestParam(required = false) Optional<Integer> numberOfDownloads,
+                                   @RequestParam(required = false) Optional<LocalDate> uploadDate,
+                                   @RequestParam(required = false) Optional<LocalDate> lastCommitDate,
+                                   @RequestParam(required = false) Optional<String> sort){
+       return addonService.filter(name, targetIdeId,numberOfDownloads, uploadDate, lastCommitDate, sort);
     }
 
     @GetMapping("/featured")

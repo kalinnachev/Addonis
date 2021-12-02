@@ -9,10 +9,12 @@ import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.RepoInfoService;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,6 +100,14 @@ public class AddonServiceImpl implements AddonService {
     public List<Addon> getPopular() {
         return addonRepository.getPopular();
     }
+
+    @Override
+    public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId,
+                              Optional<Integer> numberOfDownloads, Optional<LocalDate> uploadDate, Optional<LocalDate> lastCommitDate,
+                              Optional<String> sort) {
+        return addonRepository.filter(name,targetIdeId,numberOfDownloads,uploadDate,lastCommitDate,sort);
+    }
+
 
     private void checkIfAdmin(User user) {
         if(!user.isAdmin()){
