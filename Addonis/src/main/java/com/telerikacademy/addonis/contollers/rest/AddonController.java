@@ -44,11 +44,8 @@ public class AddonController {
     @GetMapping("/filter")
     public List<Addon> filterAddon(@RequestParam(required = false) Optional<String> name,
                                    @RequestParam(required = false) Optional<Integer> targetIdeId,
-                                   @RequestParam(required = false) Optional<Integer> numberOfDownloads,
-                                   @RequestParam(required = false) Optional<LocalDate> uploadDate,
-                                   @RequestParam(required = false) Optional<LocalDate> lastCommitDate,
                                    @RequestParam(required = false) Optional<String> sort){
-       return addonService.filter(name, targetIdeId,numberOfDownloads, uploadDate, lastCommitDate, sort);
+       return addonService.filter(name, targetIdeId, sort);
     }
 
     @GetMapping("/featured")

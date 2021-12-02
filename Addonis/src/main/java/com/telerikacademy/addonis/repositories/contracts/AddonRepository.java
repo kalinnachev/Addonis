@@ -18,9 +18,7 @@ public interface AddonRepository extends CRUDRepository<Addon> {
 
     Addon getByName(String name);
 
-    List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId,
-                       Optional<Integer> numberOfDownloads, Optional<LocalDate> uploadDate
-            , Optional<LocalDate> lastCommitDate, Optional<String> sort);
+    List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort);
 
 
 

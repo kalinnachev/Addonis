@@ -81,9 +81,7 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
     }
 
     @Override
-    public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<Integer> numberOfDownloads,
-                              Optional<LocalDate> uploadDate, Optional<LocalDate> lastCommitDate,
-                              Optional<String> sort) {
+    public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort) {
         try (Session session = getSessionFactory().openSession()) {
             var queryString = new StringBuilder(" from Addon ");
             var filter = new ArrayList<String>();
@@ -98,17 +96,6 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                 filter.add("targetIde.id = :targetIdeId");
                 params.put("targetIdeId", targetIdeId.get());
             });
-
-            numberOfDownloads.ifPresent(value -> {
-                filter.add("numberOfDownloads = :numberOfDownloads");
-                params.put("numberOfDownloads", numberOfDownloads.get());
-            });
-
-            uploadDate.ifPresent(value -> {
-                filter.add("creationDate = :uploadDate");
-                params.put("uploadDate", uploadDate.get());
-            });
-
 
             if(!filter.isEmpty()) {
                 queryString.append(" where ").append(String.join(" and ", filter));
@@ -128,20 +115,17 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
             case "name":
                 endQuery.append(" name ");
                 break;
-            case "targetIdeId":
-                endQuery.append(" targetIdeId ");
-                break;
-            case "numberOfDownloads":
+            case "download":
                 endQuery.append(" numberOfDownloads ");
                 break;
             case "uploadDate":
-                endQuery.append(" uploadDate ");
+                endQuery.append(" creationDate ");
                 break;
             case "lastCommitDate":
-                endQuery.append(" lastCommitDate ");
+                endQuery.append(" repoInfo.lastCommitDate ");
                 break;
         }
-        if(strArray.length > 1 && strArray[1].equals(" desc")){
+        if(strArray.length > 1 && strArray[1].equals("desc")){
             endQuery.append(" desc ");
         }
         return endQuery.toString();

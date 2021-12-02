@@ -102,10 +102,8 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
-    public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId,
-                              Optional<Integer> numberOfDownloads, Optional<LocalDate> uploadDate, Optional<LocalDate> lastCommitDate,
-                              Optional<String> sort) {
-        return addonRepository.filter(name,targetIdeId,numberOfDownloads,uploadDate,lastCommitDate,sort);
+    public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort) {
+        return addonRepository.filter(name,targetIdeId,sort);
     }
 
 
