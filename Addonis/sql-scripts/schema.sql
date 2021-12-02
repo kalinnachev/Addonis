@@ -55,15 +55,16 @@ create table tags
         unique (name)
 );
 
-
 create table target_ide
 (
-    id   int auto_increment
+    id              int auto_increment
         primary key,
-    name varchar(50) not null,
+    name            varchar(50)  not null,
+    image_file_name varchar(255) null,
     constraint target_ide_name_uindex
         unique (name)
 );
+
 
 create table repo_info
 (
