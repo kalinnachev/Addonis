@@ -7,14 +7,18 @@ import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
 import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
+import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/addons")
@@ -29,8 +33,6 @@ public class AddonController {
         this.addonService = addonService;
         this.authenticationHelper = authenticationHelper;
     }
-
-    //TODO authentication and exception handling
 
     @GetMapping
     public List<Addon> getAll() {
@@ -57,14 +59,13 @@ public class AddonController {
         return addonService.getById(id);
     }
 
-    //TODO when Dto is done
     @PostMapping()
-    public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
+    public Addon createAddon(@Valid @RequestPart("addon") AddonDto addonDto,
+                             @RequestPart("binary") MultipartFile binary,
+                             @RequestHeader HttpHeaders headers) throws IOException {
         User user = authenticationHelper.tryGetUser(headers);
         Addon addon = modelMapperAddon.fromDto(addonDto, user);
-        // TODO
-        addon.setBinaryContentUrl("test");
-        addonService.create(addon,user);
+        addonService.create(addon,user, IOUtils.convert(binary));
         return addon;
     }
 
@@ -74,7 +75,7 @@ public class AddonController {
                              @RequestHeader HttpHeaders headers) {
             User user = authenticationHelper.tryGetUser(headers);
             Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-            addonService.update(addon,user);
+            addonService.update(addon,user, Optional.empty());
             return addon;
     }
 
@@ -90,7 +91,6 @@ public class AddonController {
     public void deleteAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         addonService.delete(id,user);
-
     }
 
 }

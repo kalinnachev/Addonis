@@ -7,11 +7,14 @@ import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import com.telerikacademy.addonis.services.contracts.AddonService;
+import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.RepoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddonServiceImpl implements AddonService {
@@ -22,11 +25,14 @@ public class AddonServiceImpl implements AddonService {
 
     private final AddonRepository addonRepository;
     private final RepoInfoService repoInfoService;
+    private final FileService fileService;
+
 
     @Autowired
-    public AddonServiceImpl(AddonRepository addonRepository, RepoInfoService repoInfoService) {
+    public AddonServiceImpl(AddonRepository addonRepository, RepoInfoService repoInfoService, FileService fileService) {
         this.addonRepository = addonRepository;
         this.repoInfoService = repoInfoService;
+        this.fileService = fileService;
     }
 
     @Override
@@ -40,25 +46,29 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
-    public void create(Addon addon, User user) {
+    public void create(Addon addon, User user, File binaryContent) {
         checkIfBlocked(user);
         checkForDuplicateName(addon);
         checkForDuplicateOriginUrl(addon);
+
         repoInfoService.createInfoForAddon(addon);
+        setBinaryContent(addon, binaryContent);
+        addon.setNumberOfDownloads(0);
         addonRepository.create(addon);
     }
 
-
-//    private void throwIfCreatorIsBlocked(Addon addon) {
-//        if(addon.getCreator().isBlocked())
-//            throw new UnauthorizedFailureException(
-//                    String.format("User %d is blocked", addon.getCreator().getId()));
-//    }
     @Override
-    public void update(Addon addon, User user) {
+    public void update(Addon addon, User user, Optional<File> binaryContent) {
         checkIfCreator(user, addon.getId());
         checkIfBlocked(user);
+
+        binaryContent.ifPresent(file->setBinaryContent(addon,file));
         addonRepository.update(addon);
+    }
+
+    private void setBinaryContent(Addon addon, File binaryContent) {
+        String fileName = fileService.storeBinaryContent(binaryContent, addon);
+        addon.setBinaryContentUrl(fileName);
     }
 
     @Override
@@ -115,7 +125,7 @@ public class AddonServiceImpl implements AddonService {
 
     private void checkIfCreator(User user, int id) {
         Addon addon = addonRepository.getById(id);
-        if(addon.getCreator().equals(user)){
+        if(!addon.getCreator().equals(user)){
             throw new UnauthorizedFailureException(ERROR_MSG_CREATOR);
         }
     }
