@@ -23,7 +23,7 @@ public class RepoInfo {
     private Integer openIssues;
 
     @Column(name = "last_commit_date")
-    private LocalDate lastCommitDate;
+    private LocalDateTime lastCommitDate;
 
     @Column(name = "last_refresh")
     private LocalDateTime lastUpdateDateTime;
@@ -68,11 +68,11 @@ public class RepoInfo {
         this.lastUpdateDateTime = lastUpdateDateTime;
     }
 
-    public LocalDate getLastCommitDate() {
+    public LocalDateTime getLastCommitDate() {
         return lastCommitDate;
     }
 
-    public void setLastCommitDate(LocalDate lastCommitDate) {
+    public void setLastCommitDate(LocalDateTime lastCommitDate) {
         this.lastCommitDate = lastCommitDate;
     }
 }
