@@ -1,5 +1,6 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
+import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -28,7 +30,6 @@ public class HomeMVC extends BaseMvcController{
 
     @GetMapping
     public String getHome(Model model, HttpSession session) {
-        session.setAttribute("currentUser" , userService.getByUsername("admin").getUsername());
         model.addAttribute("addonlist", addonService.getAll());
         model.addAttribute("vf", new ViewFormatter());
         return "index";
