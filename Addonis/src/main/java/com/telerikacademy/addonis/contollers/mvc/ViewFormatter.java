@@ -1,9 +1,13 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.Tag;
 import com.telerikacademy.addonis.models.TargetIde;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewFormatter {
 
@@ -34,5 +38,10 @@ public class ViewFormatter {
     public String getNumberOfDownloads(Addon addon){
 
         return addon.getNumberOfDownloads() + " downloads";
+    }
+    public List<Tag> getTagsAddon(Addon addon){
+        List<Tag> allTags = new ArrayList<>(addon.getTags());
+        allTags.addAll(allTags);
+        return allTags;
     }
 }
