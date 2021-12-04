@@ -1,17 +1,18 @@
 package com.telerikacademy.addonis.contollers.rest;
 
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.Rating;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.AddonDto;
 import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
+import com.telerikacademy.addonis.models.dto.RatingDto;
 import com.telerikacademy.addonis.services.contracts.AddonService;
-import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.services.contracts.RatingService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
+import com.telerikacademy.addonis.untilities.ModelMapperRating;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,11 +24,19 @@ public class AddonController {
     private final ModelMapperAddon modelMapperAddon;
     private final AddonService addonService;
     private final AuthenticationHelper authenticationHelper;
+    private final ModelMapperRating modelMapperRating;
+    private final RatingService ratingService;
 
-    public AddonController(ModelMapperAddon modelMapperAddon, AddonService addonService, AuthenticationHelper authenticationHelper) {
+    public AddonController(ModelMapperAddon modelMapperAddon,
+                           AddonService addonService,
+                           AuthenticationHelper authenticationHelper,
+                           ModelMapperRating modelMapperRating,
+                           RatingService ratingService) {
         this.modelMapperAddon = modelMapperAddon;
         this.addonService = addonService;
         this.authenticationHelper = authenticationHelper;
+        this.modelMapperRating = modelMapperRating;
+        this.ratingService = ratingService;
     }
 
     //TODO authentication and exception handling
@@ -57,7 +66,6 @@ public class AddonController {
         return addonService.getById(id);
     }
 
-    //TODO when Dto is done
     @PostMapping()
     public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
@@ -67,6 +75,18 @@ public class AddonController {
         addonService.create(addon,user);
         return addon;
     }
+
+    @PostMapping("/{id}/rate")
+    public Addon rateAddon(@PathVariable int id,
+                           @RequestBody RatingDto ratingDto,
+                           @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        Rating rating = modelMapperRating.fromDto(id,ratingDto,user);
+        ratingService.create(rating);
+        return addonService.getById(id);
+    }
+
+
 
     @PutMapping("/{id}")
     public Addon updateAddon(@PathVariable int id,
