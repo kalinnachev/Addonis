@@ -30,4 +30,9 @@ public class ModelMapperRating {
         rating.setRating(ratingDto.getRating());
     }
 
+    public Rating fromDtoUpdate(int id, User user, RatingDto ratingDto) {
+        Rating ratingToUpdate = ratingService.getByUserAndAddon(addonService.getById(id), user);
+        ratingToUpdate.setRating(ratingDto.getRating());
+        return ratingToUpdate;
+    }
 }
