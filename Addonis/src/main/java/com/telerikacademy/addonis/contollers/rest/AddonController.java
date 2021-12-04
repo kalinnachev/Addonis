@@ -107,6 +107,15 @@ public class AddonController {
         return addonService.getById(id);
     }
 
+    @PutMapping("{id}/re-rate")
+    public Addon updateRating(@PathVariable int id,
+                              @RequestBody RatingDto ratingDto,
+                              @RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        Rating ratingToUpdate = modelMapperRating.fromDtoUpdate(id,user,ratingDto);
+        ratingService.update(ratingToUpdate);
+        return addonService.getById(id);
+    }
 
     @ApiOperation(value = "Update existing addon with the given id")
     @PutMapping("/{id}")
