@@ -666,10 +666,7 @@
 <!--            </div>-->
 <!--            &lt;!&ndash; /product &ndash;&gt;-->
 <!--        </div>-->
-        <div>
-        <li><option th:each="addon : ${addonsFilterByTargetIde}">
-            <div th:replace="fragments::addoncard(${addon})"></div></option></li>
-        </div>
+            <div th:replace="fragments::addonRotatingSelection(${addonsFilterByTargetIde}, 'Title')"></div>
         <!-- /row -->
     </div>
     <!-- /container -->
