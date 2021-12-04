@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-sm">
+  <br>
+
+  <h1 th:text="#{error.label}">Page Not Found</h1>
+  <hr>
+
+  <h3 class="error" th:text="${error}">Error placeholder</h3>
+
+  <hr>
+
+  <br>
+  <h5><a href="/" th:text="#{navigation.home}">Home</a></h5>
+
+</div>
+</body>
+</html>
