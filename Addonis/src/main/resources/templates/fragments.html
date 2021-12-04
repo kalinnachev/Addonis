@@ -5,7 +5,8 @@
 <body>
 
 <!-- ROTATING LIST ADDONS FRAGMENT -->
-<div class="section" th:fragment="addonRotatingSelection(addonlist, title)">
+<div class="section" th:fragment="addonRotatingSelection(addonlist, title)"
+     th:with="slickNavID=${title.replace(' ','_')} , slickDataNav ='#'+${slickNavID}">
     <!--/*@thymesVar id="addonlist" type="java.util.List<Addon>"*/-->
     <!--/*@thymesVar id="title" type="java.lang.String"*/-->
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
@@ -27,7 +28,7 @@
                     <div class="products-tabs">
                         <!-- tab -->
                         <div class="tab-pane active" id="tab1">
-                            <div class="products-slick" data-nav="#slick-nav-1">
+                            <div class="products-slick" th:attr="data-nav=${slickDataNav}" data-nav="#slick-nav-1">
                                 <!-- Thymeleaf-->
                                 <div th:remove="tag" th:each="addon: ${addonlist}">
                                     <div th:replace="fragments::addoncard(${addon})">
@@ -35,7 +36,7 @@
                                 </div>
                                 <!-- Thymeleaf-->
                             </div>
-                            <div class="products-slick-nav" id="slick-nav-1"></div>
+                            <div class="products-slick-nav" th:attr="id=${slickNavID}" id="slick-nav-1"></div>
                         </div>
                         <!-- /tab -->
                     </div>
@@ -232,5 +233,107 @@
 
 </div>
 
+
+
+<!-- MAIN HEADER FRAGMENT-->
+<div id="header" th:fragment="header">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- LOGO -->
+            <div class="col-md-3">
+                <div class="header-logo">
+                    <a class="logo" href="#">
+                        <br>
+                        <h3 style="color:white">
+                            <i class="fa fa-puzzle-piece" style="color:red"></i>
+                            addonis</h3>
+
+
+                        <!--                            <img alt="" src="./img/logo.png">-->
+                    </a>
+                </div>
+            </div>
+            <!-- /LOGO -->
+
+            <!-- SEARCH BAR -->
+            <div class="col-md-6">
+                <div class="header-search">
+                    <form>
+                        <select class="input-select">
+                            <option value="0">All IDE's</option>
+                            <option value="1">Category 01</option>
+                            <option value="1">Category 02</option>
+                        </select>
+                        <input class="input" placeholder="Search here">
+
+                        <button class="search-btn">Search</button>
+                    </form>
+                </div>
+            </div>
+            <!-- /SEARCH BAR -->
+
+            <!-- ACCOUNT -->
+            <div class="col-md-3 clearfix ">
+                <div class="header-ctn">
+
+
+                    <!-- Register -->
+                    <div th:if="${session.currentUser == null}">
+                        <a href="#">
+                            <i class="fa fa-user-o"></i>
+                            <span>Register</span>
+                        </a>
+                    </div>
+                    <!-- /Register -->
+
+                    <!-- Login -->
+                    <div th:if="${session.currentUser == null}">
+                        <a href="#">
+                            <i class="fa fa-sign-in"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                    <!-- /Login -->
+
+                    <!-- Account -->
+                    <div th:if="${session.currentUser != null}">
+                        <a href="#">
+                            <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
+                            <i class="fa fa-user-circle-o"></i>
+
+                            <span>Account</span>
+                        </a>
+                    </div>
+                    <!-- /Account -->
+
+                    <!-- Logout -->
+                    <div th:if="${session.currentUser != null}">
+                        <a href="#">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                    <!-- /Logout -->
+
+
+                    <!-- Menu Toogle -->
+                    <div class="menu-toggle">
+                        <a href="#">
+                            <i class="fa fa-bars"></i>
+                            <span>Menu</span>
+                        </a>
+                    </div>
+                    <!-- /Menu Toogle -->
+                </div>
+            </div>
+            <!-- /ACCOUNT -->
+        </div>
+        <!-- row -->
+    </div>
+    <!-- container -->
+</div>
+<!-- /MAIN HEADER -->
 </body>
 </html>
