@@ -9,6 +9,7 @@ import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
@@ -38,11 +39,13 @@ public class UserController {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    @ApiOperation(value = "Get all users")
     @GetMapping
     public List<User> getAll() {
         return userService.getAll();
     }
 
+    @ApiOperation(value = "Search user by  username, email or phone number")
     @GetMapping("/search")
     public List<User> getAll(@RequestParam(required = false) Optional<String> username,
                              @RequestParam(required = false) Optional<String> email,
@@ -52,11 +55,13 @@ public class UserController {
         return userService.search(username, email, phoneNumber, user);
     }
 
+    @ApiOperation(value = "Get user by id")
     @GetMapping("/{id}")
     public User getById(@PathVariable int id) {
         return userService.getById(id);
     }
 
+    @ApiOperation(value = "Create new user")
     @PostMapping
     public User createUser(@Valid @RequestPart("user") UserDto userDto,
                            @RequestPart("picture") MultipartFile picture) throws IOException {
@@ -66,6 +71,7 @@ public class UserController {
         return user;
     }
 
+    @ApiOperation(value = "Update existing user")
     @PutMapping()
     public User updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto
             , @RequestHeader HttpHeaders headers) {
@@ -75,19 +81,21 @@ public class UserController {
         return user;
     }
 
-
+    @ApiOperation(value = "Block existing user with the given id")
     @PutMapping("/{id}/block")
     public User blockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         return userService.block(id, user);
     }
 
+    @ApiOperation(value = "Unblock existing user with the given id")
     @PutMapping("/{id}/unblock")
     public User unblockUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         return userService.unblock(id, user);
     }
 
+    @ApiOperation(value = "Delete user with the give id")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);

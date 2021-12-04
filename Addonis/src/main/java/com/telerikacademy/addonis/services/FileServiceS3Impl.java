@@ -33,7 +33,7 @@ public class FileServiceS3Impl implements FileService {
 
     @Override
     public String storeBinaryContent(File file, Addon addon) {
-        String key = addon.getId() + "_binary_content_" + file.getName();
+        String key = addon.getName() + "_binary_content_" + file.getName();
         amazonS3.putObject(BUCKET, key, file);
         return file.getName();
     }
@@ -53,7 +53,7 @@ public class FileServiceS3Impl implements FileService {
 
     @Override
     public byte[] getBinaryContent(Addon addon) {
-        String key = addon.getId() + "_binary_content_" + addon.getBinaryContentUrl();
+        String key = addon.getName() + "_binary_content_" + addon.getBinaryContentUrl();
         return getContent(key);
     }
 

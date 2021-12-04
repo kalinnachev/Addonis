@@ -2,8 +2,10 @@
 INSERT INTO addonis.roles (id, role_name) VALUES (1, 'Admin');
 INSERT INTO addonis.roles (id, role_name) VALUES (2, 'User');
 
-INSERT INTO addonis.target_ide (id, name) VALUES (1, 'IntellijIDE');
-INSERT INTO addonis.target_ide (id, name) VALUES (2, 'Eclipse');
+INSERT INTO addonis.target_ide (id, name, image_file_name) VALUES (1, 'IntellijIDE', 'intellij.png');
+INSERT INTO addonis.target_ide (id, name, image_file_name) VALUES (2, 'Eclipse', 'eclipse.png');
+INSERT INTO addonis.target_ide (id, name, image_file_name) VALUES (3, 'Visual Studio', 'studio.png');
+INSERT INTO addonis.target_ide (id, name, image_file_name) VALUES (4, 'PyCharm', 'pycharm.png');
 
 INSERT INTO addonis.tags (id, name) VALUES (1, 'Code');
 INSERT INTO addonis.tags (id, name) VALUES (2, 'Databases');

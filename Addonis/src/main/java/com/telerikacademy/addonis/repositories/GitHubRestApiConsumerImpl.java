@@ -73,7 +73,7 @@ public class GitHubRestApiConsumerImpl implements GitHubRestApiConsumer {
         String commitTitle = commitNode.get("message").asText();
         String commitDate =  commitNode.get("author").get("date").asText().substring(0,10);
         LocalDate date = LocalDate.parse( commitDate, dateTimeFormatter);
-        repoInfo.setLastCommitDate(date);
+       // repoInfo.setLastCommitDate(date);
         repoInfo.setLastCommitTitle(commitTitle);
     }
 

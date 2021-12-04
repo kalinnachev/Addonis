@@ -2,17 +2,21 @@ package com.telerikacademy.addonis.services.contracts;
 
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
+import org.joda.time.LocalDate;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface AddonService {
     Addon getById(int id);
 
     List<Addon> getAll();
 
-    void create(Addon addon, User user);
+    void create(Addon addon, User user, File binaryContent);
 
-    void update(Addon addon, User user);
+    void update(Addon addon, User user, Optional<File> binaryContent);
 
     void delete(int id, User user);
 
@@ -23,4 +27,8 @@ public interface AddonService {
     List<Addon> getNewest();
 
     List<Addon> getPopular();
+
+    List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort);
+
+
 }

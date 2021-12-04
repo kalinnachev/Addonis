@@ -7,6 +7,7 @@ import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +46,7 @@ public class FileController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    @ApiOperation(value = "Download user profile picture")
     @GetMapping(value= "/users/{id}/picture")
     public ResponseEntity<ByteArrayResource> getProfilePicture(@PathVariable int id,@RequestHeader HttpHeaders headers) {
         User user = userService.getById(id);
@@ -52,19 +54,31 @@ public class FileController {
         return generateResponse(user.getPictureUrl(), data);
     }
 
+    @ApiOperation(value = "Upload user profile picture")
     @PutMapping ("/users/picture")
-    public User uploadFile( @RequestParam("picture") MultipartFile picture,
+    public User uploadProfilePicture( @RequestParam("picture") MultipartFile picture,
                            @RequestHeader HttpHeaders headers) throws IOException {
         User userToUpdate = authenticationHelper.tryGetUser(headers);
         userService.update(userToUpdate, Optional.of(IOUtils.convert(picture)));
         return userToUpdate;
     }
 
-    @GetMapping(value= "/addon/{id}/content")
+    @ApiOperation(value = "Download binary content of addon")
+    @GetMapping(value= "/addons/{id}/content")
     public ResponseEntity<ByteArrayResource> getAddonBinary(@PathVariable int id) {
         Addon addon = addonService.getById(id);
         byte[] data = fileService.getBinaryContent(addon);
         return generateResponse(addon.getBinaryContentUrl(), data);
+    }
+
+    @ApiOperation(value = "Upload binary content of addon")
+    @PutMapping ("/addons/{id}/content")
+    public Addon uploadAddonBinary(@PathVariable int id, @RequestParam("content") MultipartFile content,
+                            @RequestHeader HttpHeaders headers) throws IOException {
+        User loggedUser = authenticationHelper.tryGetUser(headers);
+        Addon addon = addonService.getById(id);
+        addonService.update(addon, loggedUser, Optional.of(IOUtils.convert(content)));
+        return addon;
     }
 
     public ResponseEntity<ByteArrayResource> generateResponse(String fileName, byte[] data) {

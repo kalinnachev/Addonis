@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Repository
 public class MockRestApiConsumer implements GitHubRestApiConsumer {
@@ -13,7 +14,7 @@ public class MockRestApiConsumer implements GitHubRestApiConsumer {
     public void populateRepoInfoFromApi(String repo_url, RepoInfo repoInfo) {
         repoInfo.setOpenIssues(1);
         repoInfo.setOpenPullRequests(1);
-        repoInfo.setLastCommitDate(LocalDate.now());
+        repoInfo.setLastCommitDate(LocalDateTime.now());
         repoInfo.setLastCommitTitle("Mock commit title");
     }
 }

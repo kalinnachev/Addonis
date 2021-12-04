@@ -9,13 +9,20 @@ import com.telerikacademy.addonis.models.dto.RatingDto;
 import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.RatingService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
+import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
 import com.telerikacademy.addonis.untilities.ModelMapperRating;
+import io.swagger.annotations.ApiOperation;
+import org.joda.time.LocalDate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/addons")
@@ -40,39 +47,53 @@ public class AddonController {
     }
 
     //TODO authentication and exception handling
-
+    @ApiOperation(value = "Get all addons")
     @GetMapping
     public List<Addon> getAll() {
         return addonService.getAll();
     }
 
+    @ApiOperation(value = "Filter addons by name and/or targetIde.Sort by uploadDate or downloads " +
+            "or last commit date or name")
+    @GetMapping("/filter")
+    public List<Addon> filterAddon(@RequestParam(required = false) Optional<String> name,
+                                   @RequestParam(required = false) Optional<Integer> targetIdeId,
+                                   @RequestParam(required = false) Optional<String> sort){
+       return addonService.filter(name, targetIdeId, sort);
+    }
+
+    @ApiOperation(value = "Get all featured addons")
     @GetMapping("/featured")
     public List<Addon> getFeatured() {
         return addonService.getFeatured();
     }
 
+    @ApiOperation(value = "Get five newest addons")
     @GetMapping("/new")
     public List<Addon> getNewest() {
         return addonService.getNewest();
     }
 
+    @ApiOperation(value = "Get five popular addons")
     @GetMapping("/popular")
     public List<Addon> getPopular() {
         return addonService.getPopular();
     }
 
+    @ApiOperation(value = "Get addon by id")
     @GetMapping("/{id}")
     public Addon getById(@PathVariable int id) {
         return addonService.getById(id);
     }
 
+    @ApiOperation(value = "Create new addon")
     @PostMapping()
-    public Addon createAddon(@Valid @RequestBody AddonDto addonDto, @RequestHeader HttpHeaders headers) {
+    public Addon createAddon(@Valid @RequestPart("addon") AddonDto addonDto,
+                             @RequestPart("binary") MultipartFile binary,
+                             @RequestHeader HttpHeaders headers) throws IOException {
         User user = authenticationHelper.tryGetUser(headers);
         Addon addon = modelMapperAddon.fromDto(addonDto, user);
-        // TODO
-        addon.setBinaryContentUrl("test");
-        addonService.create(addon,user);
+        addonService.create(addon,user, IOUtils.convert(binary));
         return addon;
     }
 
@@ -87,17 +108,18 @@ public class AddonController {
     }
 
 
-
+    @ApiOperation(value = "Update existing addon with the given id")
     @PutMapping("/{id}")
     public Addon updateAddon(@PathVariable int id,
                              @Valid @RequestBody AddonUpdateDto addonUpdateDto,
                              @RequestHeader HttpHeaders headers) {
             User user = authenticationHelper.tryGetUser(headers);
             Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-            addonService.update(addon,user);
+            addonService.update(addon,user, Optional.empty());
             return addon;
     }
 
+    @ApiOperation(value = "Approve existing addon with the given id")
     @PutMapping("/{id}/approve")
     public Addon approveAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
@@ -106,11 +128,11 @@ public class AddonController {
         return addon;
     }
 
+    @ApiOperation(value = "Delete addon")
     @DeleteMapping("/{id}")
     public void deleteAddon(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         addonService.delete(id,user);
-
     }
 
 }
