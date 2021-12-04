@@ -18,7 +18,7 @@ public class HomeMVC {
 
     @GetMapping
     public String getHome(Model model) {
-        model.addAttribute("test", addonService.getById(15));
+        model.addAttribute("addonlist", addonService.getAll());
         model.addAttribute("vf", new ViewFormatter());
 
         return "index";
