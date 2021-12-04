@@ -7,6 +7,7 @@ import org.passay.*;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
@@ -14,6 +15,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     @Override
     public void initialize(ValidPassword arg0) {
     }
+
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
@@ -32,7 +34,8 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
             return true;
         }
         context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(Joiner.on(",").join(validator.getMessages(result)))
+        context.buildConstraintViolationWithTemplate(Joiner.on(",").join(Collections.singleton(("Password must be at least 8 symbols and should contain capital letter," +
+                " digit and special symbol (+, -, *, &, ^, …)"))))
                 .addConstraintViolation();
         return false;
     }
