@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <div th:replace="fragments::index"></div>
+</head>
+<body>
+<br><br>
+<div class="container">
+    <div class="card col-md-4 shadow mx-auto bg-light border-1">
+        <div class="card-header">
+            <h4 class="text-center" th:text="#{login.title}">
+
+
+                Sign in to your account
+
+            </h4>
+        </div>
+        <br>
+        <div class="card-body">
+            <!--- form begin -->
+            <form class="form-horizontal" action="#"
+                  th:action="@{__${#httpServletRequest.requestURI}__}"
+                  th:object="${login}" method="post">
+
+                <!--- username -->
+                <div class=" col mb-3">
+                    <label class="form-label fw-bold" th:text="#{login.username}">Username</label>
+                    <input class="form-control form-control-sm" type="text" th:field="*{username}">
+                    <div class="invalid-feedback">
+                        <label th:errors="*{username}">Error placeholder</label>
+                    </div>
+                </div>
+
+                <!--- password -->
+                <div class=" col mb-3">
+                    <label class="form-label fw-bold" th:text="#{login.password}">Password</label>
+                    <input class="form-control form-control-sm" type="password" th:field="*{password}">
+                    <div class="invalid-feedback">
+                        <label th:errors="*{password}">Error placeholder</label>
+                    </div>
+                </div>
+
+                <br>
+                <div class=" text-center">
+
+                    <button class="btn btn-primary btn-block" type="submit">Login</button>
+                </div>
+            </form>
+            <!--- form ends -->
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

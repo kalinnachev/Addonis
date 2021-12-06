@@ -172,6 +172,8 @@ public class Addon {
     }
 
     public double getAverageRating() {
+        if(ratings.isEmpty())
+            return 0;
         double totalRating = 0;
         for (Rating rating : ratings) {
             totalRating += rating.getRating();
