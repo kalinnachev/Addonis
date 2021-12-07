@@ -5,6 +5,7 @@ import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Table(name = "ratings")
 @Entity
@@ -60,5 +61,18 @@ public class Rating {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rating rating = (Rating) o;
+        return Objects.equals(user, rating.user) && Objects.equals(addon, rating.addon);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, addon);
     }
 }
