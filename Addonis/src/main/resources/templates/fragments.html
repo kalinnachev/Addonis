@@ -57,7 +57,7 @@
 
     <div class="product-img">
         <img alt="" class="test"
-             src="./img/eclipse.png" style="max-width:30%" th:src="${vf.getLogoSource(addon.getTargetIde())}">
+             src="./img/eclipse.png" style="max-width:50px; margin: 5px;" th:src="${vf.getLogoSource(addon.getTargetIde())}">
         <div class="product-label">
             <span class="" th:text="${addon.getTargetIde().getName()}"></span>
         </div>
@@ -72,10 +72,10 @@
             </p>
         </h3>
         <i>
-            <div th:text="${addon.getDescription()}"> ALA BALA</div>
+            <div th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>
         </i>
         <div class="product-rating">
-            <div th:replace="fragments::addonrating(${addon})"></div>
+            <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>
         </div>
         <h6 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h6>
         <h6 th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h6>
@@ -127,18 +127,18 @@
         <div id="responsive-nav">
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
-                <li class="active">
+                <li th:classappend="${page=='home'} ? 'active' : ''">
                     <a href="#">Home</a></li>
-                <li>
-                    <a href="#">All Addons</a>
+                <li th:classappend="${page=='browseaddons'} ? 'active' : ''">
+                    <a href="#">Browse Addons</a>
                 </li>
-                <li>
+                <li th:classappend="${page=='myaddons'} ? 'active' : ''">
                     <a href="#">My Addons</a>
                 </li>
-                <li>
+                <li th:classappend="${page=='manageaddons'} ? 'active' : ''">
                     <a href="#">Manage Addons</a>
                 </li>
-                <li>
+                <li th:classappend="${page=='manageusers'} ? 'active' : ''">
                     <a href="#">Manage Users</a>
                 </li>
 
@@ -152,46 +152,46 @@
 <!-- /NAVIGATION -->
 
 <!-- ADDON RATING FRAGMENT -->
-<div th:fragment="addonrating(addon)">
+<div th:fragment="addonrating(addon, class)">
     <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
     <span th:switch="${vf.getNumberOfStars(addon)}">
-         <span class="product-rating" th:case="'0'">
+         <span th:class="${class}"  th:case="'0'">
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
         </span>
-        <span class="product-rating" th:case="'1'">
+        <span th:class="${class}" th:case="'1'">
             <i class="fa fa-star"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
         </span>
-        <span class="product-rating" th:case="'2'">
+        <span th:class="${class}" th:case="'2'">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
         </span>
-        <span class="product-rating" th:case="'3'">
+        <span th:class="${class}" th:case="'3'">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-o"></i>
             <i class="fa fa-star-o"></i>
         </span>
-         <span class="product-rating" th:case="'4'">
+         <span th:class="${class}" th:case="'4'">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-o"></i>
         </span>
-          <span class="product-rating" th:case="'5'">
+          <span th:class="${class}" th:case="'5'">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
@@ -202,7 +202,7 @@
 </div>
 
 <!-- STYLE FRAGMENT -->
-<div th:fragment="index" class="product">
+<div th:fragment="index">
     <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
     <!-- Google font -->
@@ -233,8 +233,6 @@
 
 </div>
 
-
-
 <!-- MAIN HEADER FRAGMENT-->
 <div id="header" th:fragment="header">
     <!-- container -->
@@ -242,7 +240,7 @@
         <!-- row -->
         <div class="row">
             <!-- LOGO -->
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="header-logo">
                     <a class="logo" href="#">
                         <br>
@@ -258,7 +256,7 @@
             <!-- /LOGO -->
 
             <!-- SEARCH BAR -->
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="header-search">
                     <form>
                         <select class="input-select">
@@ -267,7 +265,14 @@
                             <option value="1">Category 02</option>
                         </select>
                         <input class="input" placeholder="Search here">
+                        <select class="input-select-sort">
+                            <option value="0">Sort</option>
+                            <option value="1">Last commit date</option>
+                            <option value="2">Number of downloads</option>
+                            <option value="3">Upload date</option>
+                            <option value="3">Name</option>
 
+                        </select>
                         <button class="search-btn">Search</button>
                     </form>
                 </div>
@@ -275,7 +280,7 @@
             <!-- /SEARCH BAR -->
 
             <!-- ACCOUNT -->
-            <div class="col-md-3 clearfix ">
+            <div class="col-md-2 ">
                 <div class="header-ctn">
 
 
