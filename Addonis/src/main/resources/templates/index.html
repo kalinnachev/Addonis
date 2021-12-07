@@ -8,16 +8,16 @@
 
     <title>Addonis - home</title>
 
-    <div th:replace="fragments::index"></div>
+    <div th:remove="tag" th:replace="fragments::index"></div>
 
 </head>
 <body>
 <header>
-    <div th:replace="fragments::header"></div>
+    <div th:remove="tag" th:replace="fragments::header"></div>
 </header>
 
 
-<div th:replace="fragments::navigation('test')"></div>
+<div th:replace="fragments::navigation('home')"></div>
 
 <div th:replace="fragments::addonRotatingSelection(${addonlist}, 'Featured addons')"></div>
 
