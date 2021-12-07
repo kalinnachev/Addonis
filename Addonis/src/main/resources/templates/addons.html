@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All addons</title>
+    <div th:replace="fragments::index"></div>
+
+</head>
+<body>
+<!--/*@thymesVar id="ad" type="com.telerikacademy.addonis.contollers.mvc.AddonMVC"*/-->
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div th:if="${addons.isEmpty()}">
+        <h1 class="h3 mb-2 text-gray-800" th:text="#{addons.title.empty}">No Addons</h1>
+    </div>
+
+    <!-- Page Heading -->
+    <div th:unless="${addons.isEmpty()}">
+        <h1 class="h3 mb-2 text-gray-800" th:text="#{addons.title}">All Addons</h1>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th class="cell" th:text="#{addon.label.id}">ID</th>
+                            <th class="cell" th:text="#{addon.label.name}">Name</th>
+                            <th class="cell" th:text="#{addon.label.description}">Description</th>
+                            <th class="cell" th:text="#{addon.label.targetIde}">TargetIde</th>
+                            <th class="cell" th:text="#{addon.label.origin}">Origin</th>
+<!--                            <th class="cell" th:text="#{addon.label.binary.content}">Content</th>-->
+                            <th class="cell" th:text="#{addon.label.number.downloads}">Downloads</th>
+                            <th class="cell" th:text="#{addon.label.creation.date}">Date</th>
+                            <th class="cell" th:text="#{addon.label.approved}">Approved</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th class="cell" th:text="#{addon.label.id}">ID</th>
+                            <th class="cell" th:text="#{addon.label.name}">Name</th>
+                            <th class="cell" th:text="#{addon.label.description}">Description</th>
+                            <th class="cell" th:text="#{addon.label.targetIde}">TargetIde</th>
+                            <th class="cell" th:text="#{addon.label.origin}">Origin</th>
+<!--                            <th class="cell" th:text="#{addon.label.binary.content}">Content</th>-->
+                            <th class="cell" th:text="#{addon.label.number.downloads}">Downloads</th>
+                            <th class="cell" th:text="#{addon.label.creation.date}">Date</th>
+                            <th class="cell" th:text="#{addon.label.approved}">Approved</th>
+                        </tr>
+                        </tfoot>
+                        <tbody th:each="addon : ${addons}">
+                        <tr>
+                            <td>
+                                <a href="#" th:href="@{/addons/{id}(id=${addon.getId()})}"
+                                   th:text="${addon.id}">1</a>
+                            </td>
+                            <td class="cell" th:text="${addon.getName()}">Origin Address
+                            </td>
+                            <td class="cell" th:text="${addon.getDescription()}">Destination Address
+                            </td>
+                            <td class="cell" th:text="${addon.getTargetIde()}">Destination Address
+                            </td>
+                            <td class="cell" th:text="${addon.getOriginUrl()}">Destination Address
+                            </td>
+                            <td class="cell" th:text="${addon.getNumberOfDownloads()}">Destination Address
+                            </td>
+                            <td class="cell" th:text="${addon.getCreationDate()}">Destination Address
+                            </td>
+                            <td class="cell" th:text="${addon.isApproved() }">Destination Address
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+</body>
+</html>
