@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableScheduling
+@EnableAsync
 @PropertySource("classpath:application.properties")
 public class RestConfig {
 
