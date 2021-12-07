@@ -42,6 +42,11 @@ public class RestControllerAdvice {
         return generateResponse(HttpStatus.BAD_REQUEST, e);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleException(IllegalArgumentException e) {
+        return generateResponse(HttpStatus.BAD_REQUEST, e);
+    }
+
     // TODO internal server error?
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> handleException(IOException e) {
