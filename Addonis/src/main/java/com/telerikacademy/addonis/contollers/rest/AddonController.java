@@ -97,9 +97,9 @@ public class AddonController {
         return addon;
     }
 
-    @PostMapping("/{id}/rate")
+    @PostMapping("/{id}/rating")
     public Addon rateAddon(@PathVariable int id,
-                           @RequestBody RatingDto ratingDto,
+                           @Valid @RequestBody RatingDto ratingDto,
                            @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         Rating rating = modelMapperRating.fromDto(id,ratingDto,user);
@@ -107,9 +107,9 @@ public class AddonController {
         return addonService.getById(id);
     }
 
-    @PutMapping("{id}/re-rate")
+    @PutMapping("{id}/rating")
     public Addon updateRating(@PathVariable int id,
-                              @RequestBody RatingDto ratingDto,
+                              @Valid @RequestBody RatingDto ratingDto,
                               @RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         Rating ratingToUpdate = modelMapperRating.fromDtoUpdate(id,user,ratingDto);
