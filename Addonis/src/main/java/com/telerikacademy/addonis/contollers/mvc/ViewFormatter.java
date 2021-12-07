@@ -8,7 +8,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewFormatter {
 
@@ -20,12 +22,32 @@ public class ViewFormatter {
         return String.format("Average rating " + addon.getAverageRating() + " out of 5");
     }
 
+    public long getNumberOfUserByAddonAndRating(Addon addon, int rating){
+        return addon.getRatings().stream().filter(r->r.getRating().equals(rating)).count();
+    }
+
+    public int getRelativePercentageByAddonAndRating(Addon addon, int rating){
+        long count = getNumberOfUserByAddonAndRating(addon, rating);
+        double total = addon.getRatings().size();
+        if(total == 0)
+            return 0;
+        return (int) (100*(count/total));
+    }
+
     public String getLogoSource(TargetIde ide) {
-        return "./img/" + ide.getLogo();
+        return "../img/" + ide.getLogo();
     }
 
     public String getLastCommit(Addon addon) {
         return "Last commit : " + prettyTime.format(addon.getRepoInfo().getLastCommitDate());
+    }
+
+    public String getLastCommitPrettyDate(Addon addon) {
+        return prettyTime.format(addon.getRepoInfo().getLastCommitDate());
+    }
+
+    public String getCreatedPrettyDate(Addon addon) {
+        return prettyTime.format(addon.getCreationDate());
     }
 
     public String getLinkBinary(Addon addon) {
@@ -52,5 +74,15 @@ public class ViewFormatter {
         List<Tag> allTags = new ArrayList<>(addon.getTags());
         allTags.addAll(allTags);
         return allTags;
+    }
+
+
+    public String getShortDescription(Addon addon){
+        String [] split = addon.getDescription().split(" ");
+        if(split.length<10) return addon.getDescription();
+
+        return Arrays.stream(split)
+                .limit(10)
+                .collect(Collectors.joining(" ",""," ... "));
     }
 }

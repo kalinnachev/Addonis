@@ -3,7 +3,7 @@ package com.telerikacademy.addonis.models.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AddonUpdateDto {
+public class AddonUpdateDto extends AddonDtoMvc {
 
     private String description;
 

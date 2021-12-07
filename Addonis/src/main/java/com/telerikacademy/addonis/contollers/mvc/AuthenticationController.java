@@ -1,6 +1,7 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
 import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
+import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.LoginDto;
 import com.telerikacademy.addonis.models.dto.RegisterDto;
@@ -45,9 +46,13 @@ public class AuthenticationController extends BaseMvcController {
                               BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "login";
-        }
+        }try{
         authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
         session.setAttribute("currentUser", login.getUsername());
+        }catch (AuthenticationFailureException e){
+            bindingResult.rejectValue("username","Error",e.getMessage());
+            return "login";
+        }
         return "redirect:/";
     }
 

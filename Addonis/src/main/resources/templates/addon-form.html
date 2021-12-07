@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Addon</title>
+    <div replace="fragments::index"></div>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<!-- /MAIN HEADER -->
+<form th:fragment="addon" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${addon}"
+      method="post">
+    <fieldset>
+
+        <div class="control-group">
+            <!-- Name -->
+            <label class="control-label" for="name">Name</label>
+            <div class="controls">
+                <input type="text" id="name" name="name" th:field="*{name}" placeholder="Enter name"
+                       class="input-xlarge">
+                <label class="error" th:errors="*{name}">Name error</label>
+            </div>
+        </div>
+
+
+        <div class="control-group">
+            <!-- Description-->
+            <label class="control-label" for="description">Description</label>
+            <div class="controls">
+                <input type="text" id="description" name="description" th:field="*{description}"
+                       placeholder="Enter Description" class="input-xlarge">
+                <!--                <p class="help-block">Enter description</p>-->
+                <label class="error" th:errors="*{description}">Username error</label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- TargetIde -->
+            <label class="control-label">TargetIde</label>
+            <div class="controls">
+                <select th:field="*{targetIde}">
+                    <option th:each="targetIde : ${allTargetIde}"
+                            th:value="${targetIde.getId()}"
+                            th:text="${targetIde.getName()}"
+                    ></option>
+                    <p class="help-block">Enter targetIde</p>
+                </select>
+                <label class="error" th:errors="*{targetIde}">Warehouse error placeholder</label>
+            </div>
+            <br/>
+        </div>
+
+        <div class="control-group">
+            <!-- OriginUrl -->
+            <label class="control-label" for="originUrl">OriginUrl</label>
+            <div class="controls">
+                <input type="text" id="originUrl" name="originUrl" th:field="*{originUrl}" placeholder="Enter originUrl"
+                       class="input-xlarge">
+                <p class="help-block">Enter originUrl</p>
+                <label class="error" th:errors="*{originUrl}">Username error</label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Tag -->
+            <label class="control-label" for="tag">Tag:</label>
+            <div class="controls">
+                <input id="tag" name="tag" type="checkbox" class="input-xlarge"
+                       th:each="tag : ${allTag}"
+                       th:value="${tag.getId()}"
+                       th:text="${tag.getName()}"
+                       th:field="*{tags}"
+                />
+                <br>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="multipartFile">Content</label>
+            <div class="controls">
+                <input type="file" id="multipartFile" th:field="*{binaryFile}" placeholder="" class="input-xlarge">
+                <p class="help-block">Please provide content</p>
+                <label class="error" th:errors="*{binaryFile}">Username error</label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Button -->
+            <div class="controls">
+                <button class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </fieldset>
+    </div>
+</form>
+</body>
+</html>
