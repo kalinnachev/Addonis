@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         checkForDuplicateEmail(user);
         checkForDuplicateTelephone(user);
 
-        profilePicture.ifPresent(file->setProfilePicture(user,file));
+        profilePicture.ifPresent(file -> setProfilePicture(user, file));
         userRepository.update(user);
     }
 
@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(id);
     }
 
-
     public void checkForDuplicateUsername(User user) {
         boolean duplicateExist = true;
         try {
@@ -120,7 +119,7 @@ public class UserServiceImpl implements UserService {
     public void checkForDuplicateEmail(User user) {
         try {
             User u = userRepository.findByEmail(user.getEmail());
-            if (u.getId() == user.getId())
+            if (u.equals(user))
                 return;
         } catch (EntityNotFoundException e) {
             return;
@@ -131,7 +130,7 @@ public class UserServiceImpl implements UserService {
     public void checkForDuplicateTelephone(User user) {
         try {
             User u = userRepository.findByTelephone(user.getPhoneNumber());
-            if (u.getId() == user.getId())
+            if (u.equals(user))
                 return;
         } catch (EntityNotFoundException e) {
             return;
@@ -139,10 +138,8 @@ public class UserServiceImpl implements UserService {
         throw new DuplicateEntityException("User", "phoneNumber", user.getPhoneNumber());
     }
 
-
     private void setProfilePicture(User user, File profilePicture) {
         String picture = fileService.storeUserPicture(profilePicture, user);
         user.setPictureUrl(picture);
     }
 }
-
