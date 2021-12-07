@@ -1,5 +1,6 @@
 package com.telerikacademy.addonis.services;
 
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.Rating;
 import com.telerikacademy.addonis.models.User;
@@ -17,6 +18,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public void create(Rating rating) {
+        checkIfExists(rating);
         ratingRepository.create(rating);
     }
 
@@ -33,5 +35,14 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public void update(Rating ratingToUpdate) {
          ratingRepository.update(ratingToUpdate);
+    }
+
+    private void checkIfExists(Rating rating) {
+       try {
+           Rating rating1 = ratingRepository.getByUserAndAddon(rating.getAddon(), rating.getUser());
+           if(rating.equals(rating1)){
+               throw new IllegalArgumentException("Already rated. Use re-rate");
+           }
+       }catch (EntityNotFoundException ignored){}
     }
 }
