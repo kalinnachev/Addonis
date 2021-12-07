@@ -68,4 +68,20 @@ public class ModelMapperAddon {
         }
         addon.setTags(tags);
     }
+
+    public AddonUpdateDto toDto(Addon addon) {
+        AddonUpdateDto addonUpdateDto = new AddonUpdateDto();
+        addonUpdateDto.setName(addon.getName());
+        addonUpdateDto.setDescription(addon.getDescription());
+        addonUpdateDto.setOriginUrl(addon.getOriginUrl());
+        addonUpdateDto.setTargetIde(addon.getTargetIde().getId());
+        Set<Integer> tags = new HashSet<>();
+        for (Tag tag : addon.getTags()) {
+//            Tag tagToAdd = tagRepository.getById(tag.getId());
+            tags.add(tag.getId());
+        }
+        addonUpdateDto.setTags(tags);
+//        addonUpdateDto.setBinaryFile(addon.getBinaryFile());
+        return addonUpdateDto;
+    }
 }
