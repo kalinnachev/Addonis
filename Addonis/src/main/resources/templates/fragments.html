@@ -286,7 +286,7 @@
 
                     <!-- Register -->
                     <div th:if="${session.currentUser == null}">
-                        <a th:href="@{auth/register}">
+                        <a th:href="@{~/auth/register}">
                             <i class="fa fa-user-o"></i>
                             <span>Register</span>
                         </a>
@@ -295,7 +295,7 @@
 
                     <!-- Login -->
                     <div th:if="${session.currentUser == null}">
-                        <a th:href="@{auth/login}">
+                        <a th:href="@{~/auth/login}">
                             <i class="fa fa-sign-in"></i>
                             <span>Login</span>
                         </a>
@@ -315,7 +315,7 @@
 
                     <!-- Logout -->
                     <div th:if="${session.currentUser != null}">
-                        <a th:href="@{auth/logout}">
+                        <a th:href="@{~/auth/logout}">
                             <i class="fa fa-sign-out"></i>
                             <span>Logout</span>
                         </a>
