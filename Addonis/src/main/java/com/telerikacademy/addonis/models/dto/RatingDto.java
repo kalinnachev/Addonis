@@ -1,9 +1,12 @@
 package com.telerikacademy.addonis.models.dto;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 public class RatingDto {
-    @Size(min = 1, max = 5, message = "Rating can be only from 1 to 5")
+
+    @Min(value = 1,message = "Rating can't be less than 1")
+    @Max(value = 5, message = "Rating can't be more than 5" )
     private int rating;
 
     public RatingDto() {
