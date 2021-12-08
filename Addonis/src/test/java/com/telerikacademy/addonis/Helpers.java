@@ -39,5 +39,15 @@ public class Helpers {
         return mockTag;
     }
 
+    public static TargetIde createMockTargetIde(){
+        var mockTargetIde = new TargetIde();
+        mockTargetIde.setId(1);
+        mockTargetIde.setName("mockTargetIde");
+        mockTargetIde.setLogo("mockLogo");
+        return mockTargetIde;
+    }
+
+
+
 
 }
