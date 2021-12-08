@@ -67,5 +67,13 @@ public class AddonServiceImplTest {
         );
     }
 
+    @Test
+    public void getAll_should_callRepository(){
+        Mockito.when(addonRepository.getAll())
+                .thenReturn(new ArrayList<>());
 
+        addonService.getAll();
+
+        Mockito.verify(addonRepository, Mockito.times(1)).getAll();
+    }
 }
