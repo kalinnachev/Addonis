@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.contollers.mvc;
 
 import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.LoginDto;
 import com.telerikacademy.addonis.models.dto.RegisterDto;
@@ -93,12 +94,10 @@ public class AuthenticationController extends BaseMvcController {
         return "register_successful";
     }
 
-    @GetMapping("/{id}/verify")
-    public String verifyAccount(@Param("token") String token, @PathVariable int id) {
+    @GetMapping("/verify")
+    public String verifyAccount(@Param("token") String token) {
         verificationTokenService.verifyToken(token);
-        User user = userService.getById(id);
-        user.setEnabled(true);
-        return "verify_seccessful";
+        return "verify_successful";
     }
 }
 
