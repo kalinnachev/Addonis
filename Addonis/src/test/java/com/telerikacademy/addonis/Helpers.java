@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Helpers {
 
-    public static User createMockUser(){
+    public static User createMockUser() {
         var mockUser = new User();
         mockUser.setId(1);
         mockUser.setUsername("mockUsername");
@@ -39,7 +39,7 @@ public class Helpers {
         return mockTag;
     }
 
-    public static TargetIde createMockTargetIde(){
+    public static TargetIde createMockTargetIde() {
         var mockTargetIde = new TargetIde();
         mockTargetIde.setId(1);
         mockTargetIde.setName("mockTargetIde");
@@ -47,7 +47,14 @@ public class Helpers {
         return mockTargetIde;
     }
 
-
-
-
+    public static RepoInfo createMockRepoInfo() {
+        var mockRepoInfo = new RepoInfo();
+        mockRepoInfo.setId(1);
+        mockRepoInfo.setLastCommitTitle("mockLastCommitTitle");
+        mockRepoInfo.setOpenPullRequests(5);
+        mockRepoInfo.setOpenIssues(5);
+        mockRepoInfo.setLastCommitDate(LocalDateTime.now());
+        mockRepoInfo.setLastUpdateDateTime(LocalDateTime.now());
+        return mockRepoInfo;
+    }
 }
