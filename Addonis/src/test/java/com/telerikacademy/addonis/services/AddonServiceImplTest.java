@@ -167,4 +167,17 @@ public class AddonServiceImplTest {
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.update(mockAddon, mockUser, mockOptional));
     }
+
+    @Test
+    public void update_should_callRepository() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        Optional<File> mockOptional = Optional.empty();
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+        addonService.update(mockAddon,mockUser,mockOptional);
+
+        Mockito.verify(addonRepository, Mockito.times(1))
+                .update(mockAddon);    }
 }
