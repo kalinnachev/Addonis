@@ -153,4 +153,18 @@ public class AddonServiceImplTest {
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.update(mockAddon, mockUser, mockOptional));
     }
+
+    @Test
+    public void update_should_throw_when_userIsBlocked() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        mockUser.setBlocked(true);
+        Optional<File> mockOptional = Optional.empty();
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+
+        Assertions.assertThrows(UnauthorizedFailureException.class,
+                () -> addonService.update(mockAddon, mockUser, mockOptional));
+    }
 }
