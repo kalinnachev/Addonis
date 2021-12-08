@@ -268,4 +268,19 @@ public class AddonServiceImplTest {
 
         Mockito.verify(addonRepository, Mockito.times(1)).getPopular();
     }
+
+    @Test
+    public void filter_should_callRepository() {
+        Optional<String> name = Optional.empty();
+        Optional<Integer> targetIde = Optional.empty();
+        Optional<String> sort = Optional.empty();
+
+
+        Mockito.when(addonRepository.filter(name, targetIde, sort))
+                .thenReturn(new ArrayList<>());
+
+        addonService.filter(name, targetIde, sort);
+
+        Mockito.verify(addonRepository, Mockito.times(1)).filter(name, targetIde, sort);
+    }
 }
