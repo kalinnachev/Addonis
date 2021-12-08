@@ -23,5 +23,17 @@ public class RatingServiceTest {
     @InjectMocks
     RatingServiceImpl service;
 
+    @Test
+    public void create_should_throw_when_ratingExists() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
+
+        Mockito.when(repository.getByUserAndAddon(mockAddon, mockRating.getUser()))
+                .thenReturn(mockRating);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.create(mockRating));
+    }
+
 
 }
