@@ -57,4 +57,29 @@ public class Helpers {
         mockRepoInfo.setLastUpdateDateTime(LocalDateTime.now());
         return mockRepoInfo;
     }
+
+    public static Addon createMockAddon(){
+        var mockAddon = new Addon();
+        User mockUser = createMockUser();
+        Set<Tag> mockTags = new HashSet<>();
+        mockTags.add(createMockTag());
+        mockUser.setRole(createMockRole("User"));
+
+        mockAddon.setId(1);
+        mockAddon.setName("mockAddon");
+        mockAddon.setTargetIde(createMockTargetIde());
+        mockAddon.setCreator(mockUser);
+        mockAddon.setDescription("mockDescription");
+        mockAddon.setOriginUrl("mockOriginUrl");
+        mockAddon.setNumberOfDownloads(0);
+        mockAddon.setBinaryContentUrl("mockBinaryContentUrl");
+        mockAddon.setCreationDate(LocalDate.now());
+        mockAddon.setApproved(false);
+        mockAddon.setRepoInfo(createMockRepoInfo());
+        mockAddon.setTags(mockTags);
+
+        return mockAddon;
+    }
+
+
 }
