@@ -107,5 +107,18 @@ public class AddonServiceImplTest {
                 () -> addonService.create(mockAddon,mockUser,dummyFile));
     }
 
+    @Test
+    public void create_should_throw_when_thereIsAddonWithSameOriginUrl() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        File dummyFile = new File("dummyFile");
 
+        Mockito.when(addonRepository.getByName(mockAddon.getName()))
+                .thenThrow(EntityNotFoundException.class);
+        Mockito.when(addonRepository.findByOriginUrl(mockAddon.getOriginUrl()))
+                        .thenReturn(mockAddon);
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                () -> addonService.create(mockAddon,mockUser,dummyFile));
+    }
 }
