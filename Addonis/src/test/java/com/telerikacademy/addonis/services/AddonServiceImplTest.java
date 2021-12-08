@@ -228,4 +228,14 @@ public class AddonServiceImplTest {
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.approve(mockAddon, mockUser));
     }
+
+    @Test
+    public void approve_should_approve_when_userIsAdmin() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+
+        addonService.approve(mockAddon, mockUser);
+
+        Assertions.assertTrue(mockAddon.isApproved());
+    }
 }
