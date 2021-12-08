@@ -1,6 +1,5 @@
 package com.telerikacademy.addonis.services;
 
-import com.telerikacademy.addonis.Helpers;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
@@ -21,8 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.telerikacademy.addonis.Helpers.createMockAddon;
-import static com.telerikacademy.addonis.Helpers.createMockUser;
+import static com.telerikacademy.addonis.Helpers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AddonServiceImplTest {
@@ -219,5 +217,15 @@ public class AddonServiceImplTest {
 
         Mockito.verify(addonRepository, Mockito.times(1))
                 .delete(mockAddon.getId());
+    }
+
+    @Test
+    public void approve_should_throw_when_userIsNotAdmin() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        mockUser.setRole(createMockRole("User"));
+
+        Assertions.assertThrows(UnauthorizedFailureException.class,
+                () -> addonService.approve(mockAddon, mockUser));
     }
 }
