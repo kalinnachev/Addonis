@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static com.telerikacademy.addonis.Helpers.createMockAddon;
 import static com.telerikacademy.addonis.Helpers.createMockUser;
@@ -74,7 +75,7 @@ public class AddonServiceImplTest {
     }
 
     @Test
-    public void getAll_should_callRepository(){
+    public void getAll_should_callRepository() {
         Mockito.when(addonRepository.getAll())
                 .thenReturn(new ArrayList<>());
 
@@ -91,7 +92,7 @@ public class AddonServiceImplTest {
         File dummyFile = new File("dummyFile");
 
         Assertions.assertThrows(UnauthorizedFailureException.class,
-                () -> addonService.create(mockAddon,mockUser,dummyFile));
+                () -> addonService.create(mockAddon, mockUser, dummyFile));
     }
 
     @Test
@@ -101,10 +102,10 @@ public class AddonServiceImplTest {
         File dummyFile = new File("dummyFile");
 
         Mockito.when(addonRepository.getByName(mockAddon.getName()))
-                        .thenReturn(mockAddon);
+                .thenReturn(mockAddon);
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> addonService.create(mockAddon,mockUser,dummyFile));
+                () -> addonService.create(mockAddon, mockUser, dummyFile));
     }
 
     @Test
@@ -116,10 +117,10 @@ public class AddonServiceImplTest {
         Mockito.when(addonRepository.getByName(mockAddon.getName()))
                 .thenThrow(EntityNotFoundException.class);
         Mockito.when(addonRepository.findByOriginUrl(mockAddon.getOriginUrl()))
-                        .thenReturn(mockAddon);
+                .thenReturn(mockAddon);
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> addonService.create(mockAddon,mockUser,dummyFile));
+                () -> addonService.create(mockAddon, mockUser, dummyFile));
     }
 
     @Test
@@ -132,10 +133,24 @@ public class AddonServiceImplTest {
                 .thenThrow(EntityNotFoundException.class);
         Mockito.when(addonRepository.findByOriginUrl(mockAddon.getOriginUrl()))
                 .thenThrow(EntityNotFoundException.class);
-        addonService.create(mockAddon,mockUser,dummyFile);
+        addonService.create(mockAddon, mockUser, dummyFile);
 
         Mockito.verify(addonRepository, Mockito.times(1))
                 .create(mockAddon);
 
+    }
+
+    @Test
+    public void update_should_throw_when_userIsNotCreator() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        mockUser.setId(2);
+        Optional<File> mockOptional = Optional.empty();
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+
+        Assertions.assertThrows(UnauthorizedFailureException.class,
+                () -> addonService.update(mockAddon, mockUser, mockOptional));
     }
 }
