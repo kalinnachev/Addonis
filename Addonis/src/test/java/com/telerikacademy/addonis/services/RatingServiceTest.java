@@ -80,5 +80,14 @@ public class RatingServiceTest {
                 .getByUserAndAddon(mockAddon, mockRating.getUser());
     }
 
+    @Test
+    public void update_should_callRepository_when_matchExist() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
 
+        service.update(mockRating);
+
+        Mockito.verify(repository, Mockito.times(1))
+                .update(mockRating);
+    }
 }
