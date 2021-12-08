@@ -95,6 +95,23 @@ public class RatingServiceImplTest {
     }
 
     @Test
+    public void getByUserAndAddon_should_returnRating_when_matchExist() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
+
+        Mockito.when(repository.getByUserAndAddon(mockAddon, mockRating.getUser()))
+                .thenReturn(mockRating);
+
+        Rating result = service.getByUserAndAddon(mockAddon, mockRating.getUser());
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockRating.getId(), result.getId()),
+                () -> Assertions.assertEquals(mockRating.getUser(), result.getUser()),
+                () -> Assertions.assertEquals(mockRating.getAddon(), result.getAddon())
+        );
+    }
+
+    @Test
     public void update_should_callRepository_when_matchExist() {
         Addon mockAddon = createMockAddon();
         Rating mockRating = createMockRating(mockAddon);
