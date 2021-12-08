@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.telerikacademy.addonis.Helpers.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RatingServiceTest {
+public class RatingServiceImplTest {
 
     @Mock
     RatingRepository repository;

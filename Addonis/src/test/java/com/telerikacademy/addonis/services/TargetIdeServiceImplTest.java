@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.telerikacademy.addonis.Helpers.createMockTargetIde;
 
 @ExtendWith(MockitoExtension.class)
-public class TargetIdeServiceTest {
+public class TargetIdeServiceImplTest {
 
     @Mock
     TargetIdeRepository repository;
