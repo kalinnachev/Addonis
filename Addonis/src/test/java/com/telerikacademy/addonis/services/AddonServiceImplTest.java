@@ -248,4 +248,14 @@ public class AddonServiceImplTest {
 
         Mockito.verify(addonRepository, Mockito.times(1)).getFeatured();
     }
+
+    @Test
+    public void getNewest_should_callRepository() {
+        Mockito.when(addonRepository.getNewest())
+                .thenReturn(new ArrayList<>());
+
+        addonService.getNewest();
+
+        Mockito.verify(addonRepository, Mockito.times(1)).getNewest();
+    }
 }
