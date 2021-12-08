@@ -1,7 +1,11 @@
 package com.telerikacademy.addonis.services;
 
 import com.telerikacademy.addonis.Helpers;
+import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.RepoInfoService;
@@ -13,9 +17,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.telerikacademy.addonis.Helpers.createMockAddon;
+import static com.telerikacademy.addonis.Helpers.createMockUser;
 
 @ExtendWith(MockitoExtension.class)
 public class AddonServiceImplTest {
@@ -76,4 +82,17 @@ public class AddonServiceImplTest {
 
         Mockito.verify(addonRepository, Mockito.times(1)).getAll();
     }
+
+    @Test
+    public void create_should_throw_when_userIsBlocked() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        mockUser.setBlocked(true);
+        File dummyFile = new File("dummyFile");
+
+        Assertions.assertThrows(UnauthorizedFailureException.class,
+                () -> addonService.create(mockAddon,mockUser,dummyFile));
+    }
+
+   
 }
