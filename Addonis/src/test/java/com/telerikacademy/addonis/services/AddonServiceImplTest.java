@@ -176,8 +176,22 @@ public class AddonServiceImplTest {
 
         Mockito.when(addonRepository.getById(mockAddon.getId()))
                 .thenReturn(mockAddon);
-        addonService.update(mockAddon,mockUser,mockOptional);
+        addonService.update(mockAddon, mockUser, mockOptional);
 
         Mockito.verify(addonRepository, Mockito.times(1))
-                .update(mockAddon);    }
+                .update(mockAddon);
+    }
+
+    @Test
+    public void delete_should_throw_when_userIsNotCreator() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        mockUser.setId(2);
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+
+        Assertions.assertThrows(UnauthorizedFailureException.class,
+                () -> addonService.delete(mockAddon.getId(), mockUser));
+    }
 }
