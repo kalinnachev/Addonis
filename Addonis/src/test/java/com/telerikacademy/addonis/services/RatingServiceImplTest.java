@@ -3,6 +3,7 @@ package com.telerikacademy.addonis.services;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.Rating;
+import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.RatingRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,20 @@ public class RatingServiceImplTest {
     }
 
     @Test
-    public void getByUserAndAddon_should_callRepository_when_matchExist() {
+    public void getByUserAndAddon_should_throw_when_matchDoesNotExist() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+
+        Mockito.when(repository.getByUserAndAddon(mockAddon,mockUser))
+                        .thenThrow(EntityNotFoundException.class);
+
+
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> service.getByUserAndAddon(mockAddon,mockUser));
+    }
+
+    @Test
+    public void getByUserAndAddon_should_callRepository() {
         Addon mockAddon = createMockAddon();
         Rating mockRating = createMockRating(mockAddon);
 
