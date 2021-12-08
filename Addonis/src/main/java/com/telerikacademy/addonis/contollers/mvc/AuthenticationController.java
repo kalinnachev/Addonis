@@ -9,11 +9,15 @@ import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -27,6 +31,7 @@ public class AuthenticationController extends BaseMvcController {
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
     public AuthenticationController(AuthenticationHelper authenticationHelper, ModelMapperUser modelMapperUser, UserService userService, ApplicationEventPublisher applicationEventPublisher) {
         super(authenticationHelper);
         this.authenticationHelper = authenticationHelper;
@@ -46,11 +51,12 @@ public class AuthenticationController extends BaseMvcController {
                               BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "login";
-        }try{
-        authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
-        session.setAttribute("currentUser", login.getUsername());
-        }catch (AuthenticationFailureException e){
-            bindingResult.rejectValue("username","Error",e.getMessage());
+        }
+        try {
+            authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            session.setAttribute("currentUser", login.getUsername());
+        } catch (AuthenticationFailureException e) {
+            bindingResult.rejectValue("username", "Error", e.getMessage());
             return "login";
         }
         return "redirect:/";

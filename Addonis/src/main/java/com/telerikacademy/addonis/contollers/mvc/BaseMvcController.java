@@ -55,6 +55,16 @@ public class BaseMvcController {
         }
     }
 
+    @ModelAttribute("isUserLogged")
+    public boolean populateIsUserLogged(HttpSession session) {
+        try {
+             getLoggedUser(session);
+             return true;
+        } catch (AuthenticationFailureException e) {
+            return false;
+        }
+    }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsEmployee(HttpSession session) {
         try {
@@ -80,6 +90,11 @@ public class BaseMvcController {
         } catch (AuthenticationFailureException e) {
             return false;
         }
+    }
+
+    @ModelAttribute("vf")
+    public ViewFormatter populateViewFormatterHelper() {
+        return new ViewFormatter();
     }
 
 }

@@ -3,8 +3,10 @@ package com.telerikacademy.addonis.events;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.services.contracts.MailService;
 import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,14 +15,16 @@ import java.util.UUID;
 @Component
 public class UserRegistrationListener {
 
-    private VerificationTokenService verificationTokenService;
+    private final VerificationTokenService verificationTokenService;
     private final MailService mailService;
 
+    @Autowired
     public UserRegistrationListener(VerificationTokenService verificationTokenService, MailService mailService) {
         this.verificationTokenService = verificationTokenService;
         this.mailService = mailService;
     }
 
+    @Async
     @EventListener
     public void sendConformationEmail(UserRegistrationCompleteEvent event) {
         String url = ServletUriComponentsBuilder.fromCurrentContextPath()

@@ -34,7 +34,6 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
         }
     }
 
-    //TODO ask about tinyint
     @Override
     public List<Addon> getFeatured() {
         String query = format("from %s where %s = :value", getClazz().getSimpleName(), "featured");
@@ -101,7 +100,6 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                 queryString.append(" where ").append(String.join(" and ", filter));
             }
             sort.ifPresent(s -> queryString.append(generateAscDescString(sort.get())));
-            System.out.println(queryString);
             Query<Addon> query = session.createQuery(queryString.toString(), Addon.class);
             query.setProperties(params);
             return query.list();

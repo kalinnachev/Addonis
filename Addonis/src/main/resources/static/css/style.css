@@ -57,6 +57,23 @@ TEST BLUE # 4eb1ef
 	01 -> GENERAL
 ===========================================================*/
 
+.tagpill {
+  background-color: #ddd;
+  color: black;
+  padding: 2px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1px 1px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.tagpill:hover {
+  background-color: #f1f1f1;
+}
+
+
 /*----------------------------*\
 	Typography
 \*----------------------------*/
