@@ -207,4 +207,17 @@ public class AddonServiceImplTest {
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.delete(mockAddon.getId(), mockUser));
     }
+
+    @Test
+    public void delete_should_callRepository() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+        addonService.delete(mockAddon.getId(), mockUser);
+
+        Mockito.verify(addonRepository, Mockito.times(1))
+                .delete(mockAddon.getId());
+    }
 }
