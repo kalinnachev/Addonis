@@ -48,5 +48,23 @@ public class RatingServiceTest {
                 .create(mockRating);
     }
 
+    @Test
+    public void getById_should_returnRating_when_matchExist() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
+
+        Mockito.when(repository.getById(mockRating.getId()))
+                .thenReturn(mockRating);
+
+        Rating result = service.getById(mockRating.getId());
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockRating.getId(), result.getId()),
+                () -> Assertions.assertEquals(mockRating.getUser(), result.getUser()),
+                () -> Assertions.assertEquals(mockRating.getAddon(), result.getAddon()),
+                () -> Assertions.assertEquals(mockRating.getRating(), result.getRating())
+        );
+    }
+
 
 }
