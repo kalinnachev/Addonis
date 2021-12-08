@@ -6,18 +6,17 @@ import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.LoginDto;
 import com.telerikacademy.addonis.models.dto.RegisterDto;
 import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -30,14 +29,16 @@ public class AuthenticationController extends BaseMvcController {
     private final ModelMapperUser modelMapperUser;
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private VerificationTokenService verificationTokenService;
 
     @Autowired
-    public AuthenticationController(AuthenticationHelper authenticationHelper, ModelMapperUser modelMapperUser, UserService userService, ApplicationEventPublisher applicationEventPublisher) {
+    public AuthenticationController(AuthenticationHelper authenticationHelper, ModelMapperUser modelMapperUser, UserService userService, ApplicationEventPublisher applicationEventPublisher, VerificationTokenService verificationTokenService) {
         super(authenticationHelper);
         this.authenticationHelper = authenticationHelper;
         this.modelMapperUser = modelMapperUser;
         this.userService = userService;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.verificationTokenService = verificationTokenService;
     }
 
     @GetMapping("/login")
@@ -89,7 +90,15 @@ public class AuthenticationController extends BaseMvcController {
         User user = modelMapperUser.fromDto(register);
         userService.create(user, IOUtils.convert(register.getMultipartFile()));
         applicationEventPublisher.publishEvent(new UserRegistrationCompleteEvent(user));
-        return "redirect:/auth/login";
+        return "register_successful";
+    }
+
+    @GetMapping("/{id}/verify")
+    public String verifyAccount(@Param("token") String token, @PathVariable int id) {
+        verificationTokenService.verifyToken(token);
+        User user = userService.getById(id);
+        user.setEnabled(true);
+        return "verify_seccessful";
     }
 }
 
