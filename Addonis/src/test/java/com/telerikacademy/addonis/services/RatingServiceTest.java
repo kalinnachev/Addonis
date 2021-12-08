@@ -35,5 +35,18 @@ public class RatingServiceTest {
                 () -> service.create(mockRating));
     }
 
+    @Test
+    public void create_should_callRepository_when_ratingDoesNotExist() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
+
+        Mockito.when(repository.getByUserAndAddon(mockAddon, mockRating.getUser()))
+                .thenThrow(EntityNotFoundException.class);
+        service.create(mockRating);
+
+        Mockito.verify(repository, Mockito.times(1))
+                .create(mockRating);
+    }
+
 
 }
