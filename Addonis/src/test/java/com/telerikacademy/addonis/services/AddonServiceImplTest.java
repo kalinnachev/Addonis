@@ -42,5 +42,30 @@ public class AddonServiceImplTest {
                 .getById(mockAddon.getId());
     }
 
+    @Test
+    public void getById_should_returnAddon_when_matchExists() {
+        Addon mockAddon = createMockAddon();
+
+        Mockito.when(addonRepository.getById(mockAddon.getId()))
+                .thenReturn(mockAddon);
+
+        Addon result = addonService.getById(mockAddon.getId());
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockAddon.getId(), result.getId()),
+                () -> Assertions.assertEquals(mockAddon.getName(), result.getName()),
+                () -> Assertions.assertEquals(mockAddon.getTargetIde(), result.getTargetIde()),
+                () -> Assertions.assertEquals(mockAddon.getCreator(), result.getCreator()),
+                () -> Assertions.assertEquals(mockAddon.getDescription(), result.getDescription()),
+                () -> Assertions.assertEquals(mockAddon.getOriginUrl(), result.getOriginUrl()),
+                () -> Assertions.assertEquals(mockAddon.getBinaryContentUrl(), result.getBinaryContentUrl()),
+                () -> Assertions.assertEquals(mockAddon.getNumberOfDownloads(), result.getNumberOfDownloads()),
+                () -> Assertions.assertEquals(mockAddon.getCreationDate(), result.getCreationDate()),
+                () -> Assertions.assertEquals(mockAddon.isApproved(), result.isApproved()),
+                () -> Assertions.assertEquals(mockAddon.getRepoInfo(), result.getRepoInfo()),
+                () -> Assertions.assertEquals(mockAddon.getTags(), result.getTags())
+        );
+    }
+
 
 }
