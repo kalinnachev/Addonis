@@ -238,4 +238,14 @@ public class AddonServiceImplTest {
 
         Assertions.assertTrue(mockAddon.isApproved());
     }
+
+    @Test
+    public void getFeatured_should_callRepository() {
+        Mockito.when(addonRepository.getFeatured())
+                .thenReturn(new ArrayList<>());
+
+        addonService.getFeatured();
+
+        Mockito.verify(addonRepository, Mockito.times(1)).getFeatured();
+    }
 }
