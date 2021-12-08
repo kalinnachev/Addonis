@@ -66,5 +66,19 @@ public class RatingServiceTest {
         );
     }
 
+    @Test
+    public void getByUserAndAddon_should_callRepository_when_matchExist() {
+        Addon mockAddon = createMockAddon();
+        Rating mockRating = createMockRating(mockAddon);
+
+        Mockito.when(repository.getByUserAndAddon(mockAddon, mockRating.getUser()))
+                .thenReturn(mockRating);
+
+        service.getByUserAndAddon(mockAddon, mockRating.getUser());
+
+        Mockito.verify(repository, Mockito.times(1))
+                .getByUserAndAddon(mockAddon, mockRating.getUser());
+    }
+
 
 }
