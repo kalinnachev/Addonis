@@ -121,4 +121,21 @@ public class AddonServiceImplTest {
         Assertions.assertThrows(DuplicateEntityException.class,
                 () -> addonService.create(mockAddon,mockUser,dummyFile));
     }
+
+    @Test
+    public void create_should_callRepository() {
+        Addon mockAddon = createMockAddon();
+        User mockUser = createMockUser();
+        File dummyFile = new File("dummyFile");
+
+        Mockito.when(addonRepository.getByName(mockAddon.getName()))
+                .thenThrow(EntityNotFoundException.class);
+        Mockito.when(addonRepository.findByOriginUrl(mockAddon.getOriginUrl()))
+                .thenThrow(EntityNotFoundException.class);
+        addonService.create(mockAddon,mockUser,dummyFile);
+
+        Mockito.verify(addonRepository, Mockito.times(1))
+                .create(mockAddon);
+
+    }
 }
