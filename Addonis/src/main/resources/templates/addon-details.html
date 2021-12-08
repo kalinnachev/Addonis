@@ -2,43 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
     <title>Addon</title>
 
     <div  th:replace="fragments::index"></div>
 
-    <style>
-        .tagpill {
-            background-color: #ddd;
-            color: black;
-            padding: 2px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            margin: 1px 1px;
-            cursor: pointer;
-            border-radius: 12px;
-        }
-
-        .tagpill:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-
 </head>
 <body>
 <header>
-    <div th:remove="tag" th:replace="fragments::header"></div>
+    <div  th:replace="fragments::header"></div>
 </header>
-
 
 <div th:replace="fragments::navigation('browseaddons')"></div>
 
-
-<!-- SECTION -->
 <div class="section">
     <!-- container -->
     <div class="container">
@@ -47,9 +22,8 @@
 
             <div class="col-md-2 text-center">
 
-
-
-                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:80px; border-radius:30%">
+                <img src="/api/storage/users/1/picture"
+                     th:src = "@{~/api/storage/users/1/picture}"  style="width:80px; border-radius:30%">
                 <br>
                 <br>
                 <h5 th:text="'' +${addon.getCreator().getFirstName()} +' '+ ${addon.getCreator().getLastName()}"></h5>
@@ -57,8 +31,7 @@
                 <br><br>
 
 
-                <img alt="" class="test"
-                     src="./img/eclipse.png" style="width:60px;" th:src="${vf.getLogoSource(addon.getTargetIde())}">
+                <img style="width:60px;" th:src="${vf.getLogoSource(addon.getTargetIde())}">
                 <br><br>
                 <h5 th:text="'For ' +${addon.getTargetIde().getName()}"></h5>
                 <br>
@@ -149,10 +122,35 @@
 
 
             </div>
-            <!-- /Reviews -->
+
+
 
             <!-- Rating -->
+
             <div class="col-md-3">
+
+                <!-- Approve Form -->
+                <h3 class="text-center">Approval</h3>
+                <div class="">
+                    <div id="approve-form">
+                        <form class="review-form text-center"
+                              th:object="${approvalDto}"
+                              method="post">
+                            <div class="invalid-feedback">
+                                <h6 style="color: red" th:errors="*{message}">Error placeholder</h6>
+                            </div>
+                            <textarea th:field="*{message}" class="input" placeholder="Please fill this is addon should be rejected"></textarea>
+                            <button class="third-btn btn-sm" th:formaction="@{__${#httpServletRequest.requestURI}__/approve}">
+                                <i class="fa fa-check"></i> Approve</button>
+                            <button class="second-btn btn-sm" th:formaction="@{__${#httpServletRequest.requestURI}__}">
+                                <i class="fa fa-ban"></i> Reject  </button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+                <!-- /Approve Form -->
+
+
                 <div id="rating">
                     <div class="rating-avg">
                         <div class="col-md-3" th:text="${addon.getAverageRating()}">
@@ -243,21 +241,18 @@
                 <br>
 
                 <!-- Review Form -->
-                <div class="">
+                <div class="" th:if="${isUserLogged}">
                     <div id="review-form">
                         <form class="review-form text-center"
-                              th:action="@{__${#httpServletRequest.requestURI}__}" method="post">
-                            <!--                            <input class="input" type="text" placeholder="Your Name">-->
-                            <!--                            <input class="input" type="email" placeholder="Your Email">-->
-                            <!--                            <textarea class="input" placeholder="Your Review"></textarea>-->
-                            <div class="input-rating text-center">
+                              th:action="@{__${#httpServletRequest.requestURI}__/rate}" method="post">
+                             <div class="input-rating text-center">
                                 <span>Your Rating: </span>
                                 <div class="stars">
-                                    <input id="star5" name="rating" type="radio" value="5" checked><label for="star5"></label>
-                                    <input id="star4" name="rating" type="radio" value="4"><label for="star4"></label>
-                                    <input id="star3" name="rating" type="radio" value="3"><label for="star3"></label>
-                                    <input id="star2" name="rating" type="radio" value="2"><label for="star2"></label>
-                                    <input id="star1" name="rating" type="radio" value="1"><label for="star1"></label>
+                                    <input id="star5" name="rating" type="radio" value="5" th:checked="${currentrating == 5}"><label for="star5"></label>
+                                    <input id="star4" name="rating" type="radio" value="4" th:checked="${currentrating == 4}"><label for="star4"></label>
+                                    <input id="star3" name="rating" type="radio" value="3" th:checked="${currentrating == 3}"><label for="star3"></label>
+                                    <input id="star2" name="rating" type="radio" value="2" th:checked="${currentrating == 2}"><label for="star2"></label>
+                                    <input id="star1" name="rating" type="radio" value="1" th:checked="${currentrating == 1}"><label for="star1"></label>
                                 </div>
                             </div>
                             <button class="primary-btn btn-sm">Submit</button>
@@ -267,24 +262,7 @@
                 <!-- /Review Form -->
 
                 <br>
-                <h4>Addon approval</h4>
-                <!-- Approve Form -->
-                <div class="">
-                    <div id="approve-form">
-                        <form class="review-form text-center">
-                            <textarea class="input" placeholder="Please fill this is addon should be rejected"></textarea>
-                            <button class="third-btn btn-sm">Approve</button>
 
-                            <a class="second-btn btn-sm" th:href="${vf.getLinkBinary(addon)}">
-                                <i class="fa fa-download-"></i> Reject
-                            </a>
-<!--                            <a class="third-btn btn-sm" th:href="${vf.getLinkBinary(addon)}">-->
-<!--                                <i class="fa fa-ci"></i> Reject-->
-<!--                            </a>-->
-                        </form>
-                    </div>
-                </div>
-                <!-- /Review Form -->
 
             </div>
             <!-- /Rating -->
@@ -294,103 +272,6 @@
         </div>
     </div>
 </div>
-<!--<div class="col-md-2  col-md-pull-5">-->
-<!--    <div id="product-imgs">-->
-<!--        <div class="product-preview">-->
-<!--            <img alt="" src="./img/product01.png">-->
-<!--        </div>-->
-
-<!--        <div class="product-preview">-->
-<!--            <img alt="" src="./img/product03.png">-->
-<!--        </div>-->
-
-<!--        <div class="product-preview">-->
-<!--            <img alt="" src="./img/product06.png">-->
-<!--        </div>-->
-
-<!--        <div class="product-preview">-->
-<!--            <img alt="" src="./img/product08.png">-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!-- Product details -->
-<!--<div class="col-md-5">-->
-<!--    <div class="product-details">-->
-<!--        <h2 class="product-name" th:text="${addon.getName()}">product name goes here</h2>-->
-<!--        &lt;!&ndash;                    <div th:replace="fragments::addonrating(${addon})"></div>&ndash;&gt;-->
-<!--        <div>-->
-
-<!--            <a class="review-link" href="#"> Add your rating</a>-->
-<!--        </div>-->
-<!--        &lt;!&ndash;                    <div>&ndash;&gt;-->
-<!--        &lt;!&ndash;                        <h3 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h3>&ndash;&gt;-->
-<!--        &lt;!&ndash;                        <span class="product-available">In Stock</span>&ndash;&gt;-->
-<!--        &lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--        <p th:text="${addon.getDescription()}"></p>-->
-<!--        &lt;!&ndash;                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>&ndash;&gt;-->
-
-<!--        <div class="product-options">-->
-<!--            <label>-->
-<!--                Last Commit Date-->
-<!--                <h7 th:text="${addon.getRepoInfo().getLastCommitDate()}"></h7>-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <div class="product-options">-->
-<!--            <label>-->
-<!--                Open Issues-->
-<!--                <h7 th:text="${addon.getRepoInfo().getOpenIssues()}"></h7>-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <div class="product-options">-->
-<!--            <label>-->
-<!--                Open Pull Requests-->
-<!--                <h7 th:text="${addon.getRepoInfo().getOpenPullRequests()}"></h7>-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <div class="add-to-cart">-->
-<!--            <div class="qty-label">-->
-<!--                <div class="input-number">-->
-<!--                </div>-->
-
-<!--                <ul class="product-btns">-->
-<!--                    Tags:-->
-<!--                    <li>-->
-<!--                        <option th:each="tag : ${vf.getTagsAddon(addon)}"-->
-<!--                                th:text="${tag.getName()}"></option>-->
-<!--                    </li>-->
-<!--                </ul>-->
-
-<!--                <ul class="product-links">-->
-<!--                    TargetIde:-->
-<!--                    <h7 th:text="${addon.getTargetIde().getName()}"></h7>-->
-<!--                </ul>-->
-
-<!--                <button class="add-to-cart-btn"><a th:href="${vf.getLinkBinary(addon)}">-->
-<!--                    <i class="fa fa-shopping-cart"></i> Download </a></button>-->
-<!--                &lt;!&ndash;                    <ul class="product-links">&ndash;&gt;-->
-<!--                &lt;!&ndash;                        <li>Share:</li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                        <li><a href="#"><i class="fa fa-envelope"></i></a></li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                    </ul>&ndash;&gt;-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
-<!--    &lt;!&ndash; jQuery Plugins &ndash;&gt;-->
-<!--    <script src="js/jquery.min.js"></script>-->
-<!--    <script src="js/bootstrap.min.js"></script>-->
-<!--    <script src="js/slick.min.js"></script>-->
-<!--    <script src="js/nouislider.min.js"></script>-->
-<!--    <script src="js/jquery.zoom.min.js"></script>-->
-<!--    <script src="js/main.js"></script>-->
-
-
-
 
 </body>
 </html>
