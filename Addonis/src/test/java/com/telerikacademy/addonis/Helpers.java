@@ -81,5 +81,13 @@ public class Helpers {
         return mockAddon;
     }
 
+    public static Rating createMockRating(Addon addon) {
+        var mockRating = new Rating();
+        mockRating.setId(1);
+        mockRating.setUser(createMockUser());
+        mockRating.setAddon(addon);
+        mockRating.setRating(3);
+        return mockRating;
+    }
 
 }
