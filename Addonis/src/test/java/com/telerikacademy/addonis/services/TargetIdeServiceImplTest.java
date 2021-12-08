@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.telerikacademy.addonis.Helpers.createMockTargetIde;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +58,21 @@ public class TargetIdeServiceImplTest {
 
         Mockito.verify(repository, Mockito.times(1))
                 .getById(mockTargetIde.getId());
+    }
+
+    @Test
+    public void getById_should_returnTargetIde_when_matchExist() {
+        TargetIde mockTargetIde = createMockTargetIde();
+
+        Mockito.when(repository.getById(mockTargetIde.getId()))
+                .thenReturn(mockTargetIde);
+        TargetIde result = service.getById(mockTargetIde.getId());
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockTargetIde.getId(), result.getId()),
+                () -> Assertions.assertEquals(mockTargetIde.getName(), result.getName()),
+                () -> Assertions.assertEquals(mockTargetIde.getLogo(), result.getLogo())
+        );
     }
 
     @Test
