@@ -2,10 +2,8 @@ package com.telerikacademy.addonis.services.contracts;
 
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
-import org.joda.time.LocalDate;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,4 +29,5 @@ public interface AddonService {
     List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort);
 
 
+    List<Addon> getByUser(Integer user);
 }

@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.repositories;
 
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.Addon;
+import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.AddonRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -80,6 +81,16 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
     }
 
     @Override
+    public List<Addon> getByUser(int userId) {
+        try (Session session = getSessionFactory().openSession()) {
+            Query<Addon> query = session.createQuery("from Addon where creator.id = :userId", Addon.class);
+            query.setParameter("userId",userId);
+            if (query.list().isEmpty()) throw new EntityNotFoundException("User", userId);
+            return query.list();
+        }
+    }
+
+    @Override
     public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort) {
         try (Session session = getSessionFactory().openSession()) {
             var queryString = new StringBuilder(" from Addon ");
@@ -105,6 +116,7 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
             return query.list();
         }
     }
+
 
     public String generateAscDescString(String sort){
         var endQuery =new StringBuilder(" order by ");
