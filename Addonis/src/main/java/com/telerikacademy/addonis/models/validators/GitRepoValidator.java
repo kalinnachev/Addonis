@@ -10,6 +10,8 @@ import javax.validation.ConstraintValidatorContext;
 @Component
 public class GitRepoValidator implements ConstraintValidator<ValidGitRepo, String> {
 
+    private static final String URL_GIT = "https://github.com/";
+
     private final RestTemplate restTemplate;
 
     public GitRepoValidator(RestTemplate restTemplate) {
@@ -17,6 +19,9 @@ public class GitRepoValidator implements ConstraintValidator<ValidGitRepo, Strin
     }
 
     public boolean isValid(String repoURL, ConstraintValidatorContext cxt) {
+        if(!repoURL.startsWith(URL_GIT)){
+            return false;
+        }
         try{
             tryConnectToURL(repoURL);
         } catch (Exception e){
