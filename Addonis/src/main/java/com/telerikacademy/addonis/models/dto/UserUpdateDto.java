@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.models.dto;
 
 import com.telerikacademy.addonis.models.validators.ValidPassword;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,7 +17,8 @@ public class UserUpdateDto {
     @NotNull(message = "Last name can't be empty")
     private String lastName;
 
-    @NotNull(message = "Email can't be empty")
+    @Size(min = 1, message = "Email is mandatory")
+    @Email
     private String email;
 
     @NotNull(message = "Telephone number can't be empty")
