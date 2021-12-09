@@ -66,6 +66,7 @@ public class AddonServiceImpl implements AddonService {
 
         binaryContent.ifPresent(file->setBinaryContent(addon,file));
         addonRepository.update(addon);
+        repoInfoService.updateInfoForAddon(addon);
     }
 
     private void setBinaryContent(Addon addon, File binaryContent) {
