@@ -1,6 +1,7 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
 
+import com.sun.xml.bind.v2.TODO;
 import com.telerikacademy.addonis.events.AddonApprovedEvent;
 import com.telerikacademy.addonis.events.AddonRejectedEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
@@ -8,11 +9,7 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.*;
 import com.telerikacademy.addonis.models.dto.AddonApprovalDto;
 import com.telerikacademy.addonis.models.dto.AddonDtoMvc;
-import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
-import com.telerikacademy.addonis.services.contracts.AddonService;
-import com.telerikacademy.addonis.services.contracts.RatingService;
-import com.telerikacademy.addonis.services.contracts.TagService;
-import com.telerikacademy.addonis.services.contracts.TargetIdeService;
+import com.telerikacademy.addonis.services.contracts.*;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperAddon;
@@ -44,7 +41,7 @@ public class AddonMVC extends BaseMvcController {
 
 
     @Autowired
-    public AddonMVC(AddonService addonService, AuthenticationHelper authenticationHelper, RatingService ratingService, ModelMapperAddon modelMapperAddon, TargetIdeService targetIdeService, TagService tagService, ApplicationEventPublisher applicationEventPublisher) {
+    public AddonMVC(AddonService addonService, AuthenticationHelper authenticationHelper, RatingService ratingService, ModelMapperAddon modelMapperAddon, TargetIdeService targetIdeService, TagService tagService, ApplicationEventPublisher applicationEventPublisher, UserService userService) {
         super(authenticationHelper);
         this.addonService = addonService;
         this.ratingService = ratingService;
@@ -56,7 +53,7 @@ public class AddonMVC extends BaseMvcController {
 
     // TODO tova za kakvo ni e?
     @ModelAttribute("addons")
-    public List<Addon> populateShipment() {
+    public List<Addon> populateAddons() {
         return addonService.getAll();
     }
 
@@ -79,6 +76,17 @@ public class AddonMVC extends BaseMvcController {
         return "addon-details";
     }
 
+    @GetMapping()
+    public String showAllAddonsOnUserPage(Model model,HttpSession session) {
+        try {
+        User user = getLoggedUser(session);
+        model.addAttribute("addonlist",addonService.getByUser(user.getId()));
+        return "myaddons";
+        }catch (EntityNotFoundException e){
+            return "not_found";
+        }
+    }
+
     @PostMapping("/{id}/approve")
     public String approveAddon(@PathVariable int id, HttpSession session, @ModelAttribute("approvalDto") AddonApprovalDto approvalDto) {
         Addon addon = addonService.getById(id);
@@ -89,10 +97,10 @@ public class AddonMVC extends BaseMvcController {
     }
 
     @PostMapping("/{id}")
-    public String rejectAddon( @PathVariable int id, Model model, HttpSession session, @ModelAttribute("approvalDto") AddonApprovalDto approvalDto, BindingResult bindingResult) {
+    public String rejectAddon(@PathVariable int id, Model model, HttpSession session, @ModelAttribute("approvalDto") AddonApprovalDto approvalDto, BindingResult bindingResult) {
         Addon addon = addonService.getById(id);
-        if(approvalDto.getMessage().isBlank()){
-            bindingResult.rejectValue("message","err",
+        if (approvalDto.getMessage().isBlank()) {
+            bindingResult.rejectValue("message", "err",
                     "Message is mandatory in case of rejection");
             model.addAttribute("approvalDto", approvalDto);
             model.addAttribute("currentrating", getRatingAsInteger(getLoggedUser(session), addon));
@@ -127,8 +135,8 @@ public class AddonMVC extends BaseMvcController {
     @PostMapping("/new")
     public String createAddon(@Valid @ModelAttribute("addon") AddonDtoMvc addonDtoMvc, BindingResult errors,
                               HttpSession session) throws IOException {
-        if(addonDtoMvc.getBinaryFile().isEmpty()){
-            errors.rejectValue("binaryFile","err","Missing binary file");
+        if (addonDtoMvc.getBinaryFile().isEmpty()) {
+            errors.rejectValue("binaryFile", "err", "Missing binary file");
         }
         if (errors.hasErrors()) {
             return "addon-new";
@@ -159,10 +167,10 @@ public class AddonMVC extends BaseMvcController {
         }
         User user = getLoggedUser(session);
         File file = null;
-        if(!addonDto.getBinaryFile().isEmpty()){
+        if (!addonDto.getBinaryFile().isEmpty()) {
             file = IOUtils.convert(addonDto.getBinaryFile());
         }
-        Addon addon = modelMapperAddon.fromMvcDto(addonDto, id );
+        Addon addon = modelMapperAddon.fromMvcDto(addonDto, id);
         addonService.update(addon, user, Optional.ofNullable(file));
 
         return "redirect:/addons/{id}";
@@ -171,8 +179,9 @@ public class AddonMVC extends BaseMvcController {
     private Integer getRatingAsInteger(User user, Addon addon) {
         Integer userRating = null;
         try {
-            userRating = ratingService.getByUserAndAddon(addon,user).getRating();
-        } catch (AuthenticationFailureException | EntityNotFoundException e){}
+            userRating = ratingService.getByUserAndAddon(addon, user).getRating();
+        } catch (AuthenticationFailureException | EntityNotFoundException e) {
+        }
         return userRating;
     }
 
@@ -181,7 +190,7 @@ public class AddonMVC extends BaseMvcController {
             Rating ratingEntity = ratingService.getByUserAndAddon(addon, user);
             ratingEntity.setRating(rating);
             ratingService.update(ratingEntity);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             Rating ratingEntity = new Rating();
             ratingEntity.setRating(rating);
             ratingEntity.setAddon(addon);
