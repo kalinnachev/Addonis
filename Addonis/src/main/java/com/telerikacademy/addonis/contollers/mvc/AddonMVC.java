@@ -5,10 +5,7 @@ import com.telerikacademy.addonis.events.AddonApprovedEvent;
 import com.telerikacademy.addonis.events.AddonRejectedEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
-import com.telerikacademy.addonis.models.Addon;
-import com.telerikacademy.addonis.models.Rating;
-import com.telerikacademy.addonis.models.Tag;
-import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.*;
 import com.telerikacademy.addonis.models.dto.AddonApprovalDto;
 import com.telerikacademy.addonis.models.dto.AddonDtoMvc;
 import com.telerikacademy.addonis.models.dto.AddonUpdateDto;
@@ -63,6 +60,16 @@ public class AddonMVC extends BaseMvcController {
         return addonService.getAll();
     }
 
+    @ModelAttribute("allTag")
+    public List<Tag> populateTags() {
+        return tagService.getAll();
+    }
+
+    @ModelAttribute("allTargetIde")
+    public List<TargetIde> populateTargetIdes() {
+        return targetIdeService.getAll();
+    }
+
     @GetMapping("/{id}")
     public String showSingleAddon(@PathVariable int id, Model model, HttpSession session) {
         Addon addon = addonService.getById(id);
@@ -114,49 +121,51 @@ public class AddonMVC extends BaseMvcController {
     @GetMapping("/new")
     public String showNewAddonPage(Model model) {
         model.addAttribute("addon", new AddonDtoMvc());
-        model.addAttribute("allTargetIde", targetIdeService.getAll());
-        List<Tag> tags = tagService.getAll();
-        model.addAttribute("allTag", tags);
         return "addon-new";
     }
 
     @PostMapping("/new")
     public String createAddon(@Valid @ModelAttribute("addon") AddonDtoMvc addonDtoMvc, BindingResult errors,
                               HttpSession session) throws IOException {
+        if(addonDtoMvc.getBinaryFile().isEmpty()){
+            errors.rejectValue("binaryFile","err","Missing binary file");
+        }
         if (errors.hasErrors()) {
             return "addon-new";
         }
         User user = getLoggedUser(session);
         Addon addon = modelMapperAddon.fromDto(addonDtoMvc, user);
         addonService.create(addon, user, IOUtils.convert(addonDtoMvc.getBinaryFile()));
-        return "/";
+        return "index";
     }
 
     @GetMapping("/{id}/update")
     public String showEditAddonPage(@PathVariable int id, Model model, HttpSession session) {
-        User user = getLoggedUser(session);
+        //User user = getLoggedUser(session);
         Addon addon = addonService.getById(id);
-        AddonUpdateDto addonUpdateDto = modelMapperAddon.toDto(addon);
+        AddonDtoMvc addonDto = modelMapperAddon.toMvcDto(addon);
         model.addAttribute("addonId", id);
-        model.addAttribute("addon", addonUpdateDto);
+        model.addAttribute("addon", addonDto);
         return "addon-update";
     }
 
     @PostMapping("/{id}/update")
     public String updateAddon(@PathVariable int id,
-                              @Valid @ModelAttribute("addon") AddonUpdateDto addonUpdateDto,
+                              @Valid @ModelAttribute("addon") AddonDtoMvc addonDto,
                               BindingResult errors,
                               HttpSession session) throws IOException {
         if (errors.hasErrors()) {
             return "addon-update";
         }
         User user = getLoggedUser(session);
-        Addon addon = modelMapperAddon.fromDto(addonUpdateDto, id);
-        File file = IOUtils.convert(addonUpdateDto.getBinaryFile());
-        addonService.update(addon, user, Optional.of(file));
-        if (getLoggedUser(session).isAdmin())
-            return "redirect:/";
-        return "redirect:/myaddons";
+        File file = null;
+        if(!addonDto.getBinaryFile().isEmpty()){
+            file = IOUtils.convert(addonDto.getBinaryFile());
+        }
+        Addon addon = modelMapperAddon.fromMvcDto(addonDto, id );
+        addonService.update(addon, user, Optional.ofNullable(file));
+
+        return "redirect:/addons/{id}";
     }
 
     private Integer getRatingAsInteger(User user, Addon addon) {
