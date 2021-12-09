@@ -133,7 +133,7 @@
                     <a href="#">Browse Addons</a>
                 </li>
                 <li th:classappend="${page=='myaddons'} ? 'active' : ''">
-                    <a href="#">My Addons</a>
+                    <a th:href="@{/addons}">My Addons</a>
                 </li>
                 <li th:classappend="${page=='manageaddons'} ? 'active' : ''">
                     <a href="#">Manage Addons</a>
