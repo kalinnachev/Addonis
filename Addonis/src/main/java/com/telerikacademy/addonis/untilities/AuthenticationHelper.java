@@ -58,5 +58,12 @@ public class AuthenticationHelper {
         }
     }
 
+    public boolean isUserAnonymous(HttpSession session) {
+        return session.getAttribute("currentUser") == null;
+    }
+
+    public boolean isUserLogged(HttpSession session) {
+        return !isUserAnonymous(session);
+    }
 }
 

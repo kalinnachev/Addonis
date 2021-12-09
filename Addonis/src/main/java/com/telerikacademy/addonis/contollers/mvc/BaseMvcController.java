@@ -25,7 +25,8 @@ public class BaseMvcController {
     }
 
     @ExceptionHandler({AuthenticationFailureException.class})
-    public String authenticationFailureErrorHandler() {
+    public String authenticationFailureErrorHandler(AuthenticationFailureException e) {
+        e.printStackTrace();
         return "redirect:/auth/login";
     }
 
@@ -56,17 +57,12 @@ public class BaseMvcController {
     }
 
     @ModelAttribute("isUserLogged")
-    public boolean populateIsUserLogged(HttpSession session) {
-        try {
-             getLoggedUser(session);
-             return true;
-        } catch (AuthenticationFailureException e) {
-            return false;
-        }
+    public boolean isUserLogged(HttpSession session) {
+        return authenticationHelper.isUserLogged(session);
     }
 
     @ModelAttribute("isAdmin")
-    public boolean populateIsEmployee(HttpSession session) {
+    public boolean isLoggedUserAdmin(HttpSession session) {
         try {
             return getLoggedUser(session).isAdmin();
         } catch (AuthenticationFailureException e) {
@@ -75,7 +71,7 @@ public class BaseMvcController {
     }
 
     @ModelAttribute("isBlocked")
-    public boolean populateIsBlocked(HttpSession session) {
+    public boolean isLoggedUserBlocked(HttpSession session) {
         try {
             return getLoggedUser(session).isBlocked();
         } catch (AuthenticationFailureException e) {
@@ -84,7 +80,7 @@ public class BaseMvcController {
     }
 
     @ModelAttribute("isEnabled")
-    public boolean populateIsEnabled(HttpSession session) {
+    public boolean isLoggedUserEnabled(HttpSession session) {
         try {
             return getLoggedUser(session).isEnabled();
         } catch (AuthenticationFailureException e) {
