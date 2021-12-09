@@ -50,31 +50,4 @@ public class GitUrlHelpers {
         }
     }
 
-    //    public static final String URL_GIT_API_SEARCH = "https://api.github.com/search/";
-
-//    /*
-//       Example
-//       input:  https://github.com/spring-projects/spring-boot
-//       output: https://api.github.com/search/issues?q=repo:spring-projects/spring-boot%20is:issue%20is:open%20is:pr
-//    */
-//    public static String getOpenPullRequestsURL(String originURL) {
-//
-//        //return URL_GIT_API_SEARCH +"issues?q=" + extractPath(originURL) + "%20is:issue%20is:open%20is:pr";
-//        return getOpenIssuesURL(originURL)+" is:pr";
-//    }
-//
-//
-//    /*
-//        Example
-//        input:  https://github.com/spring-projects/spring-boot
-//        output: https://api.github.com/search/issues?q=repo:spring-projects/spring-boot%20is:issue%20is:open
-//    */
-//    public static String getOpenIssuesURL(String originURL) {
-//        //UriUtils.encodePath(" is:issue is open", "UTF-8");
-//        return URL_GIT_API_SEARCH +"issues?q=repo:" + extractPath(originURL) + " is:issue is:open";
-//
-//    }
-
-
-
 }
