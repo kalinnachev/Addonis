@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.contollers.mvc;
 
 import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
+import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.LoginDto;
@@ -30,7 +31,7 @@ public class AuthenticationController extends BaseMvcController {
     private final ModelMapperUser modelMapperUser;
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private VerificationTokenService verificationTokenService;
+    private final VerificationTokenService verificationTokenService;
 
     @Autowired
     public AuthenticationController(AuthenticationHelper authenticationHelper, ModelMapperUser modelMapperUser, UserService userService, ApplicationEventPublisher applicationEventPublisher, VerificationTokenService verificationTokenService) {
@@ -73,23 +74,31 @@ public class AuthenticationController extends BaseMvcController {
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("register", new RegisterDto());
-        return "register";
+        return "user-register";
     }
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
                                  BindingResult bindingResult,
                                  HttpSession session, Model model) throws IOException {
+        if(register.getMultipartFile().isEmpty()){
+            bindingResult.rejectValue("multipartFile", "file_error", "User photo is mandatory");
+        }
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "user-register";
         }
 
         if (!register.getPassword().equals(register.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Password confirmation should match password.");
-            return "register";
+            return "user-register";
         }
         User user = modelMapperUser.fromDto(register);
-        userService.create(user, IOUtils.convert(register.getMultipartFile()));
+        try {
+            userService.create(user, IOUtils.convert(register.getMultipartFile()));
+        }catch (DuplicateEntityException e) {
+            model.addAttribute("error", e.getMessage());
+            return "user-register";
+        }
         applicationEventPublisher.publishEvent(new UserRegistrationCompleteEvent(user));
         return "register_successful";
     }
