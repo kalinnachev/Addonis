@@ -12,15 +12,19 @@ public class AddonDto {
 
     public static final int MAX_ADDON_NAME_LENGTH = 30;
     public static final int MIN_ADDON_NAME_LENGTH = 3;
+    public static final String NAME_ERR_MSG = "Name should be between 3 and 30 symbols";
+
 
     @NotNull(message = "Name can't be empty")
-    @Size(min = MIN_ADDON_NAME_LENGTH, max = MAX_ADDON_NAME_LENGTH)
+    @Size(min = MIN_ADDON_NAME_LENGTH, max = MAX_ADDON_NAME_LENGTH,
+            message = NAME_ERR_MSG)
     private String name;
 
     @Positive
     private int targetIde;
 
     @NotNull(message = "Description can't be empty")
+    @Size(min = 50, message = "Description should be between minimum 50 symbols")
     private String description;
 
     @ValidGitRepo
