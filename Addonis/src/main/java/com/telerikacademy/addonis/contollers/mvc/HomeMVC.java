@@ -31,7 +31,6 @@ public class HomeMVC extends BaseMvcController{
     @GetMapping
     public String getHome(Model model, HttpSession session) {
         model.addAttribute("addonlist", addonService.getAll());
-        model.addAttribute("vf", new ViewFormatter());
         return "index";
     }
 
