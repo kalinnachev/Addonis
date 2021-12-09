@@ -84,6 +84,7 @@ public class AddonServiceImpl implements AddonService {
     public void approve(Addon addon, User user) {
         checkIfAdmin(user);
         addon.setApproved(true);
+        addonRepository.update(addon);
     }
 
     @Override
