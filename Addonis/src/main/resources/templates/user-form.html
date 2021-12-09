@@ -10,9 +10,14 @@
     <div th:remove="tag" th:replace="fragments::header"></div>
 </header>
 
-<br>
 
-<div class="container">
+
+<div class="container" th:fragment="user(formLabel, buttonLabel)">
+    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="formLabel" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="buttonLabel" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="register" type="com.telerikacademy.addonis.models.dto.RatingDto"*/-->
+
     <div class="col-md-3"></div>
 
     <div class="col-md-6">
@@ -20,10 +25,10 @@
         <form class="form-horizontal" enctype="multipart/form-data" method="post"
               th:action="@{/auth/register}" th:object="${register}">
             <fieldset>
-                <h3 class="text-center">
+                <h3 class="text-center" th:text="${formLabel}">
                     User Registration Form</h3>
 
-                <h5 class="error" style="color: red" >Custom error</h5>
+                <h5 class="error" style="color: red" th:text="${error}">Custom error</h5>
 
 
                 <label class="control-label" for="username">Username</label>
@@ -69,7 +74,7 @@
                 <br>
 
 
-                <button class="primary-btn order-submit btn-block">Register</button>
+                <button class="primary-btn order-submit btn-block" th:text="${buttonLabel}">Register</button>
             </fieldset>
         </form>
 

@@ -22,8 +22,9 @@
 
             <div class="col-md-2 text-center">
 
-                <img src="/api/storage/users/1/picture"
-                     style="width:80px; border-radius:30%" th:src="@{~/api/storage/users/1/picture}">
+                <img
+                     style="width:80px; border-radius:30%"
+                     th:src="@{/api/storage/users/{id}/picture(id=${addon.getCreator().getId()})}">
                 <br>
                 <br>
                 <h5 th:text="'' +${addon.getCreator().getFirstName()} +' '+ ${addon.getCreator().getLastName()}"></h5>
@@ -120,8 +121,9 @@
             <div class="col-md-3">
 
                 <!-- Approve Form -->
+                <!-- only admins can approve -->
+                <div class="" th:if="${isAdmin && !addon.isApproved()}">
                 <h3 class="text-center">Approval</h3>
-                <div class="">
                     <div id="approve-form">
                         <form class="review-form text-center"
                               method="post"
@@ -241,6 +243,8 @@
                 <br>
 
                 <!-- Review Form -->
+                <!-- Only logged users can rate addons-->
+                <div class="text-center" th:if="${!isUserLogged}">Log in to rate this addon</div>
                 <div class="" th:if="${isUserLogged}">
                     <div id="review-form">
                         <form class="review-form text-center"
@@ -248,15 +252,15 @@
                             <div class="input-rating text-center">
                                 <span>Your Rating: </span>
                                 <div class="stars">
-                                    <input id="star5" name="rating" th:checked="${currentrating == 5}" type="radio"
+                                    <input id="star5" name="rating" th:checked="${loggedUserRating == 5}" type="radio"
                                            value="5"><label for="star5"></label>
-                                    <input id="star4" name="rating" th:checked="${currentrating == 4}" type="radio"
+                                    <input id="star4" name="rating" th:checked="${loggedUserRating == 4}" type="radio"
                                            value="4"><label for="star4"></label>
-                                    <input id="star3" name="rating" th:checked="${currentrating == 3}" type="radio"
+                                    <input id="star3" name="rating" th:checked="${loggedUserRating == 3}" type="radio"
                                            value="3"><label for="star3"></label>
-                                    <input id="star2" name="rating" th:checked="${currentrating == 2}" type="radio"
+                                    <input id="star2" name="rating" th:checked="${loggedUserRating == 2}" type="radio"
                                            value="2"><label for="star2"></label>
-                                    <input id="star1" name="rating" th:checked="${currentrating == 1}" type="radio"
+                                    <input id="star1" name="rating" th:checked="${loggedUserRating == 1}" type="radio"
                                            value="1"><label for="star1"></label>
                                 </div>
                             </div>

@@ -69,6 +69,7 @@ public class AddonServiceImpl implements AddonService {
 
         binaryContent.ifPresent(file->setBinaryContent(addon,file));
         addonRepository.update(addon);
+        repoInfoService.updateInfoForAddon(addon);
     }
 
     private void setBinaryContent(Addon addon, File binaryContent) {
@@ -87,6 +88,7 @@ public class AddonServiceImpl implements AddonService {
     public void approve(Addon addon, User user) {
         checkIfAdmin(user);
         addon.setApproved(true);
+        addonRepository.update(addon);
     }
 
     @Override

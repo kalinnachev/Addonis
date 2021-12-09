@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <div th:replace="fragments::index"></div>
+</head>
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+<br>
+
+<div th:replace="user-form::user('Register', 'Register')"></div>
+
+
+
+</body>
+</html>

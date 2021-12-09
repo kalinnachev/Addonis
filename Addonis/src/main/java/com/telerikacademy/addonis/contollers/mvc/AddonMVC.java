@@ -71,7 +71,8 @@ public class AddonMVC extends BaseMvcController {
     public String showSingleAddon(@PathVariable int id, Model model, HttpSession session) {
         Addon addon = addonService.getById(id);
         model.addAttribute("approvalDto", new AddonApprovalDto());
-        model.addAttribute("currentrating", getRatingAsInteger(getLoggedUser(session), addon));
+        if(isUserLogged(session))
+            model.addAttribute("loggedUserRating", getRatingAsInteger(getLoggedUser(session), addon));
         model.addAttribute("addon", addon);
         return "addon-details";
     }
@@ -149,7 +150,7 @@ public class AddonMVC extends BaseMvcController {
 
     @GetMapping("/{id}/update")
     public String showEditAddonPage(@PathVariable int id, Model model, HttpSession session) {
-        //User user = getLoggedUser(session);
+        User user = getLoggedUser(session);
         Addon addon = addonService.getById(id);
         AddonDtoMvc addonDto = modelMapperAddon.toMvcDto(addon);
         model.addAttribute("addonId", id);
