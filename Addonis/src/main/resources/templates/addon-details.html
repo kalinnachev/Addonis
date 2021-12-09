@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <title>Addon</title>
 
-    <div  th:replace="fragments::index"></div>
+    <div th:replace="fragments::index"></div>
 
 </head>
 <body>
 <header>
-    <div  th:replace="fragments::header"></div>
+    <div th:replace="fragments::header"></div>
 </header>
 
 <div th:replace="fragments::navigation('browseaddons')"></div>
@@ -23,7 +23,7 @@
             <div class="col-md-2 text-center">
 
                 <img src="/api/storage/users/1/picture"
-                     th:src = "@{~/api/storage/users/1/picture}"  style="width:80px; border-radius:30%">
+                     style="width:80px; border-radius:30%" th:src="@{~/api/storage/users/1/picture}">
                 <br>
                 <br>
                 <h5 th:text="'' +${addon.getCreator().getFirstName()} +' '+ ${addon.getCreator().getLastName()}"></h5>
@@ -53,11 +53,6 @@
 
                 <br>
 
-<!--                <a class="primary-btn btn-sm" th:href="${vf.getLinkBinary(addon)}">-->
-<!--                    &lt;!&ndash;                    <a style="" >&ndash;&gt;-->
-<!--                    <i class="fa fa-download"></i> Download-->
-<!--                    &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                </a>-->
             </div>
             <div class="col-md-7">
 
@@ -65,12 +60,12 @@
                 <div class="row text-left">
                     <div class="col-md-9">
 
-                    <h2 th:text="${addon.getName()}"> </h2>
+                        <h2 th:text="${addon.getName()}"></h2>
                     </div>
 
                     <div class="col-md-3">
-                    <a class="yellow-btn btn-sm" th:href="${vf.getLinkBinary(addon)}">
-                        <i class="fa fa-edit"></i> Edit addon </a>
+                        <a class="yellow-btn btn-sm"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
+                            <i class="fa fa-edit"></i> Edit addon </a>
                     </div>
                 </div>
 
@@ -84,7 +79,7 @@
                 <table>
                     <tr>
                         <td style="min-width:200px">Git repo</td>
-                        <td >
+                        <td>
                             <a th:href="${addon.getOriginUrl()}" th:text="${addon.getOriginUrl()}"></a>
                         </td>
                     </tr>
@@ -117,12 +112,7 @@
                 <hr>
 
 
-
-
-
-
             </div>
-
 
 
             <!-- Rating -->
@@ -134,16 +124,20 @@
                 <div class="">
                     <div id="approve-form">
                         <form class="review-form text-center"
-                              th:object="${approvalDto}"
-                              method="post">
+                              method="post"
+                              th:object="${approvalDto}">
                             <div class="invalid-feedback">
                                 <h6 style="color: red" th:errors="*{message}">Error placeholder</h6>
                             </div>
-                            <textarea th:field="*{message}" class="input" placeholder="Please fill this is addon should be rejected"></textarea>
-                            <button class="third-btn btn-sm" th:formaction="@{__${#httpServletRequest.requestURI}__/approve}">
-                                <i class="fa fa-check"></i> Approve</button>
+                            <textarea class="input" placeholder="Please fill this is addon should be rejected"
+                                      th:field="*{message}"></textarea>
+                            <button class="third-btn btn-sm"
+                                    th:formaction="@{__${#httpServletRequest.requestURI}__/approve}">
+                                <i class="fa fa-check"></i> Approve
+                            </button>
                             <button class="second-btn btn-sm" th:formaction="@{__${#httpServletRequest.requestURI}__}">
-                                <i class="fa fa-ban"></i> Reject  </button>
+                                <i class="fa fa-ban"></i> Reject
+                            </button>
                         </form>
                         <br>
                     </div>
@@ -154,7 +148,8 @@
                 <div id="rating">
                     <div class="rating-avg">
                         <div class="col-md-3" th:text="${addon.getAverageRating()}">
-                            4.5</div>
+                            4.5
+                        </div>
 
                         <div class="col-md-9">
 
@@ -174,10 +169,11 @@
                                 <i class="fa fa-star"></i>
                             </div>
                             <div class="rating-progress">
-                                <div th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,5)} + '%;'" style="width: 80%;"></div>
+                                <div style="width: 80%;"
+                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,5)} + '%;'"></div>
                             </div>
                             <span class="sum"
-                            th:text="${vf.getNumberOfUserByAddonAndRating(addon,5)}">3</span>
+                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,5)}">3</span>
                         </li>
                         <li>
                             <div class="rating-stars">
@@ -188,7 +184,8 @@
                                 <i class="fa fa-star-o"></i>
                             </div>
                             <div class="rating-progress">
-                                <div th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,4)} + '%;'" style="width: 80%;"></div>
+                                <div style="width: 80%;"
+                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,4)} + '%;'"></div>
                             </div>
                             <span class="sum"
                                   th:text="${vf.getNumberOfUserByAddonAndRating(addon,4)}">2</span>
@@ -202,7 +199,8 @@
                                 <i class="fa fa-star-o"></i>
                             </div>
                             <div class="rating-progress">
-                                <div th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,3)} + '%;'" style="width: 80%;"></div>
+                                <div style="width: 80%;"
+                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,3)} + '%;'"></div>
                             </div>
                             <span class="sum"
                                   th:text="${vf.getNumberOfUserByAddonAndRating(addon,3)}">0</span>
@@ -216,7 +214,8 @@
                                 <i class="fa fa-star-o"></i>
                             </div>
                             <div class="rating-progress">
-                                <div th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,2)} + '%;'" style="width: 80%;"></div>
+                                <div style="width: 80%;"
+                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,2)} + '%;'"></div>
                             </div>
                             <span class="sum"
                                   th:text="${vf.getNumberOfUserByAddonAndRating(addon,2)}">0</span>
@@ -230,7 +229,8 @@
                                 <i class="fa fa-star-o"></i>
                             </div>
                             <div class="rating-progress">
-                                <div th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,1)} + '%;'" style="width: 80%;"></div>
+                                <div style="width: 80%;"
+                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,1)} + '%;'"></div>
                             </div>
                             <span class="sum"
                                   th:text="${vf.getNumberOfUserByAddonAndRating(addon,1)}">0</span>
@@ -244,15 +244,20 @@
                 <div class="" th:if="${isUserLogged}">
                     <div id="review-form">
                         <form class="review-form text-center"
-                              th:action="@{__${#httpServletRequest.requestURI}__/rate}" method="post">
-                             <div class="input-rating text-center">
+                              method="post" th:action="@{__${#httpServletRequest.requestURI}__/rate}">
+                            <div class="input-rating text-center">
                                 <span>Your Rating: </span>
                                 <div class="stars">
-                                    <input id="star5" name="rating" type="radio" value="5" th:checked="${currentrating == 5}"><label for="star5"></label>
-                                    <input id="star4" name="rating" type="radio" value="4" th:checked="${currentrating == 4}"><label for="star4"></label>
-                                    <input id="star3" name="rating" type="radio" value="3" th:checked="${currentrating == 3}"><label for="star3"></label>
-                                    <input id="star2" name="rating" type="radio" value="2" th:checked="${currentrating == 2}"><label for="star2"></label>
-                                    <input id="star1" name="rating" type="radio" value="1" th:checked="${currentrating == 1}"><label for="star1"></label>
+                                    <input id="star5" name="rating" th:checked="${currentrating == 5}" type="radio"
+                                           value="5"><label for="star5"></label>
+                                    <input id="star4" name="rating" th:checked="${currentrating == 4}" type="radio"
+                                           value="4"><label for="star4"></label>
+                                    <input id="star3" name="rating" th:checked="${currentrating == 3}" type="radio"
+                                           value="3"><label for="star3"></label>
+                                    <input id="star2" name="rating" th:checked="${currentrating == 2}" type="radio"
+                                           value="2"><label for="star2"></label>
+                                    <input id="star1" name="rating" th:checked="${currentrating == 1}" type="radio"
+                                           value="1"><label for="star1"></label>
                                 </div>
                             </div>
                             <button class="primary-btn btn-sm">Submit</button>
@@ -266,7 +271,6 @@
 
             </div>
             <!-- /Rating -->
-
 
 
         </div>

@@ -4,98 +4,81 @@
     <meta charset="UTF-8">
     <title>Register page</title>
     <div th:replace="fragments::index"></div>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
 </head>
-<form class="form-horizontal" action="#" th:action="@{/auth/register}" th:object="${register}" enctype="multipart/form-data" method="post">
-    <fieldset>
-        <div id="legend">
-            <legend class="">Register</legend>
-        </div>
-        <div class="control-group">
-            <!-- Username -->
-            <label class="control-label"  for="username">Username</label>
-            <div class="controls">
-                <input type="text" id="username" name="username" th:field="*{username}" placeholder="Enter username" class="input-xlarge">
-                <p class="help-block">Enter username</p>
-                <label class = "error" th:errors="*{username}">Username error</label>
-            </div>
-        </div>
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+<br>
+
+<div class="container">
+    <div class="col-md-3"></div>
+
+    <div class="col-md-6">
+
+        <form class="form-horizontal" enctype="multipart/form-data" method="post"
+              th:action="@{/auth/register}" th:object="${register}">
+            <fieldset>
+                <h3 class="text-center">
+                    User Registration Form</h3>
+
+                <h5 class="error" style="color: red" >Custom error</h5>
 
 
-        <div class="control-group">
-            <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
-            <div class="controls">
-                <input type="text" id="email" name="email" th:field="*{email}" placeholder="Enter Email" class="input-xlarge">
-                <p class="help-block">Please provide your E-mail</p>
-                <label class = "error" th:errors="*{email}">Username error</label>
-            </div>
-        </div>
+                <label class="control-label" for="username">Username</label>
+                <input class="input-register" id="username" name="username" placeholder="Enter username" th:field="*{username}"
+                       type="text">
 
-        <div class="control-group">
-            <!-- Password-->
-            <label class="control-label" for="password">Password</label>
-            <div class="controls">
-                <input type="password" id="password" name="password" th:field="*{password}" placeholder="Enter Password" class="input-xlarge">
-                <p class="help-block">Password must be at least 8 symbols and should contain capital letter," digit and special symbol (+, -, *, &, ^, …)</p>
-                <label class = "error" th:errors="*{password}">Username error</label>
-            </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Password -->
-            <label class="control-label"  for="password_confirm">Password (Confirm)</label>
-            <div class="controls">
-                <input type="password" id="password_confirm" name="password_confirm" th:field="*{passwordConfirm}" placeholder="Enter password(confirm)" class="input-xlarge">
-                <p class="help-block">Please confirm password</p>
-                <label class = "error" th:errors="*{passwordConfirm}">Username error</label>
-            </div>
-        </div>
+                <label class="control-label" for="email">E-mail</label>
+                <input class="input-register" id="email" name="email" placeholder="Enter Email" th:field="*{email}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{email}">Error</h6>
 
-        <div class="control-group">
-            <label class="control-label"  for="firstName">First Name</label>
-        <div class="controls">
-            <input type="text" id="firstName"  th:field="*{firstName}" placeholder="Enter first name"  class="input-xlarge">
-            <label class = "error" th:errors="*{firstName}">Username error</label>
-        </div>
-        </div>
+                <label class="control-label" for="password">Password</label>
+                <input class="input-register" id="password" name="password" placeholder="Enter Password"
+                       th:field="*{password}" type="password">
+                <h6 style="color: red" th:errors="*{password}">Error</h6>
 
-        <div class="control-group">
-            <label class="control-label"  for="lastName">Last Name</label>
-            <div class="controls">
-            <input type="text" id="lastName"  th:field="*{lastName}" placeholder="Enter last name" class="input-xlarge">
-            <label class = "error" th:errors="*{lastName}">Username error</label>
-        </div>
-        </div>
+                <label class="control-label" for="password_confirm">Password (Confirm)</label>
+                <input class="input-register" id="password_confirm" name="password_confirm" placeholder="Enter password(confirm)"
+                       th:field="*{passwordConfirm}" type="password">
+                <h6 style="color: red" th:errors="*{passwordConfirm}">Error</h6>
 
-        <div class="control-group">
-            <label class="control-label"  for="phoneNumber">Phone number</label>
-        <div class="controls">
-            <input type="text" id="phoneNumber"  th:field="*{phoneNumber}" placeholder="Enter phone number"  class="input-xlarge">
-            <p class="help-block">Please provide your  phoneNumber</p>
-            <label class = "error" th:errors="*{phoneNumber}">Username error</label>
-        </div>
-        </div>
+                <label class="control-label" for="firstName">First Name</label>
+                <input class="input-register" id="firstName" placeholder="Enter first name" th:field="*{firstName}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{firstName}">Error</h6>
 
-        <div class="control-group">
-            <label class="control-label"  for="multipartFile">Your photo</label>
-        <div class="controls">
-            <input type="file" id="multipartFile"  th:field="*{multipartFile}" placeholder=""  class="input-xlarge">
-            <p class="help-block">Please provide your photo</p>
-            <label class = "error" th:errors="*{multipartFile}">Username error</label>
-        </div>
-        </div>
+                <label class="control-label" for="lastName">Last Name</label>
+                <input class="input-register" id="lastName" placeholder="Enter last name" th:field="*{lastName}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{lastName}">Error</h6>
 
-        <div class="control-group">
-            <!-- Button -->
-            <div class="controls">
-                <button class="btn btn-success">Register</button>
-            </div>
-        </div>
-    </fieldset>
-</form>
+                <label class="control-label" for="phoneNumber">Phone number</label>
+                <input class="input-register" id="phoneNumber" placeholder="Enter phone number" th:field="*{phoneNumber}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{phoneNumber}">Error</h6>
+
+                <label class="control-label" for="multipartFile">Your photo</label>
+                <input class="input-xlarge" id="multipartFile" placeholder="" th:field="*{multipartFile}" type="file">
+                <h6 style="color: red" th:errors="*{multipartFile}">Error</h6>
+
+
+                <br>
+
+
+                <button class="primary-btn order-submit btn-block">Register</button>
+            </fieldset>
+        </form>
+
+    </div>
+
+    <div class="col-md-3"></div>
+
+</div>
+
+
 </body>
 </html>

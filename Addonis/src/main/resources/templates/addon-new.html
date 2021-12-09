@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <title>Create addon</title>
     <div th:replace="fragments::index"></div>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 
 </head>
 <body>
-<div id="legend">
-    <legend class="">Create Addon</legend>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+<!--/*@thymesVar id="ad" type="com.telerikacademy.addonis.contollers.mvc.AddonMVC"*/-->
+
+<br>
+
+<div th:replace="addon-form::addon('Create Addon', 'Create')"></div>
+
+
 </div>
-    <!--/*@thymesVar id="ad" type="com.telerikacademy.addonis.contollers.mvc.AddonMVC"*/-->
-    <div th:replace="addon-form::addon"></div>
 
 </body>
 </html>

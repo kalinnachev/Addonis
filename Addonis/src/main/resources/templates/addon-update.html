@@ -2,13 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Update addon</title>
+    <title>Create addon</title>
     <div th:replace="fragments::index"></div>
+
+
 </head>
 <body>
-<div id="legend">
-    <legend class="">Update Addon</legend>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+<!--/*@thymesVar id="ad" type="com.telerikacademy.addonis.contollers.mvc.AddonMVC"*/-->
+
+<br>
+
+<div th:replace="addon-form::addon('Update Addon', 'Update')"></div>
+
+
 </div>
-<div th:replace="addon-form::addon"></div>
+
 </body>
 </html>

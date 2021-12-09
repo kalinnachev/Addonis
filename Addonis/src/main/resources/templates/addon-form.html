@@ -3,97 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Form Addon</title>
-    <div replace="fragments::index"></div>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <div th:replace="fragments::index"></div>
+
 </head>
 <body>
 <!-- /MAIN HEADER -->
-<form th:fragment="addon" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${addon}"
-      method="post">
-    <fieldset>
+<div class="container" th:fragment="addon(formLabel, buttonLabel)">
+    <div class="col-md-2"></div>
 
-        <div class="control-group">
-            <!-- Name -->
-            <label class="control-label" for="name">Name</label>
-            <div class="controls">
-                <input type="text" id="name" name="name" th:field="*{name}" placeholder="Enter name"
-                       class="input-xlarge">
-                <label class="error" th:errors="*{name}">Name error</label>
+    <div class="col-md-8">
+
+        <h3 class="text-center" th:text="${formLabel}">Create Addon Form</h3>
+
+        <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post"
+              th:action="@{__${#httpServletRequest.requestURI}__}"
+              th:object="${addon}">
+
+            <div class="col-md-8">
+                <label class="control-label" for="name">Name</label>
+                <input class="input-register" id="name" name="name" placeholder="Addon name" th:field="*{name}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{name}">Username error</h6>
             </div>
-        </div>
 
-
-        <div class="control-group">
-            <!-- Description-->
-            <label class="control-label" for="description">Description</label>
-            <div class="controls">
-                <input type="text" id="description" name="description" th:field="*{description}"
-                       placeholder="Enter Description" class="input-xlarge">
-                <!--                <p class="help-block">Enter description</p>-->
-                <label class="error" th:errors="*{description}">Username error</label>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <!-- TargetIde -->
-            <label class="control-label">TargetIde</label>
-            <div class="controls">
-                <select th:field="*{targetIde}">
+            <div class="col-md-4">
+                <label class="control-label">TargetIde</label>
+                <select class="input-register" th:field="*{targetIde}">
                     <option th:each="targetIde : ${allTargetIde}"
-                            th:value="${targetIde.getId()}"
                             th:text="${targetIde.getName()}"
+                            th:value="${targetIde.getId()}"
                     ></option>
-                    <p class="help-block">Enter targetIde</p>
                 </select>
-                <label class="error" th:errors="*{targetIde}">Warehouse error placeholder</label>
             </div>
-            <br/>
-        </div>
 
-        <div class="control-group">
-            <!-- OriginUrl -->
-            <label class="control-label" for="originUrl">OriginUrl</label>
-            <div class="controls">
-                <input type="text" id="originUrl" name="originUrl" th:field="*{originUrl}" placeholder="Enter originUrl"
-                       class="input-xlarge">
-                <p class="help-block">Enter originUrl</p>
-                <label class="error" th:errors="*{originUrl}">Username error</label>
+
+            <div class="col-md-12">
+
+                <label class="control-label" for="description">Description</label>
+                <textarea class="input-register" cols="40" id="description" name="description"
+                          placeholder="Addon Description"
+                          rows="5"
+                          style="height: 100px" th:field="*{description}">
+                </textarea>
+                <h6 style="color: red" th:errors="*{description}">Username error</h6>
             </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Tag -->
-            <label class="control-label" for="tag">Tag:</label>
-            <div class="controls">
-                <input id="tag" name="tag" type="checkbox" class="input-xlarge"
-                       th:each="tag : ${allTag}"
-                       th:value="${tag.getId()}"
-                       th:text="${tag.getName()}"
-                       th:field="*{tags}"
-                />
+            <div class="col-md-12">
+                <label class="control-label" for="originUrl">Github repository</label>
+                <input class="input-register" id="originUrl" name="originUrl" placeholder="Addon repo url"
+                       th:field="*{originUrl}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{originUrl}">Username error</h6>
+            </div>
+
+            <div class="col-md-12">
+                <label class="control-label" for="multipartFile">Binary content</label>
+                <input id="multipartFile" placeholder="" th:field="*{binaryFile}" type="file">
+                <h6 style="color: red" th:errors="*{binaryFile}">Username error</h6>
+            </div>
+
+            <div class="col-md-12">
+                <label class="control-label">Tags:</label>
                 <br>
-            </div>
-        </div>
+                <h6 style="color: red" th:errors="*{tags}">Username error</h6>
 
-        <div class="control-group">
-            <label class="control-label" for="multipartFile">Content</label>
-            <div class="controls">
-                <input type="file" id="multipartFile" th:field="*{binaryFile}" placeholder="" class="input-xlarge">
-                <p class="help-block">Please provide content</p>
-                <label class="error" th:errors="*{binaryFile}">Username error</label>
-            </div>
-        </div>
+                <div class="col-md-3" th:each="tag : ${allTag}">
+                    <input name="tag" th:field="*{tags}"
+                           th:id="${tag.getId()}"
+                           th:value="${tag.getId()}"
+                           type="checkbox">
+                    <label th:for="${tag.getId()}" th:text="' '+${tag.getName()+' '}">Scales</label>
+                </div>
 
-        <div class="control-group">
-            <!-- Button -->
-            <div class="controls">
-                <button class="btn btn-success">Create</button>
             </div>
-        </div>
-    </fieldset>
+
+
+            <div class="col-md-12 text-center">
+                <br>
+                <button class="primary-btn order-submit" style="width: 50%;" th:text="${buttonLabel}">Create Addon</button>
+            </div>
+        </form>
     </div>
-</form>
+    <div class="col-md-2"></div>
+</div>
 </body>
 </html>

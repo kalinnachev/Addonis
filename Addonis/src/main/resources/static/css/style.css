@@ -73,6 +73,14 @@ TEST BLUE # 4eb1ef
   background-color: #f1f1f1;
 }
 
+ .input-register {
+   height: 30px;
+   padding: 0px 15px;
+   border: 1px solid #E4E7ED;
+   background-color: #FFF;
+   width: 100%;
+   border-radius: 10px;
+ }
 
 /*----------------------------*\
 	Typography
