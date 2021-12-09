@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:remove="tag" th:replace="fragments::index"></div>
+</head>
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+<br>
+
+<div th:remove="tag" th:replace="fragments::navigation(page)"></div>
+
+<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'User addons')"></div>
+
+<div class="col-md-4" style="float:right; position: absolute;bottom:0; right:0;">
+    <a class="yellow-btn btn-sm" th:href="@{/addons/new}">
+        <i class="fa fa-edit"></i> Create addon </a>
+</div>
+
+
+<!-- jQuery Plugins -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.zoom.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

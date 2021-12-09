@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <div th:remove="tag" th:replace="fragments::index"></div>
+</head>
+<body>
+<header>
+  <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+<br>
+<div class="container">
+  <div>
+    <div class="text-center">
+      <h1>You don't have addon!</h1>
+<!--      <div  class="text-center">-->
+        <a class="yellow-btn btn-sm" th:href="@{/addons/new}">
+          <i class="fa fa-edit"></i> Create addon </a>
+<!--      </div>-->
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
