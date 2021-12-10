@@ -145,7 +145,7 @@ public class AddonMVC extends BaseMvcController {
         User user = getLoggedUser(session);
         Addon addon = modelMapperAddon.fromDto(addonDtoMvc, user);
         addonService.create(addon, user, IOUtils.convert(addonDtoMvc.getBinaryFile()));
-        return "index";
+        return "redirect:/addons/{id}";
     }
 
     @GetMapping("/{id}/update")
