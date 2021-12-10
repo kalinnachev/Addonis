@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Register Successful</title>
+  <div th:replace="fragments::index"></div>
+
 </head>
 <body>
 <header>
@@ -13,7 +15,7 @@
   <div>
     <div class="text-center">
       <h2>User Verification</h2>
-      <h4>Congratulations! You account was been verified.</h4>
+      <h4>Congratulations! Your account was been verified.</h4>
       <p><a th:href="@{/auth/login}"></a></p>
     </div>
   </div>
