@@ -1786,7 +1786,8 @@ textarea.input {
 .rating-avg {
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 15px;
+  /*kalin:*/
+  /*margin-bottom: 15px;*/
 }
 
 .rating-avg .rating-stars {
