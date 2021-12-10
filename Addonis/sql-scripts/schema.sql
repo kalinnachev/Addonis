@@ -84,7 +84,7 @@ create table addons
     name                varchar(30)          not null,
     target_ide_id       int                  not null,
     creator_id          int                  not null,
-    description         varchar(256)         not null,
+    description         varchar(1000)         not null,
     origin_url          varchar(256)         not null,
     binary_content_url  varchar(256)         not null,
     number_of_downloads int        default 0 null,
