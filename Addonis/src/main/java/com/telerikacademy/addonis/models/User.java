@@ -145,4 +145,9 @@ public class User {
         User user = (User) o;
         return Objects.equals(id, user.id);
     }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
