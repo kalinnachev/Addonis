@@ -16,17 +16,46 @@ System administrators can administer all major information objects in the system
 - disable users accounts.
 
 
-## Technologies
-- Spring MVC
-- Spring Security
-- Hibernate
-- Spring Data JPA
-- Thymeleaf
-- HTML
-- CSS
-- JUnit
+## Built With
+
+* [Spring](https://spring.io/) - The framework used
+* [Gradle](https://gradle.org/) - Dependency Management
+* [Hibernate](http://hibernate.org/) - Mapping an object-oriented domain model to a relational database.
+* [JPA](https://spring.io/projects/spring-data-jpa) - Used to store and get data into/from a database.
+* [Thymeleaf](https://www.thymeleaf.org/) - Bring elegant natural templates to your development workflow
+
 
 ## Database
-![picture](imag/database.png)
+![picture](/src/main/resources/static/img/datebase.png)
+
+Website Screenshots
+---
+
+- Landing Page 
+![homepage](/src/main/resources/static/img/home.png)
+
+- All Addons Page
+<!-- ![addons](/src/main/resources/static/screens/all-addons.png) -->
+
+- Addon Product Page
+![product-page](/src/main/resources/static/img/addon-details.png)
+
+- Create new Addon form
+![create-new-addon](/src/main/resources/static/img/create.png)
+
+- Update Addon form
+![update](/src/main/resources/static/img/update.png)
+
+
+- Login Form
+![login](/src/main/resources/static/img/login.png)
+
+- Register Form
+![register](/src/main/resources/static/img/register.png)
+
+
+* **Kalin Nachev** 
+* **Borislav Ignatov**
+* **Gabriela Georgieva**
 
 
