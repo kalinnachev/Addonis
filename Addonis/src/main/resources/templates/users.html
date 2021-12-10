@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All users</title>
+    <div th:replace="fragments::index"></div>
+</head>
+<!-- Begin Page Content -->
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+
+<div th:replace="fragments::navigation('manageusers')"></div>
+
+<div th:replace="fragments::userRotatingSelection(${users}, 'All users')"></div>
+
+
+
+<div class="container-fluid">
+    <div th:if="${users.isEmpty()}">
+        <h1 class="h3 mb-2 text-gray-800" th:text="#{users.title.empty}">No Users</h1>
+    </div>
+
+    <!-- Page Heading -->
+    <div th:unless="${users.isEmpty()}">
+        <h1 class="h3 mb-2 text-gray-800" th:text="#{users.title}">All Users</h1>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th class="cell" th:text="#{users.label.id}">ID</th>
+                            <th class="cell" th:text="#{users.label.username}">Username</th>
+                            <th class="cell" th:text="#{users.label.firstName}">First Name</th>
+                            <th class="cell" th:text="#{users.label.lastName}">Last Name</th>
+                            <th class="cell" th:text="#{users.label.email}">Email</th>
+                            <th class="cell" th:text="#{users.label.phoneNumber}">Phone Number</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th class="cell" th:text="#{users.label.id}">ID</th>
+                            <th class="cell" th:text="#{users.label.username}">Username</th>
+                            <th class="cell" th:text="#{users.label.firstName}">First Name</th>
+                            <th class="cell" th:text="#{users.label.lastName}">Last Name</th>
+                            <th class="cell" th:text="#{users.label.email}">Email</th>
+                            <th class="cell" th:text="#{users.label.phoneNumber}">Phone Number</th>
+                        </tr>
+                        </tfoot>
+                        <tbody th:each="user : ${users}">
+                        <tr>
+                            <td class="cell" th:text="${user.getId()}">ID >
+<!--                               <a href="#"  th:href="@{/users/{id}(id=${users.getId()})}"-->
+<!--                                   th:text="${user.id}">1</a>-->
+
+                            </td>
+                            <td class="cell" th:text="${user.getUsername()}">Username
+                            </td>
+                            <td class="cell" th:text="${user.getFirstName()}">First Name
+                            </td>
+                            <td class="cell" th:text="${user.getLastName}">Last Name
+                            </td>
+                            <td class="cell" th:text="${user.getEmail()}">Email
+                            </td>
+                            <td class="cell" th:text="${user.getPhoneNumber()}">Phone Number
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+
+<!-- End of Main Content -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.zoom.min.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
