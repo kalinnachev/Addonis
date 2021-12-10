@@ -26,7 +26,6 @@ public class BaseMvcController {
 
     @ExceptionHandler({AuthenticationFailureException.class})
     public String authenticationFailureErrorHandler(AuthenticationFailureException e) {
-        e.printStackTrace();
         return "redirect:/auth/login";
     }
 
