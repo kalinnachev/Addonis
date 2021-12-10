@@ -27,10 +27,11 @@ INSERT INTO addonis.tags (id, name) VALUES (14, 'validation');
 INSERT INTO addonis.tags (id, name) VALUES (5, 'vim');
 INSERT INTO addonis.tags (id, name) VALUES (6, 'vsvim');
 
-
-INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled)
-VALUES (1, 'admin', 'pass', 'Admin', 'Adminov', 'admin@gmail.com', 'test_pic_url', 0, 1, '0898758267', false);
-
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (1, 'admin', 'pass', 'Admin', 'Adminov', 'admin@gmail.com', 'dogecoin.jpeg-900x510-big.jpg', 0, 1, '0898758267', 0);
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (4, 'gabi', 'Gab123^&&', 'Gabriela', 'Georgieva', 'gabigeorgieva@abv.bg', '254167383_933997764182280_5456277152055192074_n.jpg', 0, 2, '0898708810', 0);
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (16, 'gabkk', 'Gab123^&&', 'gabiii', 'ivanova', 'georgievagala@gmail.com', '254167383_933997764182280_5456277152055192074_n.jpg', 0, 2, '0898768010', 0);
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (18, 'A.dragnev', 'gg', 'gg', 'gg', 'georgievagabriela507@gmail.com', '262418678_608974720336709_1359589292855243744_n.jpg', 0, 2, '0898702210', 0);
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (19, 'Gabigeorgieva123', 'ee', 'ee', 'ee', 'vasIvanov@abv.bg', '262012826_3092574877677313_6462097667890828242_n.jpg', 0, 2, '0898708856', 0);
 INSERT INTO addonis.repo_info (id, last_commit_title, open_pull_requests, open_issues, last_commit_date, last_refresh) VALUES (23, 'Merge pull request #13 from HelloWorld521/dependabot/maven/seckill/com.fasterxml.jackson.core-jackson-databind-2.9.10.1
 
 Bump jackson-databind from 2.5.4 to 2.9.10.1 in /seckill', 32, 12, '2019-11-13 00:00:00', '2021-11-30 18:28:21');
