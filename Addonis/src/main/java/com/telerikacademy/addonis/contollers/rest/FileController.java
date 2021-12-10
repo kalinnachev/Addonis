@@ -66,8 +66,11 @@ public class FileController {
     @ApiOperation(value = "Download binary content of addon")
     @GetMapping(value= "/addons/{id}/content")
     public ResponseEntity<ByteArrayResource> getAddonBinary(@PathVariable int id) {
+        //TODO move logic to service
         Addon addon = addonService.getById(id);
+        addon.setNumberOfDownloads(addon.getNumberOfDownloads() + 1);
         byte[] data = fileService.getBinaryContent(addon);
+        addonService.update(addon);
         return generateResponse(addon.getBinaryContentUrl(), data);
     }
 

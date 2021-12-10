@@ -46,6 +46,11 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
+    public void update(Addon addon) {
+        addonRepository.update(addon);
+    }
+
+    @Override
     public List<Addon> getAll() {
         return addonRepository.getAll();
     }

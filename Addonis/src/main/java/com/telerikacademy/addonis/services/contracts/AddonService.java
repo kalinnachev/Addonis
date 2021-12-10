@@ -30,4 +30,7 @@ public interface AddonService {
 
 
     List<Addon> getByUser(Integer user);
+
+    void update(Addon addon);
+
 }
