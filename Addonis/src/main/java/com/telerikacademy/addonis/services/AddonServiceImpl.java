@@ -73,13 +73,9 @@ public class AddonServiceImpl implements AddonService {
         checkIfBlocked(user);
 
         binaryContent.ifPresent(file->setBinaryContent(addon,file));
+        String originUrl = getById(addon.getId()).getOriginUrl();
         addonRepository.update(addon);
-        repoInfoService.updateInfoForAddon(addon);
-    }
-
-    private void setBinaryContent(Addon addon, File binaryContent) {
-        String fileName = fileService.storeBinaryContent(binaryContent, addon);
-        addon.setBinaryContentUrl(fileName);
+        updateGitInfo(addon, originUrl);
     }
 
     @Override
@@ -158,6 +154,17 @@ public class AddonServiceImpl implements AddonService {
         }
         if(duplicateExist) {
             throw new DuplicateEntityException("Addon", "name", addon.getName());
+        }
+    }
+
+    private void setBinaryContent(Addon addon, File binaryContent) {
+        String fileName = fileService.storeBinaryContent(binaryContent, addon);
+        addon.setBinaryContentUrl(fileName);
+    }
+
+    private void updateGitInfo(Addon addon, String originUrl) {
+        if(!originUrl.equals(addon.getOriginUrl())){
+            repoInfoService.updateInfoForAddon(addon);
         }
     }
 }
