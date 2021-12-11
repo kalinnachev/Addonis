@@ -4,11 +4,24 @@ import com.telerikacademy.addonis.services.contracts.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AddonListener {
+
+    private static final String MAIL_BODY_WITH_ADMIN_MESSAGE =
+            "Dear %s %s,\n" +
+                    "This is to inform you that your addon %s was %s by our administrators.\n" +
+                    "Message from our administrators: \n" +
+                    "%s\n\n" +
+                    "Thank you!\n" +
+                    "Addonis team.";
+
+    private static final String MAIL_BODY =
+            "Dear %s %s,\n" +
+                    "This is to inform you that your addon %s was %s by our administrators.\n" +
+                    "Thank you!\n" +
+                    "Addonis team.";
 
     private final MailService mailService;
 
@@ -17,25 +30,37 @@ public class AddonListener {
         this.mailService = mailService;
     }
 
-    @Async
     @EventListener
     public void sendEmail(AddonApprovedEvent event) {
-        System.out.println("Addon was approved " + event.getMessage());
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setSubject("Addonis - Approved " + event.getAddon().getName() +" addon");
-        mailMessage.setText("" +
-                "This is to inform you that your addon was approved");
+        mailMessage.setSubject("Addonis - Approved " + event.getAddon().getName() + " addon");
+        if (event.getMessage().isBlank()) {
+            mailMessage.setText(String.format(MAIL_BODY,
+                    event.getAddon().getCreator().getFirstName(),
+                    event.getAddon().getCreator().getLastName(),
+                    event.getAddon().getName(),
+                    "approved"));
+        } else {
+            mailMessage.setText(String.format(MAIL_BODY_WITH_ADMIN_MESSAGE,
+                    event.getAddon().getCreator().getFirstName(),
+                    event.getAddon().getCreator().getLastName(),
+                    event.getAddon().getName(),
+                    "approved",
+                    event.getMessage()));
+        }
         mailService.sendMail(event.getAddon().getCreator(), mailMessage);
     }
 
-    @Async
     @EventListener
     public void sendEmail(AddonRejectedEvent event) {
-        System.out.println("Addon was rejected " + event.getMessage());
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setSubject("Addonis - Rejected " + event.getAddon().getName() +" addon");
-        mailMessage.setText("" +
-                "This is to inform you that, unfortunately, your addon was rejected by our administrators.");
+        mailMessage.setSubject("Addonis - Rejected " + event.getAddon().getName() + " addon");
+        mailMessage.setText(String.format(MAIL_BODY_WITH_ADMIN_MESSAGE,
+                event.getAddon().getCreator().getFirstName(),
+                event.getAddon().getCreator().getLastName(),
+                event.getAddon().getName(),
+                "rejected",
+                event.getMessage()));
         mailService.sendMail(event.getAddon().getCreator(), mailMessage);
     }
 }
