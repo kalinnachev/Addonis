@@ -32,26 +32,26 @@ Website Screenshots
 ---
 
 - Landing Page 
-![homepage](img/home.png)
+![homepage](home.png)
 
 - All Addons Page
 <!-- ![addons](/src/main/resources/static/screens/all-addons.png) -->
 
 - Addon Product Page
-![product-page](img/addon-details.png)
+![product-page](addon-details.png)
 
 - Create new Addon form
-![create-new-addon](img/create.png)
+![create-new-addon](create.png)
 
 - Update Addon form
-![update](img/update.png)
+![update](update.png)
 
 
 - Login Form
-![login](img/login.png)
+![login](login.png)
 
 - Register Form
-![register](img/register.png)
+![register](register.png)
 
 
 * **Kalin Nachev** 
