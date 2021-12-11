@@ -26,7 +26,7 @@ System administrators can administer all major information objects in the system
 
 
 ## Database
-![picture](img/datebase.png)
+![picture](datebase.png)
 
 Website Screenshots
 ---
