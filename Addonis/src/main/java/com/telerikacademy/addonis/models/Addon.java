@@ -43,6 +43,9 @@ public class Addon {
     @Column(name = "approved")
     private boolean approved;
 
+    @Column(name = "featured")
+    private boolean featured;
+
     @OneToOne
     @JoinColumn(name = "repo_info_id")
     private RepoInfo repoInfo;
@@ -138,7 +141,6 @@ public class Addon {
         this.tags = tags;
     }
 
-
     public boolean isApproved() {
         return approved;
     }
@@ -179,5 +181,13 @@ public class Addon {
             totalRating += rating.getRating();
         }
         return totalRating / ratings.size();
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 }
