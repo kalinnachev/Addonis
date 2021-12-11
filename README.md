@@ -38,20 +38,20 @@ Website Screenshots
 <!-- ![addons](/src/main/resources/static/screens/all-addons.png) -->
 
 - Addon Product Page
-![product-page](/src/main/resources/static/img/addon-details.png)
+![product-page](img/addon-details.png)
 
 - Create new Addon form
-![create-new-addon](/src/main/resources/static/img/create.png)
+![create-new-addon](img/create.png)
 
 - Update Addon form
-![update](/src/main/resources/static/img/update.png)
+![update](img/update.png)
 
 
 - Login Form
-![login](/src/main/resources/static/img/login.png)
+![login](img/login.png)
 
 - Register Form
-![register](/src/main/resources/static/img/register.png)
+![register](img/register.png)
 
 
 * **Kalin Nachev** 
