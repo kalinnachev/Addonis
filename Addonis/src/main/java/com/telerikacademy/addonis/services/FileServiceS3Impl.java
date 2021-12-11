@@ -62,7 +62,7 @@ public class FileServiceS3Impl implements FileService {
 
     @Override
     public byte[] getBinaryContent(Addon addon) {
-        String key = addon.getName() + USER_PICTURES_KEY_PART + addon.getBinaryContentUrl();
+        String key = addon.getName() + ADDON_BINARY_KEY_PART + addon.getBinaryContentUrl();
         return getContent(key);
     }
 
