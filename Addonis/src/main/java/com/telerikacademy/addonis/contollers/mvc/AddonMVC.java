@@ -1,7 +1,6 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
 
-import com.sun.xml.bind.v2.TODO;
 import com.telerikacademy.addonis.events.AddonApprovedEvent;
 import com.telerikacademy.addonis.events.AddonRejectedEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
@@ -51,11 +50,6 @@ public class AddonMVC extends BaseMvcController {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    // TODO tova za kakvo ni e?
-    @ModelAttribute("addons")
-    public List<Addon> populateAddons() {
-        return addonService.getAll();
-    }
 
     @ModelAttribute("allTag")
     public List<Tag> populateTags() {
@@ -71,19 +65,19 @@ public class AddonMVC extends BaseMvcController {
     public String showSingleAddon(@PathVariable int id, Model model, HttpSession session) {
         Addon addon = addonService.getById(id);
         model.addAttribute("approvalDto", new AddonApprovalDto());
-        if(isUserLogged(session))
+        if (isUserLogged(session))
             model.addAttribute("loggedUserRating", getRatingAsInteger(getLoggedUser(session), addon));
         model.addAttribute("addon", addon);
         return "addon-details";
     }
 
     @GetMapping()
-    public String showAllAddonsOnUserPage(Model model,HttpSession session) {
+    public String showAllAddonsOnUserPage(Model model, HttpSession session) {
         try {
-        User user = getLoggedUser(session);
-        model.addAttribute("addonlist",addonService.getByUser(user.getId()));
-        return "myaddons";
-        }catch (EntityNotFoundException e){
+            User user = getLoggedUser(session);
+            model.addAttribute("addonlist", addonService.getByUser(user.getId()));
+            return "myaddons";
+        } catch (EntityNotFoundException e) {
             return "not_found";
         }
     }
@@ -145,7 +139,7 @@ public class AddonMVC extends BaseMvcController {
         User user = getLoggedUser(session);
         Addon addon = modelMapperAddon.fromDto(addonDtoMvc, user);
         addonService.create(addon, user, IOUtils.convert(addonDtoMvc.getBinaryFile()));
-        return "redirect:/addons/{id}";
+        return "redirect:/addons/" + addon.getId();
     }
 
     @GetMapping("/{id}/update")
@@ -156,6 +150,15 @@ public class AddonMVC extends BaseMvcController {
         model.addAttribute("addonId", id);
         model.addAttribute("addon", addonDto);
         return "addon-update";
+    }
+
+    @GetMapping("/{id}/featured")
+    public String changeFeaturedProperty(@PathVariable int id, Model model, HttpSession session) {
+        User user = getLoggedUser(session);
+        Addon addon = addonService.getById(id);
+        addon.setFeatured(!addon.isFeatured());
+        addonService.update(addon, user, Optional.empty());
+        return "redirect:/addons/{id}";
     }
 
     @PostMapping("/{id}/update")
