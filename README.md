@@ -26,32 +26,32 @@ System administrators can administer all major information objects in the system
 
 
 ## Database
-![picture](database.png)
+![picture](images/database.png)
 
 Website Screenshots
 ---
 
 - Landing Page 
-![homepage](home.png)
+![homepage](images/home.png)
 
 - All Addons Page
 <!-- ![addons](/src/main/resources/static/screens/all-addons.png) -->
 
 - Addon Product Page
-![product-page](addon-details.png)
+![product-page](images/addon-details.png)
 
 - Create new Addon form
-![create-new-addon](create.png)
+![create-new-addon](images/create.png)
 
 - Update Addon form
-![update](update.png)
+![update](images/update.png)
 
 
 - Login Form
-![login](login.png)
+![login](images/login.png)
 
 - Register Form
-![register](register.png)
+![register](images/register.png)
 
 
 * **Kalin Nachev** 
