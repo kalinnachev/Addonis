@@ -26,13 +26,13 @@ System administrators can administer all major information objects in the system
 
 
 ## Database
-![picture](/src/main/resources/static/img/datebase.png)
+![picture](img/datebase.png)
 
 Website Screenshots
 ---
 
 - Landing Page 
-![homepage](/src/main/resources/static/img/home.png)
+![homepage](img/home.png)
 
 - All Addons Page
 <!-- ![addons](/src/main/resources/static/screens/all-addons.png) -->
