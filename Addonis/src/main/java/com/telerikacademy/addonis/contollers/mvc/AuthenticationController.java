@@ -13,7 +13,6 @@ import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/auth")
@@ -56,7 +56,7 @@ public class AuthenticationController extends BaseMvcController {
         }
         try {
             User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
-            if(!user.isEnabled()){
+            if (!user.isEnabled()) {
                 model.addAttribute("email", user.getEmail());
                 return "user-not-verified";
             }
@@ -84,7 +84,7 @@ public class AuthenticationController extends BaseMvcController {
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
                                  BindingResult bindingResult,
                                  HttpSession session, Model model) throws IOException {
-        if(register.getMultipartFile().isEmpty()){
+        if (register.getMultipartFile().isEmpty()) {
             bindingResult.rejectValue("multipartFile", "file_error", "User photo is mandatory");
         }
         if (bindingResult.hasErrors()) {
@@ -98,7 +98,7 @@ public class AuthenticationController extends BaseMvcController {
         User user = modelMapperUser.fromDto(register);
         try {
             userService.create(user, IOUtils.convert(register.getMultipartFile()));
-        }catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             model.addAttribute("error", e.getMessage());
             return "user-register";
         }
@@ -107,8 +107,10 @@ public class AuthenticationController extends BaseMvcController {
     }
 
     @GetMapping("/verify")
-    public String verifyAccount(@Param("token") String token) {
-        verificationTokenService.verifyToken(token);
+    public String verifyAccount(@RequestParam(name = "token") String token) {
+        User user = verificationTokenService.findUserByToken(token);
+        user.setEnabled(true);
+        userService.update(user, Optional.empty());
         return "verify_successful";
     }
 }
