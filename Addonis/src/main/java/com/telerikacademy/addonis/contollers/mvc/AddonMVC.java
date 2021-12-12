@@ -8,6 +8,7 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.*;
 import com.telerikacademy.addonis.models.dto.AddonApprovalDto;
 import com.telerikacademy.addonis.models.dto.AddonDtoMvc;
+import com.telerikacademy.addonis.models.dto.SearchDto;
 import com.telerikacademy.addonis.services.contracts.*;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
@@ -178,6 +179,27 @@ public class AddonMVC extends BaseMvcController {
         addonService.update(addon, user, Optional.ofNullable(file));
 
         return "redirect:/addons/{id}";
+    }
+
+    @PostMapping("/search")
+    public String search(Model model, @ModelAttribute("search") SearchDto searchDto) {
+        Integer targetId = searchDto.getTargetIdeID() == 0 ? null : searchDto.getTargetIdeID();
+        List<Addon> addonList = addonService.filter(
+                Optional.ofNullable(searchDto.getAddonName()),
+                Optional.ofNullable(targetId),
+                Optional.empty());
+        model.addAttribute("addonList", addonList);
+
+        model.addAttribute("title", getSearchTitle(addonList.size()));
+        return "addon-search";
+    }
+
+    private String getSearchTitle(int size) {
+        if (size == 1)
+            return "Search results (1 addon):";
+        if (size == 0)
+            return "No addons found";
+        return "Search results (" + size + " addons):";
     }
 
     private Integer getRatingAsInteger(User user, Addon addon) {
