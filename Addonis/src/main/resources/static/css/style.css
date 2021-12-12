@@ -57,20 +57,31 @@ TEST BLUE # 4eb1ef
 	01 -> GENERAL
 ===========================================================*/
 
+.featured {
+  background-color: #31708f;
+}
 .tagpill {
-  background-color: #ddd;
+  background-color: #ececec;
   color: black;
-  padding: 2px 10px;
+  padding: 1px 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   margin: 1px 1px;
-  cursor: pointer;
+  /*cursor: pointer;*/
   border-radius: 12px;
+  font-size: 12px;
 }
 
 .tagpill:hover {
-  background-color: #f1f1f1;
+  /*background-color: #f1f1f1;*/
+}
+
+.bgImgCenter{
+  /*background-image: url('https://previews.123rf.com/images/brgfx/brgfx1709/brgfx170900706/87052742-conception-de-fond-avec-des-lignes-ondulées-orange-illustration.jpg');*/
+  /*background-repeat: no-repeat;*/
+  /*background-position: center;*/
+  /*position: relative;*/
 }
 
  .input-register {
@@ -94,7 +105,8 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   color: #2B2D42;
-  font-weight: 700;
+  /*kalin*/
+  /*font-weight: 700;*/
   margin: 0 0 10px;
 }
 
@@ -120,6 +132,25 @@ ul, ol {
 /*----------------------------*\
 	Buttons
 \*----------------------------*/
+
+.addon-edit-btn {
+  display: inline-block;
+  /*padding: 6px 15px;*/
+  padding-top: 6px;
+  padding-right: 15px;
+  padding-bottom: 20px;
+  padding-left: 0px;
+  /*background-color: #f5e57e;*/
+  /*border: none;*/
+  /*border-radius: 40px;*/
+  /*color: #060405;*/
+  /*text-transform: uppercase;*/
+  font-weight: 700;
+  /*text-align: center;*/
+  /*-webkit-transition: 0.2s all;*/
+  /*transition: 0.2s all;*/
+}
+
 .yellow-btn {
   display: inline-block;
   padding: 6px 15px;
