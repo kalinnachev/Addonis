@@ -5,14 +5,17 @@ import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.VerificationToken;
 import com.telerikacademy.addonis.repositories.contracts.VerificationTokenRepository;
 import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class VerificationTokenServiceImpl implements VerificationTokenService {
+
     private VerificationTokenRepository verificationTokenRepository;
 
+    @Autowired
     public VerificationTokenServiceImpl(VerificationTokenRepository verificationTokenRepository) {
         this.verificationTokenRepository = verificationTokenRepository;
     }
@@ -22,7 +25,6 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setUser(user);
         verificationToken.setToken(token);
-        user.setEnabled(true);
         verificationTokenRepository.create(verificationToken);
     }
 
@@ -34,12 +36,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public void verifyToken(String token) {
-        Optional<VerificationToken> verificationToken = verificationTokenRepository.
-                getAll().stream().filter(t-> t.getToken().equals(token)).findFirst();
-        if(verificationToken.isEmpty()){
-            throw new EntityNotFoundException("Token","value",token);
-        }
-        verificationToken.get().getUser().setEnabled(true);
+    public User findUserByToken(String token) {
+       return verificationTokenRepository.findByTokenValue(token).getUser();
     }
 }
