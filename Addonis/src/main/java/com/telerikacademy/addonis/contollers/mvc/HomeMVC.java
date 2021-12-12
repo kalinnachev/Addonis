@@ -19,18 +19,17 @@ public class HomeMVC extends BaseMvcController{
 
     private final AddonService addonService;
 
-    private final UserService userService;
-
     @Autowired
-    public HomeMVC(AddonService addonService, AuthenticationHelper authenticationHelper, UserService userService) {
+    public HomeMVC(AddonService addonService, AuthenticationHelper authenticationHelper) {
         super(authenticationHelper);
         this.addonService = addonService;
-        this.userService = userService;
     }
 
     @GetMapping
     public String getHome(Model model, HttpSession session) {
-        model.addAttribute("addonlist", addonService.getAll());
+        model.addAttribute("featured", addonService.getFeatured());
+        model.addAttribute("newest", addonService.getNewest());
+        model.addAttribute("popular", addonService.getPopular());
         return "index";
     }
 
