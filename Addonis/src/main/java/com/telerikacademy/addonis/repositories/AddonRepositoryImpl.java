@@ -103,7 +103,7 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
 
             name.ifPresent(value -> {
                 filter.add("name like :name");
-                params.put("name", name.get());
+                params.put("name", "%"+name.get()+"%");
             });
 
             targetIdeId.ifPresent(value -> {
