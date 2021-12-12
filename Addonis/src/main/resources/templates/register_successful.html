@@ -2,22 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register Successful</title>
+  <title>Addonis</title>
   <div th:remove="tag" th:replace="fragments::index"></div>
 </head>
+
 <body>
+
 <header>
-  <div th:remove="tag" th:replace="fragments::header"></div>
+  <div  th:replace="fragments::header-nosearch('')"></div>
 </header>
+
 <br>
+
 <div class="container">
-  <div>
-  <div class="text-center">
-    <h2>User Registration</h2>
-    <h4>You have registered successfully as a user</h4>
-    <p>Please check your email to verify your account.</p>
+  <!-- row -->
+  <div class="row">
+
+    <div class="col-md-12">
+      <h3>Successful registration</h3>
+      <hr>
+
+      <h4>Please check your email to verify your account.</h4>
+
+      <hr>
+
+      <br>
+      <h5><a href="/" >Homepage</a></h5>
+
+    </div>
   </div>
-  </div>
+  <!-- row -->
 </div>
+
 </body>
 </html>

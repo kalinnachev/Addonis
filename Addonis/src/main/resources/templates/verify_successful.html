@@ -1,24 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register Successful</title>
-  <div th:replace="fragments::index"></div>
-
+  <title>Addonis</title>
+  <div th:remove="tag" th:replace="fragments::index"></div>
 </head>
+
 <body>
+
 <header>
-  <div th:remove="tag" th:replace="fragments::header"></div>
+  <div  th:replace="fragments::header-nosearch('')"></div>
 </header>
+
 <br>
+
 <div class="container">
-  <div>
-    <div class="text-center">
-      <h2>User Verification</h2>
-      <h4>Congratulations! Your account was been verified.</h4>
-      <p><a th:href="@{/auth/login}"></a></p>
+  <!-- row -->
+  <div class="row">
+
+    <div class="col-md-12">
+      <h3>Successful e-mail verification</h3>
+      <hr>
+
+      <h4>Congratulations! Your account has been verified.</h4>
+
+      <hr>
+
+      <br>
+      <h5><a th:href="@{/auth/login}"> Click here to login</a></h5>
+
     </div>
   </div>
+  <!-- row -->
 </div>
+
 </body>
 </html>

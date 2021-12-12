@@ -417,8 +417,8 @@ textarea.input {
 \*----------------------------*/
 
 .section {
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .section-title {
@@ -600,11 +600,11 @@ textarea.input {
 }
 
 .header-search form .input {
-  width: calc(60%  - 120px);
+  width: calc(56%  - 110px);
   margin-right: -4px;
 }
 .header-search form .input-select-sort {
-  width: calc(40% - 120px);
+  width: calc(40% - 110px);
   margin-right: -4px;
 }
 
