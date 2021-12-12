@@ -15,15 +15,16 @@
 <div th:replace="fragments::navigation('browseaddons')"></div>
 
 <div class="section">
-    <!-- container -->
+
     <div class="container">
+
+
         <!-- row -->
         <div class="row">
-
             <div class="col-md-2 text-center">
 
                 <img
-                     style="width:80px; border-radius:30%"
+                     style="width:90px; border-radius:10%"
                      th:src="@{/api/storage/users/{id}/picture(id=${addon.getCreator().getId()})}">
                 <br>
                 <br>
@@ -58,18 +59,44 @@
             <div class="col-md-7">
 
 
-                <div class="row text-left">
-                    <div class="col-md-9">
 
+                <div class="row text-left">
+                    <div class="col-md-9 ">
                         <h2 th:text="${addon.getName()}"></h2>
                     </div>
 
                     <div class="col-md-3">
-                        <a class="yellow-btn btn-sm"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
-                            <i class="fa fa-edit"></i> Edit addon </a>
+<!--                        <h4 class="tagpill"><i class="fa fa-trophy" aria-hidden="true">-->
+<!--                             -->
+<!--                        </i></h4>-->
+                    </div>
+                    <div class="col-md-3" th:if="${addon.isFeatured()}">
+                        <h3 class="badge featured">Featured addon</h3>
                     </div>
                 </div>
+                <!-- container -->
+                <!-- only admin and creator can see edit button-->
+                <!-- bocked creators must not see edit button-->
+                <div class="row">
+                    <b><div class="col-md-12 "
+                            th:if="${isAdmin || addon.getCreator().getUsername().equals(username)}">
+                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
+                            <i class="fa fa-edit"></i> Edit addon </a>
 
+                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
+                            <i class="fa fa-trash"></i> Delete addon </a>
+
+                        <!-- only admin can see add / remove from featured-->
+
+
+                        <a th:if="${addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">
+                            <i class="fa fa-minus-circle"></i> Remove from featured </a>
+
+                        <a th:if="${!addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">
+                            <i class="fa fa-plus-circle"></i> Add to featured </a>
+
+                    </div></b>
+                </div>
 
                 <div th:text="${addon.getDescription()}"></div>
 
@@ -81,7 +108,7 @@
                     <tr>
                         <td style="min-width:200px">Git repo</td>
                         <td>
-                            <a th:href="${addon.getOriginUrl()}" th:text="${addon.getOriginUrl()}"></a>
+                            <a target="_blank" th:href="${addon.getOriginUrl()}" th:text="${addon.getOriginUrl()}"></a>
                         </td>
                     </tr>
                     <tr>
@@ -147,20 +174,26 @@
                 <!-- /Approve Form -->
 
 
-                <div id="rating">
-                    <div class="rating-avg">
+                <div id="rating" >
+                    <div class="rating-avg" th:if="${!addon.getRatings().isEmpty()}">
                         <div class="col-md-3" th:text="${addon.getAverageRating()}">
                             4.5
                         </div>
 
                         <div class="col-md-9">
 
+                            <div>
                             <div class="rating-stars" style="display: inline-block"
                                  th:remove="tag"
-                                 th:replace="fragments::addonrating(${addon}, 'rating-stars')"></div>
-
+                                 th:replace="fragments::addonrating(${addon}, 'rating-stars')">
+                            </div>
+                            </div>
                         </div>
                     </div>
+                    <div class="text-center" th:if="${addon.getRatings().isEmpty()}" >
+                        <h4>Not rated yet</h4>
+                    </div>
+
                     <ul class="rating">
                         <li>
                             <div class="rating-stars">
