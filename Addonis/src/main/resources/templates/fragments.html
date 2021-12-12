@@ -4,13 +4,14 @@
 <head></head>
 <body>
 
+<!--/*@thymesVar id="addonlist" type="java.util.List<Addon>"*/-->
+<!--/*@thymesVar id="title" type="java.lang.String"*/-->
+<!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
 
 <!-- STATIC LIST ADDONS FRAGMENT -->
 <div class="section" th:fragment="staticAddonSelection(addonlist, title)"
      th:with="slickNavID=${title.replace(' ','_')} , slickDataNav ='#'+${slickNavID}">
-    <!--/*@thymesVar id="addonlist" type="java.util.List<Addon>"*/-->
-    <!--/*@thymesVar id="title" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
+
 
     <div class="container">
         <div class="row">
@@ -214,9 +215,9 @@
     <!--    </div>-->
 
     <div>
-        <div class="product-img">
+        <div class="product-img  bgImgCenter">
             <img alt="" class="test"
-                 src="./img/eclipse.png" style="max-width:60px; margin: 5px;"
+                 src="./img/eclipse.png" style="max-width:50px; margin: 5px;"
                  th:src="${vf.getLogoSource(addon.getTargetIde())}">
             <div class="product-label">
                 <span class="" th:text="${addon.getTargetIde().getName()}"></span>
@@ -241,12 +242,12 @@
         <div class="product-rating">
             <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>
         </div>
-        <h6 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h6>
-        <h6 th:if="${addon.isApproved()}" th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h6>
-        <h6 style="color: red" th:if="${!addon.isApproved()}">
-            <i class="fa fa-exclamation-circle"></i> pending approval</h6>
+        <h5 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h5>
+        <h5 th:if="${addon.isApproved()}" th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h5>
+        <h5 style="color: red" th:if="${!addon.isApproved()}">
+            <i class="fa fa-exclamation-circle"></i> pending approval</h5>
 
-        <h6 th:text="${vf.getLastCommit(addon)}"></h6>
+        <h5 th:text="${vf.getLastCommit(addon)}"></h5>
         <div class="product-btns">
             <button class="add-to-wishlist">
                 <i class="fa fa-user"></i>
