@@ -3,7 +3,6 @@ package com.telerikacademy.addonis.contollers.mvc;
 import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
 import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
-import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.LoginDto;
 import com.telerikacademy.addonis.models.dto.RegisterDto;
@@ -51,12 +50,16 @@ public class AuthenticationController extends BaseMvcController {
 
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("login") LoginDto login,
-                              BindingResult bindingResult, HttpSession session) {
+                              BindingResult bindingResult, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             return "login";
         }
         try {
-            authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            if(!user.isEnabled()){
+                model.addAttribute("email", user.getEmail());
+                return "user-not-verified";
+            }
             session.setAttribute("currentUser", login.getUsername());
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "Error", e.getMessage());
