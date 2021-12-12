@@ -5,6 +5,7 @@ import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.dto.SearchDto;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 public class BaseMvcController {
-    
+
     private final AuthenticationHelper authenticationHelper;
 
     public BaseMvcController(AuthenticationHelper authenticationHelper) {
@@ -91,5 +92,11 @@ public class BaseMvcController {
     public ViewFormatter populateViewFormatterHelper() {
         return new ViewFormatter();
     }
+
+    @ModelAttribute("search")
+    public SearchDto searchBar() {
+        return new SearchDto();
+    }
+
 
 }
