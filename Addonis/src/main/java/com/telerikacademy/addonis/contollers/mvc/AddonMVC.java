@@ -194,6 +194,17 @@ public class AddonMVC extends BaseMvcController {
         return "addon-search";
     }
 
+    @GetMapping("/pending")
+    public String showPendingApprovalAddons(Model model, HttpSession session) {
+        User user = getLoggedUser(session);
+        List<Addon> addonList = addonService.getPending(user);
+        model.addAttribute("addonList",addonList);
+        if(addonList.isEmpty()){
+            return "not_found";
+        }
+        model.addAttribute("title", "Pending Approval");
+        return "pending-approval";
+    }
 
     private String getSearchTitle(int size) {
         if (size == 1)
