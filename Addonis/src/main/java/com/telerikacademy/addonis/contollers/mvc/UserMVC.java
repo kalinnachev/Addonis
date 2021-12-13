@@ -32,7 +32,7 @@ public class UserMVC extends BaseMvcController{
         return "users";
     }
 
-    @PostMapping("/{id}/block")
+    @GetMapping("/{id}/block")
     public String blockUser(@PathVariable int id, HttpSession session){
         User user = getLoggedUser(session);
         userService.block(id,user);
