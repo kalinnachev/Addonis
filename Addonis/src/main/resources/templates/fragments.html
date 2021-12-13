@@ -21,12 +21,12 @@
             </div>
             <div class="col-md-12">
                 <div class="row">
-                        <!-- Thymeleaf-->
-                        <div class="col-md-3" th:each="addon: ${addonlist}">
-                            <div th:replace="fragments::addoncard(${addon})">
-                            </div>
+                    <!-- Thymeleaf-->
+                    <div class="col-md-3" th:each="addon: ${addonlist}">
+                        <div th:replace="fragments::addoncard(${addon})">
                         </div>
-                        <!-- Thymeleaf-->
+                    </div>
+                    <!-- Thymeleaf-->
                 </div>
             </div>
         </div>
@@ -83,9 +83,6 @@
 <!-- ROTATING LIST USERS FRAGMENT -->
 <div class="section" th:fragment="userRotatingSelection(userlist, title)"
      th:with="slickNavID=${title.replace(' ','_')} , slickDataNav ='#'+${slickNavID}">
-    <!--/*@thymesVar id="addonlist" type="java.util.List<Addon>"*/-->
-    <!--/*@thymesVar id="title" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
 
     <!-- container -->
     <div class="container">
@@ -101,28 +98,21 @@
             <!-- Products tab & slick -->
             <div class="col-md-12">
                 <div class="row">
-                    <div class="products-tabs">
-                        <!-- tab -->
-                        <div class="tab-pane active" id="tab1">
-                            <div class="products-slick" th:attr="data-nav=${slickDataNav}" data-nav="#slick-nav-1">
-                                <!-- Thymeleaf-->
-                                <div th:remove="tag" th:each="user: ${users}">
-                                    <div th:replace="fragments::usercard(${user})">
-                                    </div>
-                                </div>
-                                <!-- Thymeleaf-->
-                            </div>
-                            <div class="products-slick-nav" th:attr="id=${slickNavID}" id="slick-nav-1"></div>
+                    <!-- Thymeleaf-->
+                    <div class="col-md-3" th:each="user: ${users}">
+                        <div th:replace="fragments::usercard(${user})">
                         </div>
-                        <!-- /tab -->
                     </div>
+                    <!-- Thymeleaf-->
+                    <!-- /tab -->
                 </div>
             </div>
-            <!-- Products tab & slick -->
         </div>
-        <!-- /row -->
+        <!-- Products tab & slick -->
     </div>
-    <!-- /container -->
+    <!-- /row -->
+</div>
+<!-- /container -->
 </div>
 <!-- /LIST ADDONS FRAGMENT -->
 
@@ -278,11 +268,11 @@
 
         </div>
     </div>
-<!--        <div class="add-to-cart">-->
-<!--            -->
-<!--            <button class="add-to-cart-btn">-->
-<!--                <i class="fa fa-download"></i> Download</button>-->
-<!--        </div>-->
+    <!--        <div class="add-to-cart">-->
+    <!--            -->
+    <!--            <button class="add-to-cart-btn">-->
+    <!--                <i class="fa fa-download"></i> Download</button>-->
+    <!--        </div>-->
 </div>
 
 <!-- SINGLE USER CARD FRAGMENT -->
@@ -306,16 +296,16 @@
                 Category
             </p>
         </h3>
-<!--        <i>-->
-<!--            <div th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>-->
-<!--        </i>-->
+        <!--        <i>-->
+        <!--            <div th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>-->
+        <!--        </i>-->
 
-<!--        <div class="product-rating">-->
-<!--            <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>-->
-<!--        </div>-->
-<!--        <h6 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h6>-->
-<!--        <h6 th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h6>-->
-<!--        <h6 th:text="${vf.getLastCommit(addon)}"></h6>-->
+        <!--        <div class="product-rating">-->
+        <!--            <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>-->
+        <!--        </div>-->
+        <!--        <h6 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h6>-->
+        <!--        <h6 th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h6>-->
+        <!--        <h6 th:text="${vf.getLastCommit(addon)}"></h6>-->
 
         <div class="product-btns">
             <button class="add-to-wishlist">
@@ -326,36 +316,35 @@
             </button>
 
             <button class="add-to-compare">
-<!--                <a target="_blank" -->
-<!--                   th:href="${addon.getOriginUrl()}">-->
-<!--                    <i class="fa fa-git"></i> </a>-->
+                <a th:href="@{/users/{id}/block(id=${user.getId()})}">
 
+                    <i class="fa fa-ban"></i> </a>
                 <span class="tooltipp">
                 Block</span>
             </button>
 
             <button class="quick-view">
-<!--                <a href="#" th:href="@{/addons/{id}(id=${addon.getId()})}">-->
+                <!--                <a href="#" th:href="@{/addons/{id}(id=${addon.getId()})}">-->
                 <i class="fa fa-eye"> </i></a>
                 <span class="tooltipp">Unblock</span>
             </button>
 
 
             <button class="add-to-compare">
-<!--                <a th:href="${vf.getLinkBinary(addon)}">-->
-<!--                    <i class="fa fa-download"></i>-->
-<!--                </a>-->
+                <!--                <a th:href="${vf.getLinkBinary(addon)}">-->
+                <!--                    <i class="fa fa-download"></i>-->
+                <!--                </a>-->
                 <span class="tooltipp">
                 Delete</span>
             </button>
 
         </div>
     </div>
-<!--        <div class="add-to-cart">-->
-<!--            -->
-<!--            <button class="add-to-cart-btn">-->
-<!--                <i class="fa fa-download"></i> Download</button>-->
-<!--        </div>-->
+    <!--        <div class="add-to-cart">-->
+    <!--            -->
+    <!--            <button class="add-to-cart-btn">-->
+    <!--                <i class="fa fa-download"></i> Download</button>-->
+    <!--        </div>-->
 </div>
 
 
