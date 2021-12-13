@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Addons</title>
+
+    <div th:replace="fragments::index"></div>
+
+</head>
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+<div th:replace="fragments::navigation('home')"></div>
+<div th:replace="fragments::staticAddonSelection(${addonList}, ${title})"></div>
+
+</body>
+</html>
