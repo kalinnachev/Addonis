@@ -18,6 +18,8 @@ import static java.lang.String.format;
 @Repository
 public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements AddonRepository {
 
+    private static final int LIMIT = 4;
+
     @Autowired
     protected AddonRepositoryImpl(SessionFactory sessionFactory) {
         super(sessionFactory, Addon.class);
@@ -41,29 +43,31 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
         try (Session session = getSessionFactory().openSession()) {
             return session
                     .createQuery(query, getClazz())
-                    .setParameter("value", 1)
+                    .setParameter("value", true)
                     .list();
         }
     }
 
     @Override
     public List<Addon> getNewest() {
-        String query = format("from %s order by %s desc", getClazz().getSimpleName(), "creationDate");
+        String query = format("from %s where %s = :value order by %s desc", getClazz().getSimpleName(), "approved", "creationDate");
         try (Session session = getSessionFactory().openSession()) {
             return session
                     .createQuery(query, getClazz())
-                    .setMaxResults(5)
+                    .setParameter("value", true)
+                    .setMaxResults(LIMIT)
                     .list();
         }
     }
 
     @Override
     public List<Addon> getPopular() {
-        String query = format("from %s order by %s desc", getClazz().getSimpleName(), "numberOfDownloads");
+        String query = format("from %s where %s = :value order by %s desc", getClazz().getSimpleName(), "approved", "numberOfDownloads");
         try (Session session = getSessionFactory().openSession()) {
             return session
                     .createQuery(query, getClazz())
-                    .setMaxResults(5)
+                    .setParameter("value", true)
+                    .setMaxResults(LIMIT)
                     .list();
         }
     }
@@ -99,7 +103,7 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
 
             name.ifPresent(value -> {
                 filter.add("name like :name");
-                params.put("name", name.get());
+                params.put("name", "%"+name.get()+"%");
             });
 
             targetIdeId.ifPresent(value -> {

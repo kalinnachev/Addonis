@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Addonis</title>
+    <div th:remove="tag" th:replace="fragments::index"></div>
+</head>
+
+<body>
+
+<header>
+    <div th:replace="fragments::header-nosearch('')"></div>
+</header>
+
+<br>
+
+
+<div class="container">
+    <!-- row -->
+    <div class="row">
+
+        <div class="col-md-12">
+            <h3>Your account has not been verified yet</h3>
+            <hr>
+
+            <h4 th:text="'Please check your email ('+ ${email} +') to verify your account.'">Please check your email to verify your account.</h4>
+
+            <hr>
+
+            <br>
+            <h5><a href="/">Homepage</a></h5>
+
+        </div>
+    </div>
+    <!-- row -->
+</div>
+
+</body>
+</html>

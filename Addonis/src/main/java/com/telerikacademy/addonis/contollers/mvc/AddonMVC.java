@@ -8,6 +8,7 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.models.*;
 import com.telerikacademy.addonis.models.dto.AddonApprovalDto;
 import com.telerikacademy.addonis.models.dto.AddonDtoMvc;
+import com.telerikacademy.addonis.models.dto.SearchDto;
 import com.telerikacademy.addonis.services.contracts.*;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
@@ -180,6 +181,28 @@ public class AddonMVC extends BaseMvcController {
         return "redirect:/addons/{id}";
     }
 
+    @PostMapping("/search")
+    public String search(Model model, @ModelAttribute("search") SearchDto searchDto) {
+        Integer targetId = searchDto.getTargetIdeID() == 0 ? null : searchDto.getTargetIdeID();
+        List<Addon> addonList = addonService.filter(
+                Optional.ofNullable(searchDto.getAddonName()),
+                Optional.ofNullable(targetId),
+                Optional.ofNullable(getSortString(searchDto.getSortBy())));
+        model.addAttribute("addonList", addonList);
+
+        model.addAttribute("title", getSearchTitle(addonList.size()));
+        return "addon-search";
+    }
+
+
+    private String getSearchTitle(int size) {
+        if (size == 1)
+            return "Search results (1 addon):";
+        if (size == 0)
+            return "No addons found";
+        return "Search results (" + size + " addons):";
+    }
+
     private Integer getRatingAsInteger(User user, Addon addon) {
         Integer userRating = null;
         try {
@@ -201,5 +224,15 @@ public class AddonMVC extends BaseMvcController {
             ratingEntity.setUser(user);
             ratingService.create(ratingEntity);
         }
+    }
+
+    private String getSortString(int value){
+        switch (value){
+            case 1: return "lastCommitDate_desc";
+            case 2: return "download_desc";
+            case 3: return "uploadDate";
+            case 4: return "name_desc";
+        }
+        return null;
     }
 }

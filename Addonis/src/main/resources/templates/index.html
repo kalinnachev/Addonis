@@ -16,11 +16,11 @@
 
 <div th:replace="fragments::navigation('home')"></div>
 
-<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'Featured addons')"></div>
+<div th:replace="fragments::addonRotatingSelection(${featured}, 'Featured addons')"></div>
 
-<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'Top downloads')"></div>
+<div th:replace="fragments::addonRotatingSelection(${popular}, 'Top downloads addons')"></div>
 
-<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'Highest ratings')"></div>
+<div th:replace="fragments::addonRotatingSelection(${newest}, 'Most recent addons')"></div>
 
 
 <!-- jQuery Plugins -->
