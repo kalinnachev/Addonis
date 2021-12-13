@@ -22,7 +22,6 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setUser(user);
         verificationToken.setToken(token);
-        user.setEnabled(true);
         verificationTokenRepository.create(verificationToken);
     }
 
