@@ -33,4 +33,6 @@ public interface AddonService {
 
     void update(Addon addon);
 
+    List<Addon> getPending(User user);
+
 }

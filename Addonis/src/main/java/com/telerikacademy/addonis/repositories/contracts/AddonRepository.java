@@ -23,4 +23,8 @@ public interface AddonRepository extends CRUDRepository<Addon> {
 
 
     List<Addon> getByUser(int userId);
+
+    List<Addon> getPending();
+
+
 }
