@@ -187,12 +187,13 @@ public class AddonMVC extends BaseMvcController {
         List<Addon> addonList = addonService.filter(
                 Optional.ofNullable(searchDto.getAddonName()),
                 Optional.ofNullable(targetId),
-                Optional.empty());
+                Optional.ofNullable(getSortString(searchDto.getSortBy())));
         model.addAttribute("addonList", addonList);
 
         model.addAttribute("title", getSearchTitle(addonList.size()));
         return "addon-search";
     }
+
 
     private String getSearchTitle(int size) {
         if (size == 1)
@@ -223,5 +224,15 @@ public class AddonMVC extends BaseMvcController {
             ratingEntity.setUser(user);
             ratingService.create(ratingEntity);
         }
+    }
+
+    private String getSortString(int value){
+        switch (value){
+            case 1: return "lastCommitDate_desc";
+            case 2: return "download_desc";
+            case 3: return "uploadDate";
+            case 4: return "name_desc";
+        }
+        return null;
     }
 }
