@@ -90,4 +90,12 @@ public class Helpers {
         return mockRating;
     }
 
+    public static VerificationToken createMockVerificationToken(){
+        var mockToken = new VerificationToken();
+        mockToken.setId(1);
+        mockToken.setToken("mockToken");
+        mockToken.setUser(createMockUser());
+        return mockToken;
+    }
+
 }
