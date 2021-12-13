@@ -498,24 +498,145 @@
             <!-- SEARCH BAR -->
             <div class="col-md-8">
                 <div class="header-search">
-                    <form>
-                        <select class="input-select">
-                            <option value="0">All IDE's</option>
-                            <option value="1">Category 01</option>
-                            <option value="1">Category 02</option>
+                    <form th:action="@{/addons/search}"
+                          th:object="${search}" method="post">
+
+                        <select class="input-select" th:field="*{targetIdeID}">
+                            <option value="0">All IDE's </option>
+                            <option th:each="targetIde : ${allTargetIde}"
+                                    th:text="${targetIde.getName()}"
+                                    th:value="${targetIde.getId()}">
+                            </option>
                         </select>
-                        <input class="input" placeholder="Search here">
-                        <select class="input-select-sort">
-                            <option value="0">Sort</option>
+
+                        <input class="input" placeholder="Search here"
+                               th:field="*{addonName}">
+
+                        <select class="input-select-sort" th:field="*{sortBy}">
+                            <option value="0">Sort by ...</option>
                             <option value="1">Last commit date</option>
-                            <option value="2">Number of downloads</option>
+                            <option value="2">Downloads</option>
                             <option value="3">Upload date</option>
-                            <option value="3">Name</option>
+                            <option value="4">Name</option>
 
                         </select>
                         <button class="search-btn">Search</button>
                     </form>
                 </div>
+            </div>
+            <!-- /SEARCH BAR -->
+
+            <!-- ACCOUNT -->
+            <div class="col-md-2 ">
+                <div class="header-ctn">
+
+
+                    <!-- Register -->
+                    <div th:if="${session.currentUser == null}">
+                        <a th:href="@{~/auth/register}">
+                            <i class="fa fa-user-circle-o"></i>
+                            <span>Register</span>
+                        </a>
+                    </div>
+                    <!-- /Register -->
+
+                    <!-- Login -->
+                    <div th:if="${session.currentUser == null}">
+                        <a th:href="@{~/auth/login}">
+                            <i class="fa fa-sign-in"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                    <!-- /Login -->
+
+                    <!-- Account -->
+                    <div th:if="${session.currentUser != null}">
+                        <a href="#">
+                            <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
+                            <i class="fa fa-user-circle-o"></i>
+
+                            <span th:text="${username}">Account</span>
+                        </a>
+                    </div>
+                    <!-- /Account -->
+
+                    <!-- Logout -->
+                    <div th:if="${session.currentUser != null}">
+                        <a th:href="@{~/auth/logout}">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                    <!-- /Logout -->
+
+
+                    <!-- Menu Toogle -->
+                    <div class="menu-toggle">
+                        <a href="#">
+                            <i class="fa fa-bars"></i>
+                            <span>Menu</span>
+                        </a>
+                    </div>
+                    <!-- /Menu Toogle -->
+                </div>
+            </div>
+            <!-- /ACCOUNT -->
+        </div>
+        <!-- row -->
+    </div>
+    <!-- container -->
+</div>
+<!-- /MAIN HEADER -->
+
+<!-- MAIN HEADER FRAGMENT-->
+<div id="header" th:fragment="header-nosearch(title)">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- LOGO -->
+            <div class="col-md-2">
+                <div class="header-logo">
+                    <a class="logo" th:href="@{~/}">
+                        <br>
+                        <h3 style="color:white">
+                            <i class="fa fa-puzzle-piece" style="color:red"></i>
+                            addonis</h3>
+
+                    </a>
+                </div>
+            </div>
+            <!-- /LOGO -->
+
+            <!-- SEARCH BAR -->
+            <div class="col-md-8 text-center">
+<!--                <h3 style="color:white" th:text="${title}"></h3>-->
+<!--                <div class="header-search">-->
+<!--                    <form th:action="@{/addons/search}"-->
+<!--                          th:object="${search}" method="post">-->
+
+<!--                        <select class="input-select" th:field="*{targetIdeID}">-->
+<!--                            <option value="0">All IDE's </option>-->
+<!--                            <option th:each="targetIde : ${allTargetIde}"-->
+<!--                                    th:text="${targetIde.getName()}"-->
+<!--                                    th:value="${targetIde.getId()}">-->
+<!--                            </option>-->
+<!--                        </select>-->
+
+<!--                        <input class="input" placeholder="Search here"-->
+<!--                               th:field="*{addonName}">-->
+
+<!--                        <select class="input-select-sort" th:field="*{sortBy}">-->
+<!--                            <option value="0">Sort by ...</option>-->
+<!--                            <option value="1">Last commit date</option>-->
+<!--                            <option value="2">Downloads</option>-->
+<!--                            <option value="3">Upload date</option>-->
+<!--                            <option value="3">Name</option>-->
+
+<!--                        </select>-->
+<!--                        <button class="search-btn">Search</button>-->
+<!--                    </form>-->
+<!--                </div>-->
             </div>
             <!-- /SEARCH BAR -->
 
