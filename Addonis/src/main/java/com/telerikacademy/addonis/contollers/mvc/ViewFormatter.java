@@ -79,10 +79,10 @@ public class ViewFormatter {
 
     public String getShortDescription(Addon addon){
         String [] split = addon.getDescription().split(" ");
-        if(split.length<10) return addon.getDescription();
+        if(split.length<15) return addon.getDescription();
 
         return Arrays.stream(split)
-                .limit(10)
+                .limit(15)
                 .collect(Collectors.joining(" ",""," ... "));
     }
 }
