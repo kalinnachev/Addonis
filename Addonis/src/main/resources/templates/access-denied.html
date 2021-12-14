@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <div th:replace="fragments::index"></div>
+
+</head>
+<body>
+
+<header>
+    <div  th:replace="fragments::header-nosearch('')"></div>
+</header>
+
+<br>
+
+
+<div class="container">
+    <!-- row -->
+    <div class="row">
+
+        <div class="col-md-12">
+            <h1 >Access denied</h1>
+            <hr>
+
+            <h3 style="color: red" th:text="${error}">Error placeholder</h3>
+
+            <hr>
+
+            <br>
+            <h5><a href="/" >Homepage</a></h5>
+
+        </div>
+    </div>
+    <!-- row -->
+</div>
+
+</body>
+</html>
+
