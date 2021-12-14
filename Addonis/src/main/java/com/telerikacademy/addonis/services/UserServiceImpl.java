@@ -107,12 +107,11 @@ public class UserServiceImpl implements UserService {
         if (!user.isAdmin()) {
             throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_DELETE);
         }
-        try{
-            addonService.getByUser(id);
+        if (addonService.getByUser(id).size() != 0) {
             throw new IllegalArgumentException("Can't delete user with addons");
-        }catch (EntityNotFoundException e) {
-            userRepository.delete(id);
         }
+        userRepository.delete(id);
+
     }
 
     public void checkForDuplicateUsername(User user) {
