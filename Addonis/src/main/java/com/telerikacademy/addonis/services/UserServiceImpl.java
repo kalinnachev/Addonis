@@ -5,6 +5,7 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
+import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.FileService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final FileService fileService;
+    private final AddonService addonService;
 
 
-    public UserServiceImpl(UserRepository userRepository, FileService fileService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           FileService fileService,
+                           AddonService addonService) {
         this.userRepository = userRepository;
         this.fileService = fileService;
+        this.addonService = addonService;
     }
 
     @Override
