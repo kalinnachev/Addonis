@@ -100,7 +100,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <!-- Thymeleaf-->
-                    <div class="col-md-3" th:each="user: ${users}">
+                    <div class="col-md-3" th:each="user: ${userlist}">
                         <div th:replace="fragments::usercard(${user})">
                         </div>
                     </div>
@@ -113,9 +113,11 @@
     </div>
     <!-- /row -->
 </div>
+<!-- /LIST USERS FRAGMENT -->
+
 <!-- /container -->
 </div>
-<!-- /LIST ADDONS FRAGMENT -->
+
 
 <!-- SINGLE ADDON CARD FRAGMENT -->
 <div class="product" th:fragment="addoncardold(addon)">
@@ -279,13 +281,13 @@
 </div>
 
 <!-- SINGLE USER CARD FRAGMENT -->
-<div th:fragment="usercard(user)" class="product">
+<div  class="product" th:fragment="usercard(user)">
     <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
-
     <div class="product-img-user">
         <img alt="" class="test"
-             src="./img/eclipse.png" style="max-width:50px; margin: 5px;" th:src="${vf.getUserPictureLink(user)}">
+             src="./img/eclipse.png" style="max-width:50px; max-height: 100px; margin: 5px;"
+             th:src="${vf.getUserPictureLink(user)}">
         <div class="product-label-user">
             <span class="" th:text="${user.getRole().getRoleName()}"></span>
         </div>
@@ -299,55 +301,39 @@
                 Category
             </p>
         </h3>
-        <!--        <i>-->
-        <!--            <div th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>-->
-        <!--        </i>-->
-
-        <!--        <div class="product-rating">-->
-        <!--            <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>-->
-        <!--        </div>-->
-        <!--        <h6 th:text="${vf.getAverageRating(addon)}">Average rating: 4.5 out of 5</h6>-->
-        <!--        <h6 th:text="${vf.getNumberOfDownloads(addon)}">16 downloads</h6>-->
-        <!--        <h6 th:text="${vf.getLastCommit(addon)}"></h6>-->
 
         <div class="product-btns">
             <button class="add-to-wishlist">
-                <i class="fa fa-user"></i>
+                <a th:href="@{/users/{id}/addons(id=${user.getId()})}">
+                    <i class="fa fa-user"></i>
+                </a>
                 <span class="tooltipp"
                       th:text="${user.getUsername()}"
                 >Author</span>
             </button>
 
             <button class="add-to-compare">
-                <a th:href="@{/users/{id}/block(id=${user.getId()})}">
+                <a th:if="${!user.isBlocked()}" th:href="@{/users/{id}/block(id=${user.getId()})}">
+                    <i class="fa fa-ban"></i>
+                    <span class="tooltipp">Block</span> </a>
 
-                    <i class="fa fa-ban"></i> </a>
-                <span class="tooltipp">
-                Block</span>
-            </button>
+                <a th:if="${user.isBlocked()}" th:href="@{/users/{id}/unblock(id=${user.getId()})}">
+                    <i class="fa fa-check-circle"></i>
+                    <span class="tooltipp">Unblock</span> </a>
 
-            <button class="quick-view">
-                <!--                <a href="#" th:href="@{/addons/{id}(id=${addon.getId()})}">-->
-                <i class="fa fa-eye"> </i></a>
-                <span class="tooltipp">Unblock</span>
             </button>
 
 
             <button class="add-to-compare">
-                <!--                <a th:href="${vf.getLinkBinary(addon)}">-->
-                <!--                    <i class="fa fa-download"></i>-->
-                <!--                </a>-->
+                <a th:href="@{/users/{id}/delete(id=${user.getId()})}">
+                    <i class="fa fa-trash-o"></i>
+                </a>
                 <span class="tooltipp">
                 Delete</span>
             </button>
 
         </div>
     </div>
-    <!--        <div class="add-to-cart">-->
-    <!--            -->
-    <!--            <button class="add-to-cart-btn">-->
-    <!--                <i class="fa fa-download"></i> Download</button>-->
-    <!--        </div>-->
 </div>
 
 
@@ -361,7 +347,7 @@
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
                 <li th:classappend="${page=='home'} ? 'active' : ''">
-                    <a href="#">Home</a></li>
+                    <a th:href="@{/}">Home</a></li>
                 <li th:classappend="${page=='browseaddons'} ? 'active' : ''">
                     <a href="#">Browse Addons</a>
                 </li>
@@ -372,7 +358,7 @@
                     <a th:href="@{/addons/pending}">Manage Addons</a>
                 </li>
                 <li th:classappend="${page=='manageusers'} ? 'active' : ''">
-                    <a href="#">Manage Users</a>
+                    <a th:href="@{/users}">Manage Users</a>
                 </li>
 
             </ul>
@@ -493,7 +479,7 @@
                           th:object="${search}" method="post">
 
                         <select class="input-select" th:field="*{targetIdeID}">
-                            <option value="0">All IDE's </option>
+                            <option value="0">All IDE's</option>
                             <option th:each="targetIde : ${allTargetIde}"
                                     th:text="${targetIde.getName()}"
                                     th:value="${targetIde.getId()}">
@@ -579,6 +565,117 @@
 </div>
 <!-- /MAIN HEADER -->
 
+<!-- USER HEADER FRAGMENT-->
+<div id="header" th:fragment="userheader">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- LOGO -->
+            <div class="col-md-2">
+                <div class="header-logo">
+                    <a class="logo" th:href="@{~/}">
+                        <br>
+                        <h3 style="color:white">
+                            <i class="fa fa-puzzle-piece" style="color:red"></i>
+                            addonis</h3>
+
+                    </a>
+                </div>
+            </div>
+            <!-- /LOGO -->
+
+            <!-- SEARCH BAR -->
+            <div class="col-md-8">
+                <div class="header-search">
+                    <form th:action="@{/users/search}"
+                          th:object="${userSearch}" method="post">
+
+                        <select class="input-select" th:field="*{searchBy}">
+                            <option  value="1">Username</option>
+                            <option  value="2">Email</option>
+                            <option  value="3">Phone</option>
+                        </select>
+
+                        <input class="input" placeholder="Search here"
+                               th:field="*{param}">
+
+<!--                        <select class="input-select-sort" th:field="*{sortBy}">-->
+<!--                            <option value="0">Sort by ...</option>-->
+<!--                            <option value="1">Last commit date</option>-->
+<!--                            <option value="2">Downloads</option>-->
+<!--                            <option value="3">Upload date</option>-->
+<!--                            <option value="4">Name</option>-->
+
+<!--                        </select>-->
+                        <button class="search-btn">Search</button>
+                    </form>
+                </div>
+            </div>
+            <!-- /SEARCH BAR -->
+
+            <!-- ACCOUNT -->
+            <div class="col-md-2 ">
+                <div class="header-ctn">
+
+
+                    <!-- Register -->
+                    <div th:if="${session.currentUser == null}">
+                        <a th:href="@{~/auth/register}">
+                            <i class="fa fa-user-circle-o"></i>
+                            <span>Register</span>
+                        </a>
+                    </div>
+                    <!-- /Register -->
+
+                    <!-- Login -->
+                    <div th:if="${session.currentUser == null}">
+                        <a th:href="@{~/auth/login}">
+                            <i class="fa fa-sign-in"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                    <!-- /Login -->
+
+                    <!-- Account -->
+                    <div th:if="${session.currentUser != null}">
+                        <a href="#">
+                            <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
+                            <i class="fa fa-user-circle-o"></i>
+
+                            <span th:text="${username}">Account</span>
+                        </a>
+                    </div>
+                    <!-- /Account -->
+
+                    <!-- Logout -->
+                    <div th:if="${session.currentUser != null}">
+                        <a th:href="@{~/auth/logout}">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                    <!-- /Logout -->
+
+
+                    <!-- Menu Toogle -->
+                    <div class="menu-toggle">
+                        <a href="#">
+                            <i class="fa fa-bars"></i>
+                            <span>Menu</span>
+                        </a>
+                    </div>
+                    <!-- /Menu Toogle -->
+                </div>
+            </div>
+            <!-- /ACCOUNT -->
+        </div>
+        <!-- row -->
+    </div>
+    <!-- container -->
+</div>
+<!-- /USER HEADER -->
+
 <!-- MAIN HEADER FRAGMENT-->
 <div id="header" th:fragment="header-nosearch(title)">
     <!-- container -->
@@ -601,33 +698,33 @@
 
             <!-- SEARCH BAR -->
             <div class="col-md-8 text-center">
-<!--                <h3 style="color:white" th:text="${title}"></h3>-->
-<!--                <div class="header-search">-->
-<!--                    <form th:action="@{/addons/search}"-->
-<!--                          th:object="${search}" method="post">-->
+                <!--                <h3 style="color:white" th:text="${title}"></h3>-->
+                <!--                <div class="header-search">-->
+                <!--                    <form th:action="@{/addons/search}"-->
+                <!--                          th:object="${search}" method="post">-->
 
-<!--                        <select class="input-select" th:field="*{targetIdeID}">-->
-<!--                            <option value="0">All IDE's </option>-->
-<!--                            <option th:each="targetIde : ${allTargetIde}"-->
-<!--                                    th:text="${targetIde.getName()}"-->
-<!--                                    th:value="${targetIde.getId()}">-->
-<!--                            </option>-->
-<!--                        </select>-->
+                <!--                        <select class="input-select" th:field="*{targetIdeID}">-->
+                <!--                            <option value="0">All IDE's </option>-->
+                <!--                            <option th:each="targetIde : ${allTargetIde}"-->
+                <!--                                    th:text="${targetIde.getName()}"-->
+                <!--                                    th:value="${targetIde.getId()}">-->
+                <!--                            </option>-->
+                <!--                        </select>-->
 
-<!--                        <input class="input" placeholder="Search here"-->
-<!--                               th:field="*{addonName}">-->
+                <!--                        <input class="input" placeholder="Search here"-->
+                <!--                               th:field="*{addonName}">-->
 
-<!--                        <select class="input-select-sort" th:field="*{sortBy}">-->
-<!--                            <option value="0">Sort by ...</option>-->
-<!--                            <option value="1">Last commit date</option>-->
-<!--                            <option value="2">Downloads</option>-->
-<!--                            <option value="3">Upload date</option>-->
-<!--                            <option value="3">Name</option>-->
+                <!--                        <select class="input-select-sort" th:field="*{sortBy}">-->
+                <!--                            <option value="0">Sort by ...</option>-->
+                <!--                            <option value="1">Last commit date</option>-->
+                <!--                            <option value="2">Downloads</option>-->
+                <!--                            <option value="3">Upload date</option>-->
+                <!--                            <option value="3">Name</option>-->
 
-<!--                        </select>-->
-<!--                        <button class="search-btn">Search</button>-->
-<!--                    </form>-->
-<!--                </div>-->
+                <!--                        </select>-->
+                <!--                        <button class="search-btn">Search</button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
             </div>
             <!-- /SEARCH BAR -->
 
