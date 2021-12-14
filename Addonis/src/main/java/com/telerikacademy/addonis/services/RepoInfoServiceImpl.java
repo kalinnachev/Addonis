@@ -52,7 +52,7 @@ public class RepoInfoServiceImpl implements RepoInfoService {
     /*
      https://riptutorial.com/spring/example/21209/cron-expression
      */
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void scheduledUpdate(){
         List<Addon> addonList =  addonRepository.getAll();
         logger.info("Scheduled update of all repos. Extracting data from GitHub...");
