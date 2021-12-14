@@ -144,7 +144,7 @@
     </div>
     <div class="product-body">
         <h3 class="product-name">
-            <a href="#" th:text="${addon.getName()}">
+            <a href="#" th:text="${addon.getName()}" th:href="@{/addons/{id}(id=${addon.getId()})}">
                 product name goes here
             </a>
             <p class="product-category" th:text="${addon.getCreator().getUsername()}">
@@ -231,7 +231,7 @@
 
     <div class="product-body">
         <h3 class="product-name">
-            <a href="#" th:text="${addon.getName()}">
+            <a href="#" th:text="${addon.getName()}" th:href="@{/addons/{id}(id=${addon.getId()})}">
                 product name goes here
             </a>
             <p class="product-category" th:text="${addon.getCreator().getUsername()}">
