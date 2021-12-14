@@ -77,6 +77,8 @@ public class AddonMVC extends BaseMvcController {
         try {
             User user = getLoggedUser(session);
             model.addAttribute("addonlist", addonService.getByUser(user.getId()));
+            model.addAttribute("user", user);
+
             return "myaddons";
         } catch (EntityNotFoundException e) {
             return "not_found";
