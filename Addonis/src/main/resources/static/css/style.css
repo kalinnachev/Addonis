@@ -57,12 +57,27 @@ TEST BLUE # 4eb1ef
 	01 -> GENERAL
 ===========================================================*/
 
-.featured {
+.badge-admin {
+  background-color: #0c242f;
+}
+
+
+.badge-user{
   background-color: #31708f;
 }
 
+.badge-verified {
+  background-color: #145734;
+}
+
+
 .badge-blocked {
   background-color: red;
+}
+
+
+.featured {
+  background-color: #31708f;
 }
 
 
