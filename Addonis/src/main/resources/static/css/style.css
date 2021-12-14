@@ -60,6 +60,12 @@ TEST BLUE # 4eb1ef
 .featured {
   background-color: #31708f;
 }
+
+.badge-blocked {
+  background-color: red;
+}
+
+
 .tagpill {
   background-color: #ececec;
   color: black;
