@@ -33,7 +33,8 @@
                 <br><br>
 
 
-                <img style="width:60px;" th:src="${vf.getLogoSource(addon.getTargetIde())}">
+                <img style="width:60px;"
+                     th:src="@{/img/{name}(name=${addon.getTargetIde().getLogo()})}">
                 <br><br>
                 <h5 th:text="'For ' +${addon.getTargetIde().getName()}"></h5>
                 <br>
