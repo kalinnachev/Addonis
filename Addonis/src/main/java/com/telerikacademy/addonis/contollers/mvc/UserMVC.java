@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -38,5 +37,20 @@ public class UserMVC extends BaseMvcController{
         userService.block(id,user);
         return "redirect:/users/";
     }
+
+    @GetMapping("/{id}/unblock")
+    public String unblockUser(@PathVariable int id, HttpSession session){
+        User user = getLoggedUser(session);
+        userService.unblock(id,user);
+        return "redirect:/users/";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteUser(@PathVariable int id, HttpSession session){
+        User user = getLoggedUser(session);
+        userService.delete(id,user);
+        return "redirect:/users/";
+    }
+
 
 }
