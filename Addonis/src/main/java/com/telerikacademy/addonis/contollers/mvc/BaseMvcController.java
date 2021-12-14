@@ -3,6 +3,7 @@ package com.telerikacademy.addonis.contollers.mvc;
 import com.telerikacademy.addonis.exceptions.*;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.SearchDto;
+import com.telerikacademy.addonis.models.dto.UserSearchDto;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +28,7 @@ public class BaseMvcController {
         return "redirect:/auth/login";
     }
 
-    @ExceptionHandler({DuplicateEntityException.class, EntityNotFoundException.class, StorageServiceException.class})
+    @ExceptionHandler({DuplicateEntityException.class, EntityNotFoundException.class,IllegalArgumentException.class ,StorageServiceException.class})
     public ModelAndView entityErrorHandler(Exception exception) {
         return populateView("error", exception);
     }
@@ -93,6 +94,11 @@ public class BaseMvcController {
     @ModelAttribute("search")
     public SearchDto searchBar() {
         return new SearchDto();
+    }
+
+    @ModelAttribute("userSearch")
+    public UserSearchDto userSearchBar(){
+        return new UserSearchDto();
     }
 
 
