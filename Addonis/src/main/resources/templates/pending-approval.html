@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<div th:replace="fragments::index"></div>
+</head>
+<body>
+
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+<div th:replace="fragments::navigation('manageaddons')"></div>
+<div th:replace="fragments::staticAddonSelection(${addonList}, ${title})"></div>
+
+</body>
+</html>

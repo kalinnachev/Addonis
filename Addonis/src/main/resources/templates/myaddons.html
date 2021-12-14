@@ -9,16 +9,337 @@
 <header>
     <div th:remove="tag" th:replace="fragments::header"></div>
 </header>
-<br>
 
 <div th:remove="tag" th:replace="fragments::navigation(page)"></div>
 
-<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'User addons')"></div>
+<br>
+<div class="section" style="padding-bottom: 0px;">
+    <div class="container" style="padding-bottom: 0px;">
+        <!-- row -->
+        <div class="row" style="padding-bottom: 0px;">
+            <div class="col-md-2 text-center">
 
-<div class="col-md-4" style="float:right; position: absolute;bottom:0; right:0;">
-    <a class="yellow-btn btn-sm" th:href="@{/addons/new}">
-        <i class="fa fa-edit"></i> Create addon </a>
+                <img
+                        style="height:80px; border-radius:10%"
+                        th:src="@{/api/storage/users/{id}/picture(id=${user.getId()})}">
+                <br>
+
+
+<!--                <br>-->
+<!--                <h5 th:text="'' +${addon.getCreator().getFirstName()} +' '+ ${addon.getCreator().getLastName()}"></h5>-->
+<!--                <i>Developer</i>-->
+<!--                <br><br>-->
+
+
+<!--                <img style="width:60px;" th:src="${vf.getLogoSource(addon.getTargetIde())}">-->
+<!--                <br><br>-->
+<!--                <h5 th:text="'For ' +${addon.getTargetIde().getName()}"></h5>-->
+<!--                <br>-->
+<!--                Uploaded-->
+<!--                <div th:text="''+ ${vf.getCreatedPrettyDate(addon)}"></div>-->
+
+<!--                <br>-->
+<!--                <a class="primary-btn btn-sm" th:href="${vf.getLinkBinary(addon)}">-->
+<!--                    <i class="fa fa-download"></i> Download-->
+<!--                </a>-->
+<!--                <br>-->
+
+<!--                <br>-->
+<!--                Downloaded-->
+<!--                <div th:text="''+ ${addon.getNumberOfDownloads()} +' times'"></div>-->
+
+<!--                <br>-->
+
+
+<!--                <br>-->
+
+            </div>
+            <div class="col-md-7">
+                <div class="row text-left">
+                    <div class="col-md-12 " style="display: flex;">
+                        <h2 th:text="'' +${user.getFirstName()} +' '+ ${user.getLastName()} +' ('+ ${user.getUsername()}+')'"></h2>
+
+                            <div th:if="${user.isAdmin()}">
+                                <h6  class="badge featured">Admin</h6>
+                            </div>
+
+                        <div th:if="${user.isBlocked()}">
+                            <h6  class="badge badge-blocked">Blocked</h6>
+                        </div>
+
+                    </div>
+
+
+<!--                    <div class="col-md-3">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3" th:if="${user.isAdmin()}">-->
+<!--                        <h3 class="badge featured">Admin</h3>-->
+<!--                    </div>-->
+                </div>
+                <!-- container -->
+                <!-- only admin and creator can see edit button-->
+                <!-- bocked creators must not see edit button-->
+                <div class="row">
+                    <div class="col-md-12 "
+                            th:if="${isAdmin || user.getUsername().equals(username)}">
+
+                        <a class="addon-edit-btn"  th:href="@{/addons/new}">
+                            <i class="fa fa-plus-circle"></i> Create new addon</a>
+
+                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${user.getId()})}">
+                            <i class="fa fa-edit"></i> Edit my profile</a>
+
+
+
+<!--                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">-->
+<!--                            <i class="fa fa-trash"></i> Delete user </a>-->
+
+                        <!-- only admin can see add / remove from featured-->
+
+<!--                        <a th:if="${addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">-->
+<!--                            <i class="fa fa-minus-circle"></i> Remove from featured </a>-->
+
+<!--                        <a th:if="${!addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">-->
+<!--                            <i class="fa fa-plus-circle"></i> Add to featured </a>-->
+
+                    </div>
+                </div>
+
+<!--                <div th:text="${addon.getDescription()}"></div>-->
+
+<!--                <hr>-->
+
+<!--                <h4>Repository info</h4>-->
+
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <td style="min-width:200px">Git repo</td>-->
+<!--                        <td>-->
+<!--                            <a target="_blank" th:href="${addon.getOriginUrl()}" th:text="${addon.getOriginUrl()}"></a>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Open Issues</td>-->
+<!--                        <td th:text="${addon.getRepoInfo().getOpenIssues()}"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Open Pull Requests</td>-->
+<!--                        <td th:text="${addon.getRepoInfo().getOpenPullRequests()}"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Last commit</td>-->
+<!--                        <td th:text="${vf.getLastCommitPrettyDate(addon)}"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Last commit message</td>-->
+<!--                        <td th:text="${addon.getRepoInfo().getLastCommitTitle()}"></td>-->
+<!--                    </tr>-->
+
+<!--                </table>-->
+<!--                <hr>-->
+<!--                <h4>Tags</h4>-->
+
+
+<!--                <div th:each="tag : ${addon.getTags()}" th:remove="tag">-->
+<!--                    <span class="tagpill" th:text="${tag.getName()}"></span>-->
+<!--                </div>-->
+
+<!--                <hr>-->
+
+
+            </div>
+
+
+            <!-- Rating -->
+
+            <div class="col-md-3">
+
+<!--                &lt;!&ndash; Approve Form &ndash;&gt;-->
+<!--                &lt;!&ndash; only admins can approve &ndash;&gt;-->
+<!--                <div class="" th:if="${isAdmin && !addon.isApproved()}">-->
+<!--                    <h3 class="text-center">Approval</h3>-->
+<!--                    <div id="approve-form">-->
+<!--                        <form class="review-form text-center"-->
+<!--                              method="post"-->
+<!--                              th:object="${approvalDto}">-->
+<!--                            <div class="invalid-feedback">-->
+<!--                                <h6 style="color: red" th:errors="*{message}">Error placeholder</h6>-->
+<!--                            </div>-->
+<!--                            <textarea class="input" placeholder="Please fill this is addon should be rejected"-->
+<!--                                      th:field="*{message}"></textarea>-->
+<!--                            <button class="third-btn btn-sm"-->
+<!--                                    th:formaction="@{__${#httpServletRequest.requestURI}__/approve}">-->
+<!--                                <i class="fa fa-check"></i> Approve-->
+<!--                            </button>-->
+<!--                            <button class="second-btn btn-sm" th:formaction="@{__${#httpServletRequest.requestURI}__}">-->
+<!--                                <i class="fa fa-ban"></i> Reject-->
+<!--                            </button>-->
+<!--                        </form>-->
+<!--                        <br>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; /Approve Form &ndash;&gt;-->
+
+
+<!--                <div id="rating" >-->
+<!--                    <div class="rating-avg" th:if="${!addon.getRatings().isEmpty()}">-->
+<!--                        <div class="col-md-3" th:text="${addon.getAverageRating()}">-->
+<!--                            4.5-->
+<!--                        </div>-->
+
+<!--                        <div class="col-md-9">-->
+
+<!--                            <div>-->
+<!--                                <div class="rating-stars" style="display: inline-block"-->
+<!--                                     th:remove="tag"-->
+<!--                                     th:replace="fragments::addonrating(${addon}, 'rating-stars')">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="text-center" th:if="${addon.getRatings().isEmpty()}" >-->
+<!--                        <h4>Not rated yet</h4>-->
+<!--                    </div>-->
+
+<!--                    <ul class="rating">-->
+<!--                        <li>-->
+<!--                            <div class="rating-stars">-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                            </div>-->
+<!--                            <div class="rating-progress">-->
+<!--                                <div style="width: 80%;"-->
+<!--                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,5)} + '%;'"></div>-->
+<!--                            </div>-->
+<!--                            <span class="sum"-->
+<!--                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,5)}">3</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <div class="rating-stars">-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                            </div>-->
+<!--                            <div class="rating-progress">-->
+<!--                                <div style="width: 80%;"-->
+<!--                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,4)} + '%;'"></div>-->
+<!--                            </div>-->
+<!--                            <span class="sum"-->
+<!--                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,4)}">2</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <div class="rating-stars">-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                            </div>-->
+<!--                            <div class="rating-progress">-->
+<!--                                <div style="width: 80%;"-->
+<!--                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,3)} + '%;'"></div>-->
+<!--                            </div>-->
+<!--                            <span class="sum"-->
+<!--                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,3)}">0</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <div class="rating-stars">-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                            </div>-->
+<!--                            <div class="rating-progress">-->
+<!--                                <div style="width: 80%;"-->
+<!--                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,2)} + '%;'"></div>-->
+<!--                            </div>-->
+<!--                            <span class="sum"-->
+<!--                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,2)}">0</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <div class="rating-stars">-->
+<!--                                <i class="fa fa-star"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                            </div>-->
+<!--                            <div class="rating-progress">-->
+<!--                                <div style="width: 80%;"-->
+<!--                                     th:style="'width:' + ${vf.getRelativePercentageByAddonAndRating(addon,1)} + '%;'"></div>-->
+<!--                            </div>-->
+<!--                            <span class="sum"-->
+<!--                                  th:text="${vf.getNumberOfUserByAddonAndRating(addon,1)}">0</span>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
+<!--                <br>-->
+
+<!--                &lt;!&ndash; Review Form &ndash;&gt;-->
+<!--                &lt;!&ndash; Only logged users can rate addons&ndash;&gt;-->
+<!--                <div class="text-center" th:if="${!isUserLogged}">Log in to rate this addon</div>-->
+<!--                <div class="" th:if="${isUserLogged}">-->
+<!--                    <div id="review-form">-->
+<!--                        <form class="review-form text-center"-->
+<!--                              method="post" th:action="@{__${#httpServletRequest.requestURI}__/rate}">-->
+<!--                            <div class="input-rating text-center">-->
+<!--                                <span>Your Rating: </span>-->
+<!--                                <div class="stars">-->
+<!--                                    <input id="star5" name="rating" th:checked="${loggedUserRating == 5}" type="radio"-->
+<!--                                           value="5"><label for="star5"></label>-->
+<!--                                    <input id="star4" name="rating" th:checked="${loggedUserRating == 4}" type="radio"-->
+<!--                                           value="4"><label for="star4"></label>-->
+<!--                                    <input id="star3" name="rating" th:checked="${loggedUserRating == 3}" type="radio"-->
+<!--                                           value="3"><label for="star3"></label>-->
+<!--                                    <input id="star2" name="rating" th:checked="${loggedUserRating == 2}" type="radio"-->
+<!--                                           value="2"><label for="star2"></label>-->
+<!--                                    <input id="star1" name="rating" th:checked="${loggedUserRating == 1}" type="radio"-->
+<!--                                           value="1"><label for="star1"></label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <button class="primary-btn btn-sm">Submit</button>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; /Review Form &ndash;&gt;-->
+
+<!--                <br>-->
+
+
+            </div>
+            <!-- /Rating -->
+
+
+        </div>
+<!--        <hr>-->
+
+    </div>
 </div>
+
+
+
+<!--<div class="container">-->
+<!--    &lt;!&ndash; row &ndash;&gt;-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-4"></div>-->
+<!--        <div class="col-md-4">-->
+<!--            <a  class="primary-btn btn-sm" th:href="@{/addons/new}">-->
+<!--                <i class="fa fa-edit"></i> Create new addon </a>-->
+<!--        </div>-->
+<!--        <div class="col-md-4"></div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div th:replace="fragments::addonRotatingSelection(${addonlist}, 'My addons')"></div>
+
+
 
 
 <!-- jQuery Plugins -->

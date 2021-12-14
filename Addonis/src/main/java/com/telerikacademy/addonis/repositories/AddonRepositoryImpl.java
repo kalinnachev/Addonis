@@ -95,6 +95,17 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
     }
 
     @Override
+    public List<Addon> getPending() {
+        String query = format("from %s where %s = :value", getClazz().getSimpleName(), "approved");
+        try (Session session = getSessionFactory().openSession()) {
+            return session
+                    .createQuery(query, getClazz())
+                    .setParameter("value", false)
+                    .list();
+        }
+    }
+
+    @Override
     public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort) {
         try (Session session = getSessionFactory().openSession()) {
             var queryString = new StringBuilder(" from Addon ");
@@ -110,6 +121,9 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
                 filter.add("targetIde.id = :targetIdeId");
                 params.put("targetIdeId", targetIdeId.get());
             });
+
+            filter.add("approved = :value");
+            params.put("value",true);
 
             if(!filter.isEmpty()) {
                 queryString.append(" where ").append(String.join(" and ", filter));

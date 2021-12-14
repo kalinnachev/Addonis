@@ -51,6 +51,12 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
+    public List<Addon> getPending(User user) {
+       checkIfAdmin(user);
+       return addonRepository.getPending();
+    }
+
+    @Override
     public List<Addon> getAll() {
         return addonRepository.getAll();
     }

@@ -1,9 +1,11 @@
 package com.telerikacademy.addonis.services;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import com.telerikacademy.addonis.exceptions.StorageServiceException;
 import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.services.contracts.FileService;
@@ -25,9 +27,8 @@ public class FileServiceS3Impl implements FileService {
 
     private static final String BUCKET = "addonis-app";
     private static final String USER_PICTURES_CACHE = "user-pictures";
-    private static final String USER_PICTURES_KEY_PART = "_profile_picture_";
-    private static final String ADDON_BINARY_KEY_PART = "_binary_content_";
-
+    private static final String USER_KEY = "_profile_picture_";
+    private static final String ADDON_KEY = "_binary_content_";
 
     private final AmazonS3 amazonS3;
 
@@ -40,7 +41,7 @@ public class FileServiceS3Impl implements FileService {
 
     @Override
     public String storeBinaryContent(File file, Addon addon) {
-        String key = addon.getName() + ADDON_BINARY_KEY_PART + file.getName();
+        String key = addon.getName() + ADDON_KEY + file.getName();
         amazonS3.putObject(BUCKET, key, file);
         return file.getName();
     }
@@ -48,7 +49,7 @@ public class FileServiceS3Impl implements FileService {
     @Override
     @CacheEvict(value = USER_PICTURES_CACHE, key = "#user")
     public String storeUserPicture(File file, User user) {
-        String key = user.getUsername() + USER_PICTURES_KEY_PART + file.getName();
+        String key = user.getUsername() + USER_KEY + file.getName();
         amazonS3.putObject(BUCKET, key, file);
         return file.getName();
     }
@@ -56,28 +57,26 @@ public class FileServiceS3Impl implements FileService {
     @Override
     @Cacheable(USER_PICTURES_CACHE)
     public byte[] getUserPicture(User user) {
-        String key = user.getUsername() + USER_PICTURES_KEY_PART + user.getPictureUrl();
+        String key = user.getUsername() + USER_KEY + user.getPictureUrl();
         return getContent(key);
     }
 
     @Override
     public byte[] getBinaryContent(Addon addon) {
-        String key = addon.getName() + ADDON_BINARY_KEY_PART + addon.getBinaryContentUrl();
+        String key = addon.getName() + ADDON_KEY + addon.getBinaryContentUrl();
         return getContent(key);
     }
 
     private byte[] getContent(String key) {
         logger.info("Requesting data from Amazon S3 for key [{}]", key);
-        byte[] content = null;
+        byte[] content;
         try (S3Object s3Object = amazonS3.getObject(BUCKET, key)) {
             S3ObjectInputStream stream = s3Object.getObjectContent();
             content = IOUtils.toByteArray(stream);
-        } catch (IOException e) {
-            // TODO
+        } catch (AmazonS3Exception | IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
+            throw new StorageServiceException(e.getMessage());
         }
-        logger.info("Requesting data from Amazon S3 - DONE");
         return content;
     }
 

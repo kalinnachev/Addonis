@@ -2,6 +2,7 @@ package com.telerikacademy.addonis.contollers.aspects;
 
 import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.exceptions.StorageServiceException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import org.springframework.http.HttpStatus;
@@ -47,10 +48,14 @@ public class RestControllerAdvice {
         return generateResponse(HttpStatus.BAD_REQUEST, e);
     }
 
-    // TODO internal server error?
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> handleException(IOException e) {
         return generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
+
+    @ExceptionHandler(StorageServiceException.class)
+    public ResponseEntity<ErrorResponse> handleException(StorageServiceException e) {
+        return generateResponse(HttpStatus.NOT_FOUND, e);
     }
 
     private String getStackTrace(Exception e){

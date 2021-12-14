@@ -1,9 +1,6 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
-import com.telerikacademy.addonis.exceptions.AuthenticationFailureException;
-import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
-import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
-import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
+import com.telerikacademy.addonis.exceptions.*;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.SearchDto;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
@@ -30,7 +27,7 @@ public class BaseMvcController {
         return "redirect:/auth/login";
     }
 
-    @ExceptionHandler({DuplicateEntityException.class, EntityNotFoundException.class})
+    @ExceptionHandler({DuplicateEntityException.class, EntityNotFoundException.class, StorageServiceException.class})
     public ModelAndView entityErrorHandler(Exception exception) {
         return populateView("error", exception);
     }
