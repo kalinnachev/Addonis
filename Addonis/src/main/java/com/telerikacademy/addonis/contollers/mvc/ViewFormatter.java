@@ -34,9 +34,9 @@ public class ViewFormatter {
         return (int) (100*(count/total));
     }
 
-    public String getLogoSource(TargetIde ide) {
-        return "../img/" + ide.getLogo();
-    }
+//    public String getLogoSource(TargetIde ide) {
+//        return "../img/" + ide.getLogo();
+//    }
 
     public String getLastCommit(Addon addon) {
         return "Last commit : " + prettyTime.format(addon.getRepoInfo().getLastCommitDate());

@@ -135,7 +135,7 @@
     <div class="product-img">
         <img alt="" class="test"
              src="./img/eclipse.png" style="max-width:50px; margin: 5px;"
-             th:src="${vf.getLogoSource(addon.getTargetIde())}">
+             th:src="@{/img/{name}(name=${addon.getTargetIde().getLogo()})}">
         <div class="product-label">
             <span class="" th:text="${addon.getTargetIde().getName()}"></span>
 
@@ -218,7 +218,9 @@
         <div class="product-img  bgImgCenter">
             <img alt="" class="test"
                  src="./img/eclipse.png" style="max-width:50px; margin: 5px;"
-                 th:src="${vf.getLogoSource(addon.getTargetIde())}">
+
+                 th:src="@{/img/{name}(name=${addon.getTargetIde().getLogo()})}">
+
             <div class="product-label">
                 <span class="" th:text="${addon.getTargetIde().getName()}"></span>
 
