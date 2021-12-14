@@ -214,7 +214,7 @@
                  th:src="@{/img/{name}(name=${addon.getTargetIde().getLogo()})}">
 
             <div class="product-label">
-                <span class="" th:text="${addon.getTargetIde().getName()}"></span>
+                <span th:class="${vf.getIDEBadgeCSSClass(addon)}" th:text="${addon.getTargetIde().getName()}"></span>
 
 
             </div>

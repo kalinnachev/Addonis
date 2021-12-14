@@ -57,6 +57,36 @@ TEST BLUE # 4eb1ef
 	01 -> GENERAL
 ===========================================================*/
 
+.ide-eclipse{
+  background-color:#88829f;
+  color: white;
+  border: 0px solid;
+}
+
+.ide-vs{
+  background-color: #87498b;
+  color: white;
+  border: 0px solid;
+}
+
+.ide-ij{
+  background-color: #675dbb;
+  color: white;
+  border: 0px solid;
+}
+
+.ide-xcode{
+  background-color: #3d4046;
+  color: white;
+  border: 0px solid;
+}
+
+.ide-default{
+  background-color: #8a6d3b;
+  color: white;
+  border: 0px solid;
+}
+
 .badge-admin {
   background-color: #0c242f;
 }
@@ -1025,7 +1055,13 @@ textarea.input {
   box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+
+  box-shadow: 0px 2px 10px 0px #acaeb1
+
+
 }
+/*0px 0px 0px 1px #e4e7ed, */
+/*inset 0px 0px 20px 0px #e4e7ed*/
 
 .product:hover {
   -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;

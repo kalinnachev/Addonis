@@ -70,12 +70,20 @@ public class ViewFormatter {
         return addon.getNumberOfDownloads() + " downloads";
     }
 
-    public List<Tag> getTagsAddon(Addon addon) {
-        List<Tag> allTags = new ArrayList<>(addon.getTags());
-        allTags.addAll(allTags);
-        return allTags;
+    public String getIDEBadgeCSSClass(Addon addon){
+        switch (addon.getTargetIde().getName()){
+            case "Eclipse": return "ide-eclipse";
+            case "IntellijIDE": return "ide-ij";
+            case "Visual Studio": return "ide-vs";
+            case "Xcode": return "ide-xcode";
+        }
+        return "ide-default";
     }
-
+//    public List<Tag> getTagsAddon(Addon addon) {
+//        List<Tag> allTags = new ArrayList<>(addon.getTags());
+//        allTags.addAll(allTags);
+//        return allTags;
+//    }
 
     public String getShortDescription(Addon addon){
         String [] split = addon.getDescription().split(" ");
