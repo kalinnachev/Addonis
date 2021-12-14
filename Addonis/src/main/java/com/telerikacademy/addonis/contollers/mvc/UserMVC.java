@@ -66,5 +66,18 @@ public class UserMVC extends BaseMvcController{
         return "redirect:/users/";
     }
 
+    @GetMapping("/{id}/addons")
+    public String showAllAddonsOnUserPage(@PathVariable int id ,Model model, HttpSession session) {
+        try {
+            User user = getLoggedUser(session);
+            User addonsUser = userService.getById(id);
+            model.addAttribute("addonlist", addonService.getByUser(id));
+            model.addAttribute("user", addonsUser);
+            return "myaddons";
+        } catch (EntityNotFoundException e) {
+            return "not_found";
+        }
+    }
+
 
 }
