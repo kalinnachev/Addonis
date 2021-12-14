@@ -55,9 +55,14 @@ public class UserMVC extends BaseMvcController{
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteUser(@PathVariable int id, HttpSession session){
+    public String deleteUser(@PathVariable int id, HttpSession session, Model model){
         User user = getLoggedUser(session);
-        userService.delete(id,user);
+        try {
+            userService.delete(id, user);
+        } catch (IllegalArgumentException e){
+            model.addAttribute("msg", e.getMessage());
+            return "error";
+        }
         return "redirect:/users/";
     }
 
