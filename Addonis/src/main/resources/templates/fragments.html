@@ -101,7 +101,7 @@
                 <div class="row">
                     <!-- Thymeleaf-->
                     <div class="col-md-3" th:each="user: ${userlist}">
-                        <div th:replace="fragments::usercard(${user})">
+                        <div th:replace="fragments::usercardTest(${user})">
                         </div>
                     </div>
                     <!-- Thymeleaf-->
@@ -230,9 +230,9 @@
                 Category
             </p>
         </h3>
-        <!--        <i>-->
-        <!--            <div th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>-->
-        <!--        </i>-->
+                <i>
+                    <div style="    height: 5em;" th:text="${vf.getShortDescription(addon)}"> ALA BALA</div>
+                </i>
         <div class="product-rating">
             <div th:replace="fragments::addonrating(${addon}, 'product-rating')"></div>
         </div>
@@ -286,7 +286,7 @@
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
     <div class="product-img-user">
         <img alt="" class="test"
-             src="./img/eclipse.png" style="max-width:50px; max-height: 100px; margin: 5px;"
+             src="./img/eclipse.png" style="height: 80px; margin: 5px;"
              th:src="${vf.getUserPictureLink(user)}">
         <div class="product-label-user">
             <span class="" th:text="${user.getRole().getRoleName()}"></span>
@@ -298,6 +298,82 @@
                 product name goes here
             </a>
             <p class="product-category" th:text="${user.getEmail()}">
+                Category
+            </p>
+        </h3>
+
+        <div class="product-btns">
+            <button class="add-to-wishlist">
+                <a th:href="@{/users/{id}/addons(id=${user.getId()})}">
+                    <i class="fa fa-user"></i>
+                </a>
+                <span class="tooltipp"
+                      th:text="${user.getUsername()}"
+                >Author</span>
+            </button>
+
+            <button class="add-to-compare">
+                <a th:if="${!user.isBlocked()}" th:href="@{/users/{id}/block(id=${user.getId()})}">
+                    <i class="fa fa-ban"></i>
+                    <span class="tooltipp">Block</span> </a>
+
+                <a th:if="${user.isBlocked()}" th:href="@{/users/{id}/unblock(id=${user.getId()})}">
+                    <i class="fa fa-check-circle"></i>
+                    <span class="tooltipp">Unblock</span> </a>
+
+            </button>
+
+
+            <button class="add-to-compare">
+                <a th:href="@{/users/{id}/delete(id=${user.getId()})}">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+                <span class="tooltipp">
+                Delete</span>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ТЕСТ КАЛИН SINGLE USER CARD FRAGMENT -->
+<div  class="product" th:fragment="usercardTest(user)">
+    <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
+    <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
+    <div class="product-img-user text-center" style="background-color: white">
+        <img alt="" class="test"
+             src="./img/eclipse.png" style="height: 100px; margin: 5px; "
+             th:src="${vf.getUserPictureLink(user)}">
+<!--        <br><br>-->
+        <div class="product-label-user">
+
+<!--            <span class="" th:text="${user.getRole().getRoleName()}"></span>-->
+<!--            <h6 th:if = "${user.isAdmin()}"class="badge badge-admin">Admin</h6>-->
+<!--            <h6 th:if = "${!user.isAdmin()}"class="badge badge-user">User</h6>-->
+<!--            <h6 th:if = "${user.isBlocked()}"class="badge badge-blocked">Blocked</h6>-->
+<!--            <h6 th:if = "${user.isEnabled()}"class="badge badge-verified">Verified</h6>-->
+
+        </div>
+    </div>
+
+    <div class="product-body">
+        <h5 th:text="${user.getUsername()}"></h5>
+
+        <h3 class="product-name">
+
+            <a href="#" th:text="${user.getFirstName()} +' '+ ${user.getLastName()}">
+                product name goes here
+            </a>
+            <h6 th:if = "${user.isAdmin()}"class="badge badge-admin">Admin</h6>
+            <h6 th:if = "${!user.isAdmin()}"class="badge badge-user">User</h6>
+            <h6 th:if = "${user.isBlocked()}"class="badge badge-blocked">Blocked</h6>
+            <h6 th:if = "${user.isEnabled()}"class="badge badge-verified">Verified</h6>
+
+            <p class="product-category" th:text="${user.getEmail()}">
+                Category
+            </p>
+            <p class="product-category" th:text="${user.getPhoneNumber()}">
                 Category
             </p>
         </h3>
