@@ -1,16 +1,21 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
+import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.models.Addon;
 import com.telerikacademy.addonis.models.User;
+import com.telerikacademy.addonis.models.dto.SearchDto;
+import com.telerikacademy.addonis.models.dto.UserSearchDto;
+import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -18,11 +23,15 @@ import javax.servlet.http.HttpSession;
 public class UserMVC extends BaseMvcController{
 
     private final UserService userService;
+    private final AddonService addonService;
 
     @Autowired
-    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService) {
+    public UserMVC(AuthenticationHelper authenticationHelper,
+                   UserService userService,
+                   AddonService addonService) {
         super(authenticationHelper);
         this.userService = userService;
+        this.addonService = addonService;
     }
 
     @GetMapping
