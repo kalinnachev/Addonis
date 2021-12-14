@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Users</title>
+
+    <div th:replace="fragments::index"></div>
+
+</head>
+<body>
+<header>
+    <div th:remove="tag" th:replace="fragments::userheader"></div>
+</header>
+
+<div th:replace="fragments::navigation('manageusers')"></div>
+<div th:replace="fragments::userRotatingSelection(${users}, ${title})"></div>
+
+
+
+<script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="js/slick.min.js" th:src="@{/js/slick.min.js}"></script>
+<script src="js/nouislider.min.js" th:src="@{/js/nouislider.min.js}"></script>
+<script src="js/jquery.zoom.min.js" th:src="@{/js/jquery.zoom.min.js}"></script>
+<script src="js/main.js" th:src="@{/js/main.js}"></script>
+</body>
+</html>
