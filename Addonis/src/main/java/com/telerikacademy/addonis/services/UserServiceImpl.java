@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService {
         checkForDuplicateEmail(user);
         checkForDuplicateTelephone(user);
 
-        setProfilePicture(user, profilePicture);
         userRepository.create(user);
+        setProfilePicture(user, profilePicture);
+        userRepository.update(user);
     }
 
     @Override
@@ -151,5 +152,6 @@ public class UserServiceImpl implements UserService {
     private void setProfilePicture(User user, File profilePicture) {
         String picture = fileService.storeUserPicture(profilePicture, user);
         user.setPictureUrl(picture);
+
     }
 }
