@@ -199,6 +199,13 @@ public class AddonMVC extends BaseMvcController {
         return "pending-approval";
     }
 
+    @GetMapping("/{id}/delete")
+    public String deleteAddon(@PathVariable int id,  HttpSession session) {
+        User user = getLoggedUser(session);
+        addonService.delete(id, user);
+        return "redirect:/addons";
+    }
+
     private String getSearchTitle(int size) {
         if (size == 1)
             return "Search results (1 addon):";
