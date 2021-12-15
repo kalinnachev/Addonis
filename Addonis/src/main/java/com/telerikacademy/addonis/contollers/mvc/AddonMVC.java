@@ -73,10 +73,9 @@ public class AddonMVC extends BaseMvcController {
     }
 
     @GetMapping()
-    public String showAll(Model model, HttpSession session) {
-        //User user = getLoggedUser(session);
-        model.addAttribute("addonList", addonService.getAll());
-       // model.addAttribute("user", user);
+    public String showAll(Model model) {
+        List<Addon> addonList = addonService.filter(Optional.empty(), Optional.empty(), Optional.empty());
+        model.addAttribute("addonList", addonList);
         model.addAttribute("title", "All Addons");
         return "addons";
     }
