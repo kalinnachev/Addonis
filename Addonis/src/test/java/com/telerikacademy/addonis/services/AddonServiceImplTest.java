@@ -139,9 +139,10 @@ public class AddonServiceImplTest {
     }
 
     @Test
-    public void update_should_throw_when_userIsNotCreator() {
+    public void update_should_throw_when_userIsNotCreatorOrAdmin() {
         Addon mockAddon = createMockAddon();
         User mockUser = createMockUser();
+        mockUser.setRole(createMockRole("User"));
         mockUser.setId(2);
         Optional<File> mockOptional = Optional.empty();
 
@@ -181,9 +182,10 @@ public class AddonServiceImplTest {
     }
 
     @Test
-    public void delete_should_throw_when_userIsNotCreator() {
+    public void delete_should_throw_when_userIsNotCreatorOrAdmin() {
         Addon mockAddon = createMockAddon();
         User mockUser = createMockUser();
+        mockUser.setRole(createMockRole("User"));
         mockUser.setId(2);
 
         Mockito.when(addonRepository.getById(mockAddon.getId()))

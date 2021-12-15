@@ -81,10 +81,10 @@
                 <div class="row">
                     <b><div class="col-md-12 "
                             th:if="${isAdmin || addon.getCreator().getUsername().equals(username)}">
-                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
+                        <a th:if="${!isBlocked}" class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
                             <i class="fa fa-edit"></i> Edit addon </a>
 
-                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
+                        <a th:if="${!isBlocked}" class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${addon.getId()})}">
                             <i class="fa fa-trash"></i> Delete addon </a>
 
                         <!-- only admin can see add / remove from featured-->

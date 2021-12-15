@@ -28,6 +28,7 @@ INSERT INTO addonis.tags (id, name) VALUES (5, 'vim');
 INSERT INTO addonis.tags (id, name) VALUES (6, 'vsvim');
 
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (1, 'admin', 'pass', 'Admin', 'Adminov', 'admin@gmail.com', 'dogecoin.jpeg-900x510-big.jpg', 0, 1, '0898758267', 0);
+INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (20, 'Borkata', 'V@lid123', 'Borislav', 'Ignatov', 'boignatov@tu-sofia.bg', '264433552-256-k270892.jpg', 0, 2, '0899879546', 1);
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (4, 'gabi', 'Gab123^&&', 'Gabriela', 'Georgieva', 'gabigeorgieva@abv.bg', '254167383_933997764182280_5456277152055192074_n.jpg', 0, 2, '0898708810', 0);
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (16, 'gabkk', 'Gab123^&&', 'gabiii', 'ivanova', 'georgievagala@gmail.com', '254167383_933997764182280_5456277152055192074_n.jpg', 0, 2, '0898768010', 0);
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (18, 'A.dragnev', 'gg', 'gg', 'gg', 'georgievagabriela507@gmail.com', '262418678_608974720336709_1359589292855243744_n.jpg', 0, 2, '0898702210', 0);
