@@ -100,10 +100,9 @@ public class AddonMVC extends BaseMvcController {
             model.addAttribute("addon", addon);
             return "addon-details";
         }
-        //TODO
-        // addonService.approve(addon, user);
+        addonService.reject(addon, getLoggedUser(session));
         applicationEventPublisher.publishEvent(new AddonRejectedEvent(addon, approvalDto.getMessage()));
-        return "redirect:/addons/" + id;
+        return "redirect:/addons";
     }
 
     @PostMapping("/{id}/rate")
