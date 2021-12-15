@@ -1,24 +1,20 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
-import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
-import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
-import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
+import com.telerikacademy.addonis.models.TargetIde;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.UserSearchDto;
 import com.telerikacademy.addonis.models.dto.UserUpdatePassword;
 import com.telerikacademy.addonis.services.contracts.AddonService;
-import com.telerikacademy.addonis.models.dto.RegisterDto;
 import com.telerikacademy.addonis.models.dto.UserUpdateDto;
+import com.telerikacademy.addonis.services.contracts.TargetIdeService;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,7 +22,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 
 @Controller
@@ -36,14 +31,14 @@ public class UserMVC extends BaseMvcController {
     private final UserService userService;
     private final AddonService addonService;
     private final ModelMapperUser modelMapperUser;
+    private final TargetIdeService targetIdeService;
 
-    @Autowired
-    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService,
-                   ModelMapperUser modelMapperUser,AddonService addonService) {
+    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService, AddonService addonService, ModelMapperUser modelMapperUser, TargetIdeService targetIdeService) {
         super(authenticationHelper);
         this.userService = userService;
         this.addonService = addonService;
         this.modelMapperUser = modelMapperUser;
+        this.targetIdeService = targetIdeService;
     }
 
     @GetMapping
@@ -76,13 +71,13 @@ public class UserMVC extends BaseMvcController {
 
     @GetMapping("/{id}/addons")
     public String showAllAddonsOnUserPage(@PathVariable int id, Model model, HttpSession session) {
-            User user = getLoggedUser(session);
-            User addonsUser = userService.getById(id);
-            model.addAttribute("addonlist", addonService.getByUser(id));
-            model.addAttribute("user", addonsUser);
-            return "myaddons";
-    }
+        //User user = getLoggedUser(session);
+        User addonsUser = userService.getById(id);
+        model.addAttribute("addonlist", addonService.getByUser(id));
+        model.addAttribute("user", addonsUser);
+        return "myaddons";
 
+    }
 
     @PostMapping("/search")
     public String search(Model model, @ModelAttribute("userSearch") UserSearchDto userSearchDto, HttpSession session) {
@@ -92,6 +87,11 @@ public class UserMVC extends BaseMvcController {
 
         model.addAttribute("title", getSearchTitle(usersList.size()));
         return "user-search";
+    }
+
+    @ModelAttribute("allTargetIde")
+    public List<TargetIde> populateTargetIdes() {
+        return targetIdeService.getAll();
     }
 
     private String getSearchTitle(int size) {
