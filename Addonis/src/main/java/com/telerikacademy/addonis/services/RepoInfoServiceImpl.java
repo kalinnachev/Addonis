@@ -63,6 +63,5 @@ public class RepoInfoServiceImpl implements RepoInfoService {
             repoInfoRepository.update(addon.getRepoInfo());
         }
         logger.info("Scheduled update of all repos - DONE");
-
     }
 }
