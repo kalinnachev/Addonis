@@ -1,4 +1,4 @@
-package com.telerikacademy.addonis.utils;
+package com.telerikacademy.addonis.untilities;
 
 import java.net.URI;
 import java.net.URISyntaxException;

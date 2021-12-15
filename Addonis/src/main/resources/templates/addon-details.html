@@ -89,12 +89,13 @@
 
                         <!-- only admin can see add / remove from featured-->
 
-
+                        <span th:if="${isAdmin}">
                         <a th:if="${addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">
                             <i class="fa fa-minus-circle"></i> Remove from featured </a>
 
                         <a th:if="${!addon.isFeatured() && addon.isApproved()}" class="addon-edit-btn"  th:href="@{/addons/{id}/featured(id=${addon.getId()})}">
                             <i class="fa fa-plus-circle"></i> Add to featured </a>
+                        </span>
 
                     </div></b>
                 </div>

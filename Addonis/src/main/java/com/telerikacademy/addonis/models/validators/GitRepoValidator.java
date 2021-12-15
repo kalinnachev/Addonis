@@ -1,6 +1,6 @@
 package com.telerikacademy.addonis.models.validators;
 
-import com.telerikacademy.addonis.utils.GitUrlHelpers;
+import com.telerikacademy.addonis.untilities.GitUrlHelpers;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

@@ -1056,16 +1056,22 @@ textarea.input {
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
 
-  box-shadow: 0px 2px 10px 0px #acaeb1
+  box-shadow: 0px 2px 10px 0px #acaeb1;
 
+  transform: scale(.97); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 
 }
 /*0px 0px 0px 1px #e4e7ed, */
 /*inset 0px 0px 20px 0px #e4e7ed*/
 
 .product:hover {
-  -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
-  box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+  /*-webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;*/
+  /*box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;*/
+
+  box-shadow: 0px 2px 10px 0px #acaeb1;
+
+  transform: scale(1.06); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+
 }
 
 .product .product-img {

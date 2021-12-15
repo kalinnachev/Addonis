@@ -89,7 +89,6 @@ public class AddonRepositoryImpl extends CRUDSQLRepository<Addon> implements Add
         try (Session session = getSessionFactory().openSession()) {
             Query<Addon> query = session.createQuery("from Addon where creator.id = :userId", Addon.class);
             query.setParameter("userId",userId);
-            if (query.list().isEmpty()) throw new EntityNotFoundException("User", userId);
             return query.list();
         }
     }

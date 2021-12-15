@@ -7,11 +7,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telerikacademy.addonis.models.RepoInfo;
 import com.telerikacademy.addonis.repositories.contracts.GitHubRestApiConsumer;
-import com.telerikacademy.addonis.utils.GitUrlHelpers;
+import com.telerikacademy.addonis.untilities.GitUrlHelpers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;

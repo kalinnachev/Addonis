@@ -54,6 +54,11 @@ public class BaseMvcController {
         }
     }
 
+    @ModelAttribute("loggedUserID")
+    public Integer loggedUseID(HttpSession session) {
+        return authenticationHelper.isUserLogged(session)? getLoggedUser(session).getId() : null;
+    }
+
     @ModelAttribute("isUserLogged")
     public boolean isUserLogged(HttpSession session) {
         return authenticationHelper.isUserLogged(session);

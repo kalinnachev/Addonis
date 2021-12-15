@@ -28,8 +28,7 @@ public interface AddonService {
 
     List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort);
 
-
-    List<Addon> getByUser(Integer user);
+    List<Addon> getByUser(Integer userID ,Optional<User> loggedUser);
 
     void update(Addon addon);
 
