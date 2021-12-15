@@ -5,6 +5,7 @@ import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
 import com.telerikacademy.addonis.exceptions.UnauthorizedFailureException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.repositories.contracts.UserRepository;
+import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.services.contracts.FileService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class UserServiceImplTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    AddonService addonService;
 
     @Mock
     FileService fileService;
@@ -276,6 +280,8 @@ public class UserServiceImplTest {
         mockUser.setRole(createMockRole("User"));
         mockUser.setId(2);
 
+        Mockito.when(addonService.getByUser(mockUser.getId(), Optional.of(mockAdmin)))
+                        .thenReturn(new ArrayList<>());
         service.delete(mockUser.getId(), mockAdmin);
 
         Mockito.verify(userRepository, Mockito.times(1))
