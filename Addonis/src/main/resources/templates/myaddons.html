@@ -46,7 +46,7 @@
                 <!-- bocked creators must not see edit button-->
                 <div class="row">
                     <div class="col-md-12 "
-                            th:if="${isAdmin || user.getUsername().equals(username)}">
+                            th:if="${user.getUsername().equals(username)}">
 
                         <a th:if="${!user.isBlocked()}" class="addon-edit-btn"  th:href="@{/addons/new}">
                             <i class="fa fa-plus-circle"></i> Create new addon</a>
