@@ -48,14 +48,14 @@
                     <div class="col-md-12 "
                             th:if="${isAdmin || user.getUsername().equals(username)}">
 
-                        <a class="addon-edit-btn"  th:href="@{/addons/new}">
+                        <a th:if="${!user.isBlocked()}" class="addon-edit-btn"  th:href="@{/addons/new}">
                             <i class="fa fa-plus-circle"></i> Create new addon</a>
 
-                        <a class="addon-edit-btn"  th:href="@{/users/update}">
-                            <i class="fa fa-edit"></i> Edit my profile</a>
+                        <a  class="addon-edit-btn"  th:href="@{/users/update}">
+                            <i class="fa fa-edit"></i> Edit profile</a>
 
                         <a class="addon-edit-btn"  th:href="@{/users/change/password}">
-                            <i class="fa fa-edit"></i> Change my password </a>
+                            <i class="fa fa-edit"></i> Change password </a>
 
                     </div>
                 </div>

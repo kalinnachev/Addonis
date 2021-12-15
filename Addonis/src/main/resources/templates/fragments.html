@@ -605,7 +605,7 @@
 
                     <!-- Account -->
                     <div th:if="${session.currentUser != null}">
-                        <a href="#">
+                        <a th:href="@{/users/{id}/addons(id=${loggedUserID})}">
                             <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
                             <i class="fa fa-user-circle-o"></i>
 
@@ -716,7 +716,7 @@
 
                     <!-- Account -->
                     <div th:if="${session.currentUser != null}">
-                        <a href="#">
+                        <a th:href="@{/users/{id}/addons(id=${loggedUserID})}">
                             <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
                             <i class="fa fa-user-circle-o"></i>
 
@@ -830,7 +830,7 @@
 
                     <!-- Account -->
                     <div th:if="${session.currentUser != null}">
-                        <a href="#">
+                        <a th:href="@{/users/{id}/addons(id=${loggedUserID})}">
                             <!--                                <img src="/api/storage/users/1/picture" alt="Avatar" style="width:30px; border-radius:50%">-->
                             <i class="fa fa-user-circle-o"></i>
 
