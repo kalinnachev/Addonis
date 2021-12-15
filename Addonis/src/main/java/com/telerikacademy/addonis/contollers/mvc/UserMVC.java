@@ -70,10 +70,10 @@ public class UserMVC extends BaseMvcController {
     }
 
     @GetMapping("/{id}/addons")
-    public String showAllAddonsOnUserPage(@PathVariable int id, Model model, HttpSession session) {
-        //User user = getLoggedUser(session);
+    public String showUserAddons(@PathVariable int id, Model model, HttpSession session) {
+        Optional<User> loggedUser = isUserLogged(session)? Optional.of(getLoggedUser(session)) : Optional.empty();
         User addonsUser = userService.getById(id);
-        model.addAttribute("addonlist", addonService.getByUser(id));
+        model.addAttribute("addonlist", addonService.getByUser(id, loggedUser));
         model.addAttribute("user", addonsUser);
         return "myaddons";
 
