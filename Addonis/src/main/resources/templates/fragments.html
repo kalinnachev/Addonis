@@ -199,22 +199,17 @@
     <!--/*@thymesVar id="addon" type="com.telerikacademy.addonis.models.Addon"*/-->
     <!--/*@thymesVar id="vf" type="com.telerikacademy.addonis.contollers.mvc.ViewFormatter"*/-->
 
-    <!--    <div style="-->
-    <!--   height: 100px; width: 250px; border: 1px solid black; -->
-    <!--   -->
-    <!--   ">-->
-    <!--        <h1><span style="background-color:white;"> Tiled </span></h1>-->
-    <!--    </div>-->
 
     <div>
-        <div class="product-img  bgImgCenter">
+        <div class="product-img">
             <img alt="" class="test"
-                 src="./img/eclipse.png" style="max-width:50px; margin: 5px;"
+                 src="./img/eclipse.png" style="max-width:60px; margin: 5px;"
 
                  th:src="@{/img/{name}(name=${addon.getTargetIde().getLogo()})}">
 
             <div class="product-label">
-                <span th:class="${vf.getIDEBadgeCSSClass(addon)}" th:text="${addon.getTargetIde().getName()}"></span>
+<!--                <span th:class="${vf.getIDEBadgeCSSClass(addon)}" th:text="${addon.getTargetIde().getName()}"></span>-->
+                <span th:text="${addon.getTargetIde().getName()}"></span>
 
 
             </div>
@@ -243,8 +238,9 @@
 
         <h5 th:text="${vf.getLastCommit(addon)}"></h5>
         <div class="product-btns">
-            <button class="add-to-wishlist">
+            <button class="add-to-wishlist"><a href="#" th:href="@{/users/{id}/addons(id=${addon.getCreator().getId()})}">
                 <i class="fa fa-user"></i>
+            </a>
                 <span class="tooltipp"
                       th:text="${addon.getCreator().getUsername()}">Author</span>
             </button>
@@ -425,16 +421,21 @@
                 <li th:classappend="${page=='home'} ? 'active' : ''">
                     <a th:href="@{/}">Home</a></li>
                 <li th:classappend="${page=='browseaddons'} ? 'active' : ''">
-                    <a href="#">Browse Addons</a>
+                    <a th:href="@{/addons}">Addons</a>
                 </li>
-                <li th:classappend="${page=='myaddons'} ? 'active' : ''">
-                    <a th:href="@{/addons}">My Addons</a>
+                <li th:if="${isUserLogged}" th:classappend="${page=='profile'} ? 'active' : ''">
+                    <a th:href="@{/users/{id}/addons(id=${loggedUserID})}">Profile</a>
                 </li>
-                <li th:classappend="${page=='manageaddons'} ? 'active' : ''">
-                    <a th:href="@{/addons/pending}">Manage Addons</a>
+
+                <li th:if="${!isUserLogged}" th:classappend="${page=='profile'} ? 'active' : ''">
+                    <a th:href="@{/auth/login}">Profile</a>
                 </li>
-                <li th:classappend="${page=='manageusers'} ? 'active' : ''">
-                    <a th:href="@{/users}">Manage Users</a>
+
+                <li th:if="${isAdmin}" th:classappend="${page=='manageaddons'} ? 'active' : ''">
+                    <a th:href="@{/addons/pending}">For approval</a>
+                </li>
+                <li th:if="${isAdmin}" th:classappend="${page=='manageusers'} ? 'active' : ''">
+                    <a th:href="@{/users}">Users</a>
                 </li>
 
             </ul>
@@ -662,7 +663,7 @@
             <!-- /LOGO -->
 
             <!-- SEARCH BAR -->
-            <div class="col-md-8">
+            <div class="col-md-8 text-center">
                 <div class="header-search">
                     <form th:action="@{/users/search}"
                           th:object="${userSearch}" method="post">
