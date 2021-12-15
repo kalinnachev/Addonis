@@ -46,4 +46,15 @@ public class ModelMapperUser {
         user.setPhoneNumber(userUpdateDto.getPhoneNumber());
         user.setEmail(userUpdateDto.getEmail());
     }
+
+    public UserUpdateDto toDto(User user) {
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setPassword(user.getPassword());
+        userUpdateDto.setFirstName(user.getFirstName());
+        userUpdateDto.setLastName(user.getLastName());
+        userUpdateDto.setPhoneNumber(user.getPhoneNumber());
+        userUpdateDto.setEmail(user.getEmail());
+        userUpdateDto.setUsername(user.getUsername());
+        return userUpdateDto;
+    }
 }
