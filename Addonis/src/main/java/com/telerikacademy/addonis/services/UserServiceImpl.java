@@ -103,11 +103,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id, User user) {
-        if (!user.isAdmin()) {
+    public void delete(int id, User loggedUser) {
+        if (!loggedUser.isAdmin()) {
             throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_DELETE);
         }
-        if (addonService.getByUser(id).size() != 0) {
+        if (addonService.getByUser(id, Optional.of(loggedUser)).size() != 0) {
             throw new IllegalArgumentException("Can't delete user with addons");
         }
         userRepository.delete(id);
