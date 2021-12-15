@@ -57,8 +57,11 @@
                         <a class="addon-edit-btn"  th:href="@{/addons/new}">
                             <i class="fa fa-plus-circle"></i> Create new addon</a>
 
-                        <a class="addon-edit-btn"  th:href="@{/addons/{id}/update(id=${user.getId()})}">
+                        <a class="addon-edit-btn"  th:href="@{/users/update}">
                             <i class="fa fa-edit"></i> Edit my profile</a>
+
+                        <a class="addon-edit-btn"  th:href="@{/users/change/password}">
+                            <i class="fa fa-edit"></i> Change my password </a>
 
                     </div>
                 </div>
@@ -75,10 +78,10 @@
 </div>
 
 
-
+<div th:if="${addonlist.size() != 0}">
 <div th:replace="fragments::staticAddonSelection(${addonlist}, 'My addons')"></div>
-
-
+</div>
+<!--<h1 th:if="${addonlist.size() == 0}" You don't have addon!</h1>-->
 
 
 <!-- jQuery Plugins -->
