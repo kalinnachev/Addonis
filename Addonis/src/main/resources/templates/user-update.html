@@ -2,9 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update page</title>
+    <div th:replace="fragments::index"></div>
 </head>
 <body>
+<header>
+    <div th:remove="tag" th:replace="fragments::header"></div>
+</header>
+
+
+
+<div class="container" th:fragment="user(formLabel, buttonLabel)">
+    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="formLabel" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="buttonLabel" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="register" type="com.telerikacademy.addonis.models.dto.RatingDto"*/-->
+
+    <div class="col-md-3"></div>
+
+    <div class="col-md-6">
+
+        <form class="form-horizontal" enctype="multipart/form-data" method="post"
+              th:action="@{/users/update}" th:object="${userDto}">
+            <fieldset>
+                <h3 class="text-center" th:text="${formLabel}">
+                    User Registration Form</h3>
+
+                <h5 class="error" style="color: red" th:text="${error}">Custom error</h5>
+
+
+                <label class="control-label" for="username">Username</label>
+                <input class="input-register" id="username" name="username" placeholder="Enter username" th:field="*{username}"
+                       th:disabled="${username != null}">
+
+
+                <input class="input-register" id="password" name="password" placeholder="Enter Password"
+                       th:field="*{password}" type="hidden">
+
+                <label class="control-label" for="email">E-mail</label>
+                <input class="input-register" id="email" name="email" placeholder="Enter Email" th:field="*{email}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{email}">Error</h6>
+
+
+                <label class="control-label" for="firstName">First Name</label>
+                <input class="input-register" id="firstName" placeholder="Enter first name" th:field="*{firstName}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{firstName}">Error</h6>
+
+                <label class="control-label" for="lastName">Last Name</label>
+                <input class="input-register" id="lastName" placeholder="Enter last name" th:field="*{lastName}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{lastName}">Error</h6>
+
+                <label class="control-label" for="phoneNumber">Phone number</label>
+                <input class="input-register" id="phoneNumber" placeholder="Enter phone number" th:field="*{phoneNumber}"
+                       type="text">
+                <h6 style="color: red" th:errors="*{phoneNumber}">Error</h6>
+
+                <label class="control-label" for="multipartFile">Your photo</label>
+                <input class="input-xlarge" id="multipartFile" placeholder="" th:field="*{multipartFile}" type="file">
+                <h6 style="color: red" th:errors="*{multipartFile}">Error</h6>
+
+
+                <br>
+
+
+                <button class="primary-btn order-submit btn-block">Update</button>
+            </fieldset>
+        </form>
+
+    </div>
+
+    <div class="col-md-3"></div>
+
+</div>
+
 
 </body>
 </html>
