@@ -73,11 +73,12 @@ public class AddonMVC extends BaseMvcController {
     }
 
     @GetMapping()
-    public String showAllAddonsOnUserPage(Model model, HttpSession session) {
-            User user = getLoggedUser(session);
-            model.addAttribute("addonlist", addonService.getByUser(user.getId()));
-            model.addAttribute("user", user);
-            return "myaddons";
+    public String showAll(Model model, HttpSession session) {
+        //User user = getLoggedUser(session);
+        model.addAttribute("addonList", addonService.getAll());
+       // model.addAttribute("user", user);
+        model.addAttribute("title", "All Addons");
+        return "addons";
     }
 
     @PostMapping("/{id}/approve")
@@ -186,9 +187,8 @@ public class AddonMVC extends BaseMvcController {
                 Optional.ofNullable(targetId),
                 Optional.ofNullable(getSortString(searchDto.getSortBy())));
         model.addAttribute("addonList", addonList);
-
         model.addAttribute("title", getSearchTitle(addonList.size()));
-        return "addon-search";
+        return "addons";
     }
 
     @GetMapping("/pending")
@@ -196,7 +196,6 @@ public class AddonMVC extends BaseMvcController {
         User user = getLoggedUser(session);
         List<Addon> addonList = addonService.getPending(user);
         model.addAttribute("addonList",addonList);
-        //TO DO
         model.addAttribute("title", "Pending Approval");
         return "pending-approval";
     }
