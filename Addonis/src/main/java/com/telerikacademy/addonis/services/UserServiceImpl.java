@@ -71,9 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User block(int id, User user) {
-        if (!user.isAdmin()) {
-            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_BLOCK);
-        }
+        throwIfNotAdmin(user);
         User userBlock = userRepository.getById(id);
         userBlock.setBlocked(true);
         userRepository.update(userBlock);
@@ -82,9 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User unblock(int id, User user) {
-        if (!user.isAdmin()) {
-            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_UNBLOCK);
-        }
+        throwIfNotAdmin(user);
         User userUnblock = userRepository.getById(id);
         userUnblock.setBlocked(false);
         userRepository.update(userUnblock);
@@ -94,9 +90,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> search(Optional<String> username, Optional<String> email, Optional<String> phoneNumber, User user) {
-        if (!user.isAdmin()) {
-            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_SEARCH);
-        } else if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()) {
+        throwIfNotAdmin(user);
+        if (username.isEmpty() && email.isEmpty() && phoneNumber.isEmpty()) {
             return userRepository.getAll();
         }
         return userRepository.search(username, email, phoneNumber);
@@ -104,14 +99,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(int id, User loggedUser) {
-        if (!loggedUser.isAdmin()) {
-            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_DELETE);
-        }
+        throwIfNotAdmin(loggedUser);
+        throwIfUserHaveAddons(id, loggedUser);
+        userRepository.delete(id);
+
+    }
+
+    private void throwIfUserHaveAddons(int id, User loggedUser) {
         if (addonService.getByUser(id, Optional.of(loggedUser)).size() != 0) {
             throw new IllegalArgumentException("Can't delete user with addons");
         }
-        userRepository.delete(id);
-
     }
 
     public void checkForDuplicateUsername(User user) {
@@ -152,5 +149,11 @@ public class UserServiceImpl implements UserService {
         String picture = fileService.storeUserPicture(profilePicture, user);
         user.setPictureUrl(picture);
 
+    }
+
+    private void throwIfNotAdmin(User user) {
+        if (!user.isAdmin()) {
+            throw new UnauthorizedFailureException(ONLY_ADMIN_CAN_BLOCK);
+        }
     }
 }
