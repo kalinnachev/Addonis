@@ -1,8 +1,7 @@
-drop database `addonis`;
+drop database if exists `addonis`;
+
 create database if not exists `addonis`;
-
 use `addonis`;
-
 
 create table roles
 (
