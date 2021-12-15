@@ -33,8 +33,10 @@ INSERT INTO addonis.users (id, username, password, first_name, last_name, email,
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (16, 'gabkk', 'Gab123^&&', 'gabiii', 'ivanova', 'georgievagala@gmail.com', '254167383_933997764182280_5456277152055192074_n.jpg', 0, 2, '0898768010', 0);
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (18, 'A.dragnev', 'gg', 'gg', 'gg', 'georgievagabriela507@gmail.com', '262418678_608974720336709_1359589292855243744_n.jpg', 0, 2, '0898702210', 0);
 INSERT INTO addonis.users (id, username, password, first_name, last_name, email, picture_url, blocked, role_id, phone_number, enabled) VALUES (19, 'Gabigeorgieva123', 'ee', 'ee', 'ee', 'vasIvanov@abv.bg', '262012826_3092574877677313_6462097667890828242_n.jpg', 0, 2, '0898708856', 0);
-INSERT INTO addonis.repo_info (id, last_commit_title, open_pull_requests, open_issues, last_commit_date, last_refresh) VALUES (23, 'Merge pull request #13 from HelloWorld521/dependabot/maven/seckill/com.fasterxml.jackson.core-jackson-databind-2.9.10.1
 
+INSERT INTO addonis.verifications_token (id, user_id, name) VALUES (1, 20, '816a0249-6900-412e-8fcf-fb05fec30aa7');
+
+INSERT INTO addonis.repo_info (id, last_commit_title, open_pull_requests, open_issues, last_commit_date, last_refresh) VALUES (23, 'Merge pull request #13 from HelloWorld521/dependabot/maven/seckill/com.fasterxml.jackson.core-jackson-databind-2.9.10.1
 Bump jackson-databind from 2.5.4 to 2.9.10.1 in /seckill', 32, 12, '2019-11-13 00:00:00', '2021-11-30 18:28:21');
 INSERT INTO addonis.repo_info (id, last_commit_title, open_pull_requests, open_issues, last_commit_date, last_refresh) VALUES (24, 'Update README.md', 6, 7, '2021-11-16 01:36:16', '2021-12-10 16:15:01');
 INSERT INTO addonis.repo_info (id, last_commit_title, open_pull_requests, open_issues, last_commit_date, last_refresh) VALUES (25, 'Add desig file', 0, 8, '2021-08-31 09:11:14', '2021-12-04 00:35:04');
