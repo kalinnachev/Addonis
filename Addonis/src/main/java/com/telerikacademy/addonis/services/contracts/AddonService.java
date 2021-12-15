@@ -20,6 +20,8 @@ public interface AddonService {
 
     void approve(Addon addon, User user);
 
+    void reject(Addon addon, User user);
+
     List<Addon> getFeatured();
 
     List<Addon> getNewest();

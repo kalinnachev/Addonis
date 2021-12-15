@@ -107,6 +107,12 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
+    public void reject(Addon addon, User user) {
+        checkIfAdmin(user);
+        addonRepository.delete(addon.getId());
+    }
+
+    @Override
     public List<Addon> getFeatured() {
         return addonRepository.getFeatured();
     }
