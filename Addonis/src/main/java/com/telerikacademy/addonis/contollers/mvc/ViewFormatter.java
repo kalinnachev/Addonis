@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class ViewFormatter {
 
-    PrettyTime prettyTime = new PrettyTime();
+    private PrettyTime prettyTime = new PrettyTime();
 
     public String getAverageRating(Addon addon) {
         if (addon.getAverageRating() == 0)
@@ -33,10 +33,6 @@ public class ViewFormatter {
             return 0;
         return (int) (100*(count/total));
     }
-
-//    public String getLogoSource(TargetIde ide) {
-//        return "../img/" + ide.getLogo();
-//    }
 
     public String getLastCommit(Addon addon) {
         return "Last commit : " + prettyTime.format(addon.getRepoInfo().getLastCommitDate());
@@ -79,11 +75,6 @@ public class ViewFormatter {
         }
         return "ide-default";
     }
-//    public List<Tag> getTagsAddon(Addon addon) {
-//        List<Tag> allTags = new ArrayList<>(addon.getTags());
-//        allTags.addAll(allTags);
-//        return allTags;
-//    }
 
     public String getShortDescription(Addon addon){
         String [] split = addon.getDescription().split(" ");
