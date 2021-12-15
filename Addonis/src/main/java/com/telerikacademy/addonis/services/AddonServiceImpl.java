@@ -83,7 +83,7 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void update(Addon addon, User user, Optional<File> binaryContent) {
-        checkIfCreator(user, addon.getId());
+        checkUser(user, addon.getId());
         checkIfBlocked(user);
 
         binaryContent.ifPresent(file->setBinaryContent(addon,file));
@@ -94,7 +94,7 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void delete(int id, User user) {
-        checkIfCreator(user, id);
+        checkUser(user, id);
         checkIfBlocked(user);
         addonRepository.delete(id);
     }
@@ -150,8 +150,9 @@ public class AddonServiceImpl implements AddonService {
         }
     }
 
-    private void checkIfCreator(User user, int id) {
+    private void checkUser(User user, int id) {
         Addon addon = addonRepository.getById(id);
+        if(user.isAdmin())return;
         if(!addon.getCreator().equals(user)){
             throw new UnauthorizedFailureException(ERROR_MSG_CREATOR);
         }
