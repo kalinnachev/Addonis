@@ -10,7 +10,7 @@
     <div th:remove="tag" th:replace="fragments::header"></div>
 </header>
 
-<div th:remove="tag" th:replace="fragments::navigation(page)"></div>
+<div th:remove="tag" th:replace="fragments::navigation('profile')"></div>
 
 <br>
 <div class="section" style="padding-bottom: 0px;">
@@ -40,12 +40,6 @@
 
                     </div>
 
-
-<!--                    <div class="col-md-3">-->
-<!--                    </div>-->
-<!--                    <div class="col-md-3" th:if="${user.isAdmin()}">-->
-<!--                        <h3 class="badge featured">Admin</h3>-->
-<!--                    </div>-->
                 </div>
                 <!-- container -->
                 <!-- only admin and creator can see edit button-->
@@ -72,16 +66,13 @@
 
 
         </div>
-<!--        <hr>-->
-
     </div>
 </div>
 
 
 <div th:if="${addonlist.size() != 0}">
-<div th:replace="fragments::staticAddonSelection(${addonlist}, 'My addons')"></div>
+    <div th:replace="fragments::staticAddonSelection(${addonlist}, 'User addons')"></div>
 </div>
-<!--<h1 th:if="${addonlist.size() == 0}" You don't have addon!</h1>-->
 
 
 <!-- jQuery Plugins -->
