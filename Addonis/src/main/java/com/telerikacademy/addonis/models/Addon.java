@@ -58,7 +58,7 @@ public class Addon {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "addon", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "addon", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Rating> ratings = new HashSet<>();
 
     public LocalDate getCreationDate() {
