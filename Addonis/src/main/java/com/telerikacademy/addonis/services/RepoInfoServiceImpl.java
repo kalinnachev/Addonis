@@ -42,6 +42,7 @@ public class RepoInfoServiceImpl implements RepoInfoService {
     public void updateInfoForAddon(Addon addon) {
         RepoInfo repoInfo = addon.getRepoInfo();
         extractedDataFromExternalSource(addon.getOriginUrl(), repoInfo);
+        repoInfoRepository.update(repoInfo);
     }
 
     private void extractedDataFromExternalSource(String url, RepoInfo repoInfo) {
@@ -57,6 +58,7 @@ public class RepoInfoServiceImpl implements RepoInfoService {
         List<Addon> addonList =  addonRepository.getAll();
         logger.info("Scheduled update of all repos. Extracting data from GitHub...");
         for(Addon addon: addonList){
+            logger.info("Extracting data from GitHub for addon {}", addon.getOriginUrl());
             extractedDataFromExternalSource(addon.getOriginUrl(), addon.getRepoInfo());
             repoInfoRepository.update(addon.getRepoInfo());
         }
