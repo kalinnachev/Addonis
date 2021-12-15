@@ -180,7 +180,9 @@ public class Addon {
         for (Rating rating : ratings) {
             totalRating += rating.getRating();
         }
-        return totalRating / ratings.size();
+        double avgRating =totalRating / ratings.size();
+        return (double)Math.round(avgRating * 100d) / 100d;
+
     }
 
     public boolean isFeatured() {
