@@ -12,7 +12,15 @@
 </header>
 
 <div th:replace="fragments::navigation('manageaddons')"></div>
-<div th:replace="fragments::staticAddonSelection(${addonList}, ${title})"></div>
+
+<div th:if="${!addonList.isEmpty()}">
+<div th:replace="fragments::staticAddonSelection(${addonList}, 'Addons for approval')"></div>
+</div>
+
+<div th:if="${addonList.isEmpty()}">
+    <div th:replace="fragments::staticAddonSelection(${addonList}, 'No addons for approval')"></div>
+
+</div>
 
 </body>
 </html>
