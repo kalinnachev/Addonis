@@ -2,7 +2,7 @@ package com.telerikacademy.addonis.repositories;
 
 import com.telerikacademy.addonis.models.RepoInfo;
 import com.telerikacademy.addonis.repositories.contracts.GitHubRestApiConsumer;
-import com.telerikacademy.addonis.utils.GitUrlHelpers;
+import com.telerikacademy.addonis.untilities.GitUrlHelpers;
 import org.kohsuke.github.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
