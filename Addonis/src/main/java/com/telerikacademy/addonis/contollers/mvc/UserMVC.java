@@ -159,31 +159,29 @@ public class UserMVC extends BaseMvcController {
     public String showChangePasswordPage(Model model, HttpSession session) {
         User user = getLoggedUser(session);
         UserUpdatePassword userUpdatePassword = new UserUpdatePassword();
-        model.addAttribute("user", userUpdatePassword);
+        model.addAttribute("userDto", userUpdatePassword);
         return "user-update-password";
     }
 
     @PostMapping("/change/password")
-    public String updateUserPassword(@Valid @ModelAttribute("user") UserUpdatePassword userUpdatePassword,
-                                     Model model,
+    public String updateUserPassword(@Valid @ModelAttribute("userDto") UserUpdatePassword userUpdatePassword,
                              BindingResult errors,
-                             HttpSession session) throws IOException {
+                             HttpSession session)  {
         if (errors.hasErrors()) {
             return "user-update-password";
         }
 
         User user = getLoggedUser(session);
         if(!user.getPassword().equals(userUpdatePassword.getOldPassword())){
-            errors.rejectValue("oldPassword", "password_error", "Password old should match old password.");
+            errors.rejectValue("oldPassword", "password_error", "Invalid password");
             return "user-update-password";
         }
         if (!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getPasswordConfirm())) {
-            errors.rejectValue("passwordConfirm", "password", "Password confirmation should match password.");
+            errors.rejectValue("passwordConfirm", "password", "Passwords should match");
             return "user-update-password";
         }
         user.setPassword(userUpdatePassword.getNewPassword());
-        File file = null;
-        userService.update(user, Optional.ofNullable(file));
+        userService.update(user, Optional.empty());
         return "redirect:/addons";
     }
 }

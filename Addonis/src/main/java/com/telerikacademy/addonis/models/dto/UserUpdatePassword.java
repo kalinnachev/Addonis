@@ -2,17 +2,13 @@ package com.telerikacademy.addonis.models.dto;
 
 import com.telerikacademy.addonis.models.validators.ValidPassword;
 
-import javax.validation.constraints.NotNull;
-
 public class UserUpdatePassword {
 
-    @ValidPassword
     private String oldPassword;
 
     @ValidPassword
     private String newPassword;
 
-    @ValidPassword
     private String passwordConfirm;
 
     public String getOldPassword() {
