@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AddonServiceImpl implements AddonService {
@@ -41,8 +42,15 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
-    public List<Addon> getByUser(Integer user) {
-        return addonRepository.getByUser(user);
+    public List<Addon> getByUser(Integer userID, Optional<User> loggedUser) {
+        List<Addon> allUserAddons = addonRepository.getByUser(userID);
+        // only admin or loggedUser can see pending addons
+        if(loggedUser.isPresent()){
+            if(loggedUser.get().isAdmin() || loggedUser.get().getId().equals(userID)){
+                return allUserAddons;
+            }
+        }
+        return allUserAddons.stream().filter(Addon::isApproved).collect(Collectors.toList());
     }
 
     @Override
@@ -117,8 +125,6 @@ public class AddonServiceImpl implements AddonService {
     public List<Addon> filter(Optional<String> name, Optional<Integer> targetIdeId, Optional<String> sort) {
         return addonRepository.filter(name,targetIdeId,sort);
     }
-
-
 
     private void checkIfAdmin(User user) {
         if(!user.isAdmin()){
