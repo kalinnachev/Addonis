@@ -1,18 +1,31 @@
 package com.telerikacademy.addonis.contollers.mvc;
 
 import com.telerikacademy.addonis.exceptions.EntityNotFoundException;
+import com.telerikacademy.addonis.events.UserRegistrationCompleteEvent;
+import com.telerikacademy.addonis.exceptions.DuplicateEntityException;
 import com.telerikacademy.addonis.models.User;
 import com.telerikacademy.addonis.models.dto.UserSearchDto;
+import com.telerikacademy.addonis.models.dto.UserUpdatePassword;
 import com.telerikacademy.addonis.services.contracts.AddonService;
+import com.telerikacademy.addonis.models.dto.RegisterDto;
+import com.telerikacademy.addonis.models.dto.UserUpdateDto;
 import com.telerikacademy.addonis.services.contracts.UserService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
+import com.telerikacademy.addonis.untilities.IOUtils;
+import com.telerikacademy.addonis.untilities.ModelMapperUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -22,14 +35,15 @@ public class UserMVC extends BaseMvcController {
 
     private final UserService userService;
     private final AddonService addonService;
+    private final ModelMapperUser modelMapperUser;
 
     @Autowired
-    public UserMVC(AuthenticationHelper authenticationHelper,
-                   UserService userService,
-                   AddonService addonService) {
+    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService,
+                   ModelMapperUser modelMapperUser,AddonService addonService) {
         super(authenticationHelper);
         this.userService = userService;
         this.addonService = addonService;
+        this.modelMapperUser = modelMapperUser;
     }
 
     @GetMapping
@@ -62,16 +76,13 @@ public class UserMVC extends BaseMvcController {
 
     @GetMapping("/{id}/addons")
     public String showAllAddonsOnUserPage(@PathVariable int id, Model model, HttpSession session) {
-        try {
             User user = getLoggedUser(session);
             User addonsUser = userService.getById(id);
             model.addAttribute("addonlist", addonService.getByUser(id));
             model.addAttribute("user", addonsUser);
             return "myaddons";
-        } catch (EntityNotFoundException e) {
-            return "not_found";
-        }
     }
+
 
     @PostMapping("/search")
     public String search(Model model, @ModelAttribute("userSearch") UserSearchDto userSearchDto, HttpSession session) {
@@ -117,5 +128,62 @@ public class UserMVC extends BaseMvcController {
             default:
                 return userService.getAll();
         }
+    }
+    @GetMapping("/update")
+    public String showUpdatePage(Model model, HttpSession session) {
+        User user = getLoggedUser(session);
+        UserUpdateDto userUpdateDto = modelMapperUser.toDto(user);
+        model.addAttribute("userDto", userUpdateDto);
+        return "user-update";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("userDto") UserUpdateDto userUpdateDto,Model model,
+                                 BindingResult errors,
+                                 HttpSession session) throws IOException {
+        if (errors.hasErrors()) {
+            return "user-update";
+        }
+
+        User user = getLoggedUser(session);
+        User userToUpdate = modelMapperUser.fromDto(userUpdateDto,user);
+        File file = null;
+        if (!userUpdateDto.getMultipartFile().isEmpty()) {
+            file = IOUtils.convert(userUpdateDto.getMultipartFile());
+        }
+        userService.update(userToUpdate, Optional.ofNullable(file));
+        return "redirect:/addons";
+    }
+
+    @GetMapping("/change/password")
+    public String showChangePasswordPage(Model model, HttpSession session) {
+        User user = getLoggedUser(session);
+        UserUpdatePassword userUpdatePassword = new UserUpdatePassword();
+        model.addAttribute("user", userUpdatePassword);
+        return "user-update-password";
+    }
+
+    @PostMapping("/change/password")
+    public String updateUserPassword(@Valid @ModelAttribute("user") UserUpdatePassword userUpdatePassword,
+                                     Model model,
+                             BindingResult errors,
+                             HttpSession session) throws IOException {
+        if (errors.hasErrors()) {
+            return "user-update-password";
+        }
+
+        User user = getLoggedUser(session);
+        if(!user.getPassword().equals(userUpdatePassword.getOldPassword())){
+            errors.rejectValue("oldPassword", "password_error", "Password old should match old password.");
+            return "user-update-password";
+        }
+        if (!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getPasswordConfirm())) {
+            errors.rejectValue("passwordConfirm", "password", "Password confirmation should match password.");
+            return "user-update-password";
+        }
+        user.setPassword(userUpdatePassword.getNewPassword());
+        File file = null;
+        userService.update(user, Optional.ofNullable(file));
+        return "redirect:/addons";
     }
 }
