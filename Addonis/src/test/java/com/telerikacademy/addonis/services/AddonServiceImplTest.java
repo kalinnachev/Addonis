@@ -160,8 +160,8 @@ public class AddonServiceImplTest {
         mockUser.setBlocked(true);
         Optional<File> mockOptional = Optional.empty();
 
-        Mockito.when(addonRepository.getById(mockAddon.getId()))
-                .thenReturn(mockAddon);
+//        Mockito.when(addonRepository.getById(mockAddon.getId()))
+//                .thenReturn(mockAddon);
 
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.update(mockAddon, mockUser, mockOptional));
@@ -201,8 +201,8 @@ public class AddonServiceImplTest {
         User mockUser = createMockUser();
         mockUser.setBlocked(true);
 
-        Mockito.when(addonRepository.getById(mockAddon.getId()))
-                .thenReturn(mockAddon);
+//        Mockito.when(addonRepository.getById(mockAddon.getId()))
+//                .thenReturn(mockAddon);
 
         Assertions.assertThrows(UnauthorizedFailureException.class,
                 () -> addonService.delete(mockAddon.getId(), mockUser));
@@ -213,8 +213,8 @@ public class AddonServiceImplTest {
         Addon mockAddon = createMockAddon();
         User mockUser = createMockUser();
 
-        Mockito.when(addonRepository.getById(mockAddon.getId()))
-                .thenReturn(mockAddon);
+//        Mockito.when(addonRepository.getById(mockAddon.getId()))
+//                .thenReturn(mockAddon);
         addonService.delete(mockAddon.getId(), mockUser);
 
         Mockito.verify(addonRepository, Mockito.times(1))
