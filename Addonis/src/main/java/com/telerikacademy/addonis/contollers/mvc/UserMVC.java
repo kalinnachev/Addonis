@@ -8,6 +8,7 @@ import com.telerikacademy.addonis.services.contracts.AddonService;
 import com.telerikacademy.addonis.models.dto.UserUpdateDto;
 import com.telerikacademy.addonis.services.contracts.TargetIdeService;
 import com.telerikacademy.addonis.services.contracts.UserService;
+import com.telerikacademy.addonis.services.contracts.VerificationTokenService;
 import com.telerikacademy.addonis.untilities.AuthenticationHelper;
 import com.telerikacademy.addonis.untilities.IOUtils;
 import com.telerikacademy.addonis.untilities.ModelMapperUser;
@@ -32,13 +33,16 @@ public class UserMVC extends BaseMvcController {
     private final AddonService addonService;
     private final ModelMapperUser modelMapperUser;
     private final TargetIdeService targetIdeService;
+    private final VerificationTokenService verificationTokenService;
 
-    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService, AddonService addonService, ModelMapperUser modelMapperUser, TargetIdeService targetIdeService) {
+
+    public UserMVC(AuthenticationHelper authenticationHelper, UserService userService, AddonService addonService, ModelMapperUser modelMapperUser, TargetIdeService targetIdeService, VerificationTokenService verificationTokenService) {
         super(authenticationHelper);
         this.userService = userService;
         this.addonService = addonService;
         this.modelMapperUser = modelMapperUser;
         this.targetIdeService = targetIdeService;
+        this.verificationTokenService = verificationTokenService;
     }
 
     @GetMapping
@@ -62,10 +66,10 @@ public class UserMVC extends BaseMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteUser(@PathVariable int id, HttpSession session, Model model) {
+    public String deleteUser(@PathVariable int id, HttpSession session) {
         User user = getLoggedUser(session);
+        verificationTokenService.deleteVerificationToken(userService.getById(id));
         userService.delete(id, user);
-
         return "redirect:/users/";
     }
 
