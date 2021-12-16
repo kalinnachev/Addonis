@@ -44,11 +44,8 @@ http://addonis-env.eba-uwhdwzpn.eu-central-1.elasticbeanstalk.com/swagger-ui/#/
 
 
 
-## Database
-![picture](images/database.png)
 
-Website Screenshots
----
+## Website screenshots
 
 - Home Page 
 ![homepage](images/home.png)
@@ -56,20 +53,25 @@ Website Screenshots
 - Add-on Detailed View 
 ![product-page](images/addon-details.png)
 
+- Users page (admin view)
+![users](images/users.png)
+
 - Create new add-on
 ![create-new-addon](images/create.png)
 
 - Update add-on
 ![update](images/update.png)
 
-- Users page 
-![users](images/users.png)
 
-- Login Form 
-![login](images/login.png)
+
+<!-- - Login Form 
+![login](images/login.png) -->
 
 - Register Form 
 ![register](images/register.png)
 
+## Database schema
+
+![picture](images/database.png)
 
 
